@@ -1,57 +1,115 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class SkellyMovement : MonoBehaviour
 {
-    public float walkSpeed = 2;
-    public float runSpeed = 3;
-    public float rotationSpeed;
-    private Vector3 target;
+    UnityEngine.AI.NavMeshAgent navMesh;
+    public Transform testdenistation;
+    public bool moveGo;
+    [Header("Random Movment")]
+    [Range(1, 20)]
+    [SerializeField] float travelDistance = 5;
+    [SerializeField] AIZoner perimeter;
+
+    Vector3 maxPerimeter;
+    Vector3 minPerimeter;
+
+    [Header("Idle")]
+    bool idle;
+    [Range(1, 10)]
+    [SerializeField] float maxIdle = 10;
+    [Range(0.1f, 2)]
+    [SerializeField] float minIdle = 0.4f;
+    [Range(0.1f, 1)]
+    [SerializeField] float chanceIdea = 0.5f;
+    float idleClock;
 
 
-    [Header("Premiter")]
-    public AIZoner aiZoner;
-    private Vector3 areaSize;
-    private Vector3 areaOrgine;
     void Start()
     {
-        areaSize = aiZoner.areaSize/2;
-        areaOrgine = aiZoner.transform.position;
-        RandomTarget();
+        navMesh = GetComponent<UnityEngine.AI.NavMeshAgent>();
+
+        if (perimeter != null)
+        {
+            Vector3 rangePerimeter = perimeter.areaSize/2;
+            Vector3 orginPerimeter = perimeter.transform.position;
+            Vector3 objectSize = new Vector3(transform.lossyScale.x/2, 0, transform.lossyScale.z/2);
+
+            //max Permiter
+            maxPerimeter = orginPerimeter + rangePerimeter - objectSize;
+            minPerimeter = orginPerimeter - rangePerimeter + objectSize;
+        }
+
     }
 
-    // Update is called once per frame
     void FixedUpdate()
     {
+        if (moveGo)
+        {
+            navMesh.destination = testdenistation.position;
+            moveGo = false;
+        }
         RandomMovement();
     }
 
-
     void RandomMovement()
     {
-        if (transform.position.x != target.x && transform.position.z != target.z)
+        bool lastIdling = false;
+        if (idle)
         {
-            if (Quaternion.LookRotation(target) != Quaternion.LookRotation(transform.forward))
+            idleClock -= 1 * Time.deltaTime;
+            if (idleClock <= 0)
             {
-                Vector3 tempDirection = Vector3.RotateTowards(transform.forward, target, rotationSpeed * Time.deltaTime, 0.0f);
-                transform.rotation = Quaternion.LookRotation(tempDirection);
+                lastIdling = idle;
+                idle = !idle;
             }
-
-            transform.position = Vector3.MoveTowards(transform.position, target, walkSpeed * Time.deltaTime);
         }
-        else
+
+        if (!navMesh.hasPath && !idle)
         {
-            RandomTarget();
+            // Idle
+            if (!lastIdling && Random.Range(0.0f, 1.0f) > chanceIdea)
+            {
+                idleClock = Random.Range(minIdle, maxIdle);
+                idle = true;
+                Debug.Log("AI Idling");
+            }
+            else //generate random movement
+            {
+                Vector3 newPath;
+                Vector3 currentPosition = transform.position;
+                newPath.x = Random.Range(currentPosition.x - travelDistance, currentPosition.x + travelDistance);
+                if (newPath.x < minPerimeter.x)
+                {
+                    newPath.x = minPerimeter.x;
+                }
+                else if (newPath.x > maxPerimeter.x)
+                {
+                    newPath.x = maxPerimeter.x;
+                }
+                newPath.y = Random.Range(currentPosition.y - travelDistance, currentPosition.y + travelDistance);
+                if (newPath.y < minPerimeter.y)
+                {
+                    newPath.y = minPerimeter.y;
+                }
+                else if (newPath.y > maxPerimeter.y)
+                {
+                    newPath.y = maxPerimeter.y;
+                }
+                newPath.z = Random.Range(currentPosition.z - travelDistance, currentPosition.z + travelDistance);
+                if (newPath.z < minPerimeter.z)
+                {
+                    newPath.z = minPerimeter.z;
+                }
+                else if (newPath.z > maxPerimeter.z)
+                {
+                    newPath.z = maxPerimeter.z;
+                }
+                navMesh.destination = newPath;
+
+            }
         }
-    }
-
-    void RandomTarget()
-    {
-        Vector2 tempTarget;
-        tempTarget.x = Mathf.Round(Random.Range(areaOrgine.x - areaSize.x, areaOrgine.x + areaSize.x));
-        tempTarget.y = Mathf.Round(Random.Range(areaOrgine.z - areaSize.z, areaOrgine.z + areaSize.z));
-
-        target = new Vector3(tempTarget.x, transform.position.y, tempTarget.y);
     }
 }

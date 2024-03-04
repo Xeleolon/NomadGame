@@ -15,11 +15,18 @@ public class PlayerLife : MonoBehaviour
     [SerializeField] float hunger;
     float curHunger;
     [SerializeField] float hungerDecay;
+    [Header("Inventory")]
+    [SerializeField] float waterSkinSize = 10;
+    [SerializeField] float waterSkinFill = 10;
+
+
     
     [Header("Paused")]
     public bool gamePaused;
+    public static PlayerLife instance;
     [Header("Actack")]
     float coolDown;
+    bool canHarm = true;
     public WeaponItem weapon;
 
     #region Inputs
@@ -28,6 +35,11 @@ public class PlayerLife : MonoBehaviour
     void Awake()
     {
         playerControls = new PlayerInputActions();
+        if (instance != null)
+        {
+            Debug.LogWarning("more than one player life!");
+        }
+        instance = this;
     }
     void OnEnable()
     {
@@ -75,16 +87,16 @@ public class PlayerLife : MonoBehaviour
         }
         else
         {
-            AlterHealth(0.2 * Time.deltaTime);
+            AlterHealth(0.2f * Time.deltaTime);
         }
 
         if (curHunger > 0)
         {
-            curHunger -= thirstHunger * Time.deltaTime;
+            curHunger -= hungerDecay * Time.deltaTime;
         }
         else
         {
-            AlterHealth(0.2 * Time.deltaTime);
+            AlterHealth(0.2f * Time.deltaTime);
         }
     }
 
@@ -125,22 +137,25 @@ public class PlayerLife : MonoBehaviour
 
     void SpearActack()
     {
-        Ray ray;
-        ray = new Ray(gameObject.transform.position, gameObject.transform.forward);
-
-        RaycastHit hit;
-
-        int layerMask = 1 << 10;
-        layerMask = ~layerMask;
-
-        if (Physics.Raycast(ray, out hit, weapon.range, layerMask))
+        if (canHarm)
         {
-            EmenyHealth emeny = hit.collider.gameObject.GetComponent<EmenyHealth>();
-            if (emeny != null)
+            Ray ray;
+            ray = new Ray(gameObject.transform.position, gameObject.transform.forward);
+    
+            RaycastHit hit;
+    
+            int layerMask = 1 << 10;
+            layerMask = ~layerMask;
+    
+            if (Physics.Raycast(ray, out hit, weapon.range, layerMask))
             {
-                emeny.Damage(weapon.damage);
-                Debug.Log("Hit " + hit.collider.gameObject.name);
-                coolDown = weapon.actackSpeed;
+                EmenyHealth emeny = hit.collider.gameObject.GetComponent<EmenyHealth>();
+                if (emeny != null)
+                {
+                    emeny.Damage(weapon.damage);
+                    Debug.Log("Hit " + hit.collider.gameObject.name);
+                    coolDown = weapon.actackSpeed;
+                }
             }
         }
     }
