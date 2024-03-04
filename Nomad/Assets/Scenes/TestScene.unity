@@ -386,25 +386,6 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 3801867164365025853}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &891576342
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 891576341}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d9daf636e6f060f4c8d44495fde5a634, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  testdenistation: {fileID: 1637992848}
-  moveGo: 0
-  travelDistance: 5
-  perimeter: {fileID: 760310731}
-  maxIdle: 10
-  minIdle: 0.4
-  chanceIdea: 0.5
 --- !u!195 &891576343
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -467,8 +448,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9daf636e6f060f4c8d44495fde5a634, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  testdenistation: {fileID: 1637992848}
-  moveGo: 0
+  damage: 1
+  mode: 0
+  speed: 3
+  rotationSpeed: 3
+  inCircleSpeed: 3
+  actackDistance: {x: 3, y: 5}
+  targeting: 0
   travelDistance: 5
   perimeter: {fileID: 760310731}
   maxIdle: 10
@@ -541,6 +527,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Emeny (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3801867162851592453, guid: c535fc458e9ee3c4f89414d5e3be0f25,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_AddedGameObjects: []
@@ -682,8 +673,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9daf636e6f060f4c8d44495fde5a634, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  testdenistation: {fileID: 1637992848}
-  moveGo: 0
+  damage: 1
+  mode: 0
+  speed: 3
+  rotationSpeed: 3
+  inCircleSpeed: 3
+  actackDistance: {x: 3, y: 5}
+  targeting: 0
   travelDistance: 5
   perimeter: {fileID: 760310731}
   maxIdle: 10
@@ -1135,13 +1131,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9daf636e6f060f4c8d44495fde5a634, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  testdenistation: {fileID: 1637992848}
-  moveGo: 0
+  damage: 1
+  mode: 0
+  speed: 3
+  rotationSpeed: 3
+  inCircleSpeed: 3
+  actackDistance: {x: 3, y: 5}
+  targeting: 0
   travelDistance: 5
   perimeter: {fileID: 760310731}
   maxIdle: 10
   minIdle: 0.4
   chanceIdea: 0.5
+--- !u!4 &2069729541 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6460667982185550420, guid: 2755097388678624fa0ac21a25ac9044,
+    type: 3}
+  m_PrefabInstance: {fileID: 6460667981389916056}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &2076416184
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1209,6 +1216,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Emeny (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3801867162851592453, guid: c535fc458e9ee3c4f89414d5e3be0f25,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_AddedGameObjects: []
@@ -1281,6 +1293,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Emeny (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 3801867162851592453, guid: c535fc458e9ee3c4f89414d5e3be0f25,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_AddedGameObjects: []
   m_SourcePrefab: {fileID: 100100000, guid: c535fc458e9ee3c4f89414d5e3be0f25, type: 3}
@@ -1292,6 +1309,26 @@ PrefabInstance:
     serializedVersion: 2
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1933671186, guid: c535fc458e9ee3c4f89414d5e3be0f25, type: 3}
+      propertyPath: speed
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 1933671186, guid: c535fc458e9ee3c4f89414d5e3be0f25, type: 3}
+      propertyPath: target
+      value: 
+      objectReference: {fileID: 2069729541}
+    - target: {fileID: 1933671186, guid: c535fc458e9ee3c4f89414d5e3be0f25, type: 3}
+      propertyPath: targeting
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1933671186, guid: c535fc458e9ee3c4f89414d5e3be0f25, type: 3}
+      propertyPath: inCircleSpeed
+      value: 60
+      objectReference: {fileID: 0}
+    - target: {fileID: 1933671186, guid: c535fc458e9ee3c4f89414d5e3be0f25, type: 3}
+      propertyPath: rotationSpeed
+      value: 60
+      objectReference: {fileID: 0}
     - target: {fileID: 3801867162851592449, guid: c535fc458e9ee3c4f89414d5e3be0f25,
         type: 3}
       propertyPath: m_RootOrder
@@ -1310,7 +1347,7 @@ PrefabInstance:
     - target: {fileID: 3801867162851592449, guid: c535fc458e9ee3c4f89414d5e3be0f25,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 4.87
+      value: 16.38
       objectReference: {fileID: 0}
     - target: {fileID: 3801867162851592449, guid: c535fc458e9ee3c4f89414d5e3be0f25,
         type: 3}
@@ -1381,7 +1418,7 @@ PrefabInstance:
     - target: {fileID: 6460667982185550420, guid: 2755097388678624fa0ac21a25ac9044,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: 24.23
       objectReference: {fileID: 0}
     - target: {fileID: 6460667982185550420, guid: 2755097388678624fa0ac21a25ac9044,
         type: 3}
@@ -1421,6 +1458,11 @@ PrefabInstance:
     - target: {fileID: 6460667982185550429, guid: 2755097388678624fa0ac21a25ac9044,
         type: 3}
       propertyPath: m_Name
+      value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 6460667982185550429, guid: 2755097388678624fa0ac21a25ac9044,
+        type: 3}
+      propertyPath: m_TagString
       value: Player
       objectReference: {fileID: 0}
     m_RemovedComponents: []

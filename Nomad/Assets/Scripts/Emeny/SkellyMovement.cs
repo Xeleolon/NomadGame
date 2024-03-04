@@ -6,8 +6,23 @@ using UnityEngine.AI;
 public class SkellyMovement : MonoBehaviour
 {
     UnityEngine.AI.NavMeshAgent navMesh;
-    public Transform testdenistation;
-    public bool moveGo;
+    [SerializeField] float damage = 1;
+
+    [Header("ActackMovements")]
+    GameObject player;
+    Transform target;
+    public int mode = 0; // 0 for not actack 1 for chasing target, 2 for incircling, 3 for actack
+    [SerializeField] float speed = 3;
+    [SerializeField] float rotationSpeed = 3;
+    [SerializeField] float inCircleSpeed = 3;
+    [SerializeField] Vector2 actackDistance = new Vector2(3,5);
+    float alter;
+    bool alterState;
+    float inCircleDistance;
+    Vector3 Velocity;
+    public bool targeting;
+
+
     [Header("Random Movment")]
     [Range(1, 20)]
     [SerializeField] float travelDistance = 5;
@@ -15,6 +30,8 @@ public class SkellyMovement : MonoBehaviour
 
     Vector3 maxPerimeter;
     Vector3 minPerimeter;
+
+
 
     [Header("Idle")]
     bool idle;
@@ -31,6 +48,8 @@ public class SkellyMovement : MonoBehaviour
     {
         navMesh = GetComponent<UnityEngine.AI.NavMeshAgent>();
 
+        player = GameObject.FindWithTag("Player");
+        target = player.transform;
         if (perimeter != null)
         {
             Vector3 rangePerimeter = perimeter.areaSize/2;
@@ -44,18 +63,143 @@ public class SkellyMovement : MonoBehaviour
 
     }
 
-    void FixedUpdate()
+    void Update()
     {
-        if (moveGo)
+        switch (mode)
         {
-            navMesh.destination = testdenistation.position;
-            moveGo = false;
+
+            case 1:
+            Approach();
+            break;
+
+            case 2:
+            InCirlce();
+            break;
+
+            case 3:
+
+            break;
+
+            default:
+
+            break;
         }
-        RandomMovement();
     }
 
+    void FixedUpdate()
+    {
+        switch (mode) //what current states is the movement of the ai IN.
+        {
+            case 1:
+            FixedApproach();
+            break;
+
+            case 2:
+            FixedInCircle();
+            break;
+
+            case 3:
+
+            break;
+
+            default:
+            RandomMovement();
+
+            break;
+        }
+    }
+    #region ActackMovement
+
+    void Approach()
+    {
+        if (!targeting)
+        {
+            inCircleDistance = Random.Range(actackDistance.x, actackDistance.y);
+            navMesh.updateRotation = false;
+            targeting = true;
+        }
+        Velocity = transform.forward * speed * Time.deltaTime;
+
+        Vector3 newRotation = Vector3.RotateTowards(transform.forward, target.position, rotationSpeed * Time.deltaTime, 0.0f);
+        transform.rotation = Quaternion.LookRotation(newRotation, Vector3.up);
+    }
+    void FixedApproach()
+    {
+        if (navMesh.hasPath)
+        {
+            navMesh.ResetPath();
+        }
+        if (Vector3.Distance(target.position, transform.position) < inCircleDistance)
+        {
+            mode = 2;
+        }
+        else
+        {
+            navMesh.Move(Velocity);
+        }
+    }
+
+    void InCirlce()
+    {
+        if (alterState)
+        {
+            if (alter < 1)
+            {
+                alter =+ 1 * Time.deltaTime;
+            }
+            else
+            {
+                alterState = !alterState;
+            }
+        }
+        else
+        {
+            if (alter < 0)
+            {
+                alter =- 1 * Time.deltaTime;
+            }
+            else
+            {
+                alterState = !alterState;
+            }
+        }
+        inCircleDistance = Mathf.Lerp(actackDistance.x, actackDistance.y, alter);
+    }
+
+    void FixedInCircle()
+    {
+        if (Vector3.Distance(target.position, transform.position) > actackDistance.y + 0.2f)
+        {
+            mode = 1;
+        }
+        else
+        {
+            transform.RotateAround(target.position, Vector3.up * inCircleDistance, inCircleSpeed * Time.deltaTime);
+        }
+    }
+
+    void Strike()
+    {
+
+    }
+
+    void FixedStrike()
+    {
+
+    }
+
+
+
+    #endregion
+
+    #region AIGeneralMovement
     void RandomMovement()
     {
+        if (targeting)
+        {
+            targeting = false;
+            navMesh.updateRotation = true;
+        }
         bool lastIdling = false;
         if (idle)
         {
@@ -112,4 +256,5 @@ public class SkellyMovement : MonoBehaviour
             }
         }
     }
+    #endregion
 }
