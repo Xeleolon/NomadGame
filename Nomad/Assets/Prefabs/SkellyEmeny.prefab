@@ -110,6 +110,8 @@ GameObject:
   - component: {fileID: 2804048333991240643}
   - component: {fileID: 2804048333991240642}
   - component: {fileID: 2804048333991240645}
+  - component: {fileID: 3279065262456938963}
+  - component: {fileID: -2286772280029755856}
   m_Layer: 0
   m_Name: SkellyEmeny
   m_TagString: Untagged
@@ -213,3 +215,44 @@ MonoBehaviour:
   remainsPrefab: {fileID: 6370355482741390595, guid: 466a076cd909c9a46b3c4fa4ffcf6a03,
     type: 3}
   skellyType: 1
+--- !u!195 &3279065262456938963
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2804048333991240644}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.5
+  m_Speed: 3.5
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 2
+  m_BaseOffset: 1
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
+--- !u!114 &-2286772280029755856
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2804048333991240644}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d9daf636e6f060f4c8d44495fde5a634, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  testdenistation: {fileID: 0}
+  moveGo: 0
+  travelDistance: 5
+  perimeter: {fileID: 0}
+  maxIdle: 10
+  minIdle: 0.4
+  chanceIdea: 0.5
