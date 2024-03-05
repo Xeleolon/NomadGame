@@ -7,6 +7,14 @@ public class SkellyMovement : MonoBehaviour
 {
     UnityEngine.AI.NavMeshAgent navMesh;
     [SerializeField] float damage = 1;
+    [SerializeField] Vector2 strikePauses = new Vector2(1, 3);
+    [SerializeField] int repeatStrikes = 2;
+    [SerializeField] float strikeSpeed = 3;
+    [SerializeField] float strikeHold = 1;
+    private int strikeMode;
+    private Vector3 strikePosition;
+    private float strikeClock; // the timer while ai incircle player
+    private float strikeHoldClock; //the actacks hold 
 
     [Header("ActackMovements")]
     GameObject player;
@@ -20,7 +28,7 @@ public class SkellyMovement : MonoBehaviour
     bool alterState;
     float inCircleDistance;
     Vector3 Velocity;
-    public bool targeting;
+    bool targeting;
 
 
     [Header("Random Movment")]
@@ -132,7 +140,7 @@ public class SkellyMovement : MonoBehaviour
         {
             navMesh.ResetPath();
         }
-        
+
         if (Vector3.Distance(target.position, transform.position) < inCircleDistance)
         {
             mode = 2;
@@ -145,6 +153,8 @@ public class SkellyMovement : MonoBehaviour
 
     void InCirlce()
     {
+        Strike();
+
         if (alterState)
         {
             if (alter < 1)
@@ -168,6 +178,8 @@ public class SkellyMovement : MonoBehaviour
             }
         }
         inCircleDistance = Mathf.Lerp(actackDistance.x, actackDistance.y, alter);
+
+
     }
 
     void FixedInCircle()
@@ -181,15 +193,97 @@ public class SkellyMovement : MonoBehaviour
             transform.RotateAround(target.position, Vector3.up * inCircleDistance, inCircleSpeed * Time.deltaTime);
         }
     }
-
     void Strike()
     {
+        if (strikeClock > Random.Range(strikePauses.x, strikePauses.y))
+        {
+            mode = 3;
+            strikeMode = 0;
+            strikeHoldClock = 0;
+            if (transform.position.x > target.position.x)
+            {
+                strikePosition.x = target.position.x - 1;
+            }
+            else
+            {
+                strikePosition.x = target.position.x + 1;
+            }
+
+            if (transform.position.z > target.position.z)
+            {
+                strikePosition.z = target.position.z - 1;
+            }
+            else
+            {
+                strikePosition.z = target.position.z + 1;
+            }
+
+            strikePosition.y = target.position.y;
+        }
+        else
+        {
+            strikeClock += 1 * Time.deltaTime;
+        }
+    }
+    void UpdateStrike()
+    {
+        switch (strikeMode)
+        {
+            case 0: //hold strike
+            if (strikeHoldClock < strikeHold)
+            {
+                strikeHoldClock += 1 * Time.deltaTime;
+    
+                Vector3 newRotation = Vector3.RotateTowards(transform.forward, strikePosition.position - transform.position, rotationSpeed * Time.deltaTime, 0.0f);
+                transform.rotation = Quaternion.LookRotation(newRotation);
+            }
+            else
+            {
+                strikeMode = 1;
+            }
+            break;
+
+            case 1: //strike
+            if (transform.position != strikePosition)
+            {
+                Velocity = transform.forward * speed * Time.deltaTime;
+            }
+            else
+            {
+                strikeMode = 2;
+            }
+            break;
+            
+            strikeMode = 3;
+            case 2:
+
+            break;
+
+            case 3: //retreat
+
+            break;
+
+        }
+
 
     }
 
     void FixedStrike()
     {
+        switch (strikeMode)
+        {
+            case 1: //strike
+            if (transform.position != strikePosition)
+            {
+                navMesh.Move(Velocity);
+            }
+            break;
 
+            case 3: //retreat
+
+            break;
+
+        }
     }
 
 
