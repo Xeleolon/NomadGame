@@ -9,6 +9,7 @@ public class SkellyMovement : MonoBehaviour
     [SerializeField] float damage = 1;
     [SerializeField] Vector2 strikePauses = new Vector2(1, 3);
     [SerializeField] int repeatStrikes = 2;
+    int repeatStrikeCount;
     [SerializeField] float strikeSpeed = 3;
     [SerializeField] float strikeHold = 1;
     private int strikeMode;
@@ -68,6 +69,7 @@ public class SkellyMovement : MonoBehaviour
             maxPerimeter = orginPerimeter + rangePerimeter - objectSize;
             minPerimeter = orginPerimeter - rangePerimeter + objectSize;
         }
+        repeatStrikeCount = repeatStrikes;
 
     }
 
@@ -85,11 +87,11 @@ public class SkellyMovement : MonoBehaviour
             break;
 
             case 3:
-
+            UpdateStrike();
             break;
 
             default:
-
+            RandomMovement();
             break;
         }
     }
@@ -107,7 +109,7 @@ public class SkellyMovement : MonoBehaviour
             break;
 
             case 3:
-
+            FixedStrike();
             break;
 
             default:
@@ -202,22 +204,24 @@ public class SkellyMovement : MonoBehaviour
             strikeHoldClock = 0;
             if (transform.position.x > target.position.x)
             {
-                strikePosition.x = target.position.x - 1;
+                strikePosition.x = target.position.x + 1;
             }
             else
             {
-                strikePosition.x = target.position.x + 1;
+                strikePosition.x = target.position.x - 1;
             }
 
             if (transform.position.z > target.position.z)
             {
-                strikePosition.z = target.position.z - 1;
+                strikePosition.z = target.position.z + 1;
             }
             else
             {
-                strikePosition.z = target.position.z + 1;
+                strikePosition.z = target.position.z - 1;
             }
-
+            repeatStrikeCount -= 1;
+            strikePosition.x = (Mathf.Round(strikePosition.x * 100))/100;
+            strikePosition.z = (Mathf.Round(strikePosition.z * 100))/100;
             strikePosition.y = target.position.y;
         }
         else
@@ -234,7 +238,7 @@ public class SkellyMovement : MonoBehaviour
             {
                 strikeHoldClock += 1 * Time.deltaTime;
     
-                Vector3 newRotation = Vector3.RotateTowards(transform.forward, strikePosition.position - transform.position, rotationSpeed * Time.deltaTime, 0.0f);
+                Vector3 newRotation = Vector3.RotateTowards(transform.forward, strikePosition - transform.position, rotationSpeed * 2 * Time.deltaTime, 0.0f);
                 transform.rotation = Quaternion.LookRotation(newRotation);
             }
             else
@@ -244,9 +248,9 @@ public class SkellyMovement : MonoBehaviour
             break;
 
             case 1: //strike
-            if (transform.position != strikePosition)
+            if (Vector3.Distance(transform.position, strikePosition) > 1.1f)
             {
-                Velocity = transform.forward * speed * Time.deltaTime;
+                Velocity = transform.forward * strikeSpeed * Time.deltaTime;
             }
             else
             {
@@ -254,13 +258,47 @@ public class SkellyMovement : MonoBehaviour
             }
             break;
             
-            strikeMode = 3;
             case 2:
 
+            Ray ray;
+            ray = new Ray(gameObject.transform.position, gameObject.transform.forward);
+    
+            RaycastHit hit;
+    
+
+    
+            if (Physics.Raycast(ray, out hit, 1.2f))
+            {
+                PlayerLife playerLife = hit.collider.gameObject.GetComponent<PlayerLife>();
+                if (playerLife != null)
+                {
+                    playerLife.AlterHealth(-damage);
+                    Debug.Log("Hit player");
+                }
+            }
+
+            strikeMode = 3;
             break;
 
             case 3: //retreat
-
+            if (Vector3.Distance(transform.position, target.position) >= Random.Range(actackDistance.x, actackDistance.y))
+            {
+                if (repeatStrikeCount > 0 && Random.Range(0.0f, 1.0f) > 0.5f)
+                {
+                    Strike();
+                }
+                else
+                {
+                    mode = 1;
+                    strikeClock = 0;
+                }
+            }
+            else
+            {
+                Velocity = transform.forward * -1 * strikeSpeed * Time.deltaTime;
+                Vector3 newRotation = Vector3.RotateTowards(transform.forward, strikePosition - transform.position, rotationSpeed * Time.deltaTime, 0.0f);
+                transform.rotation = Quaternion.LookRotation(newRotation);
+            }
             break;
 
         }
@@ -273,14 +311,13 @@ public class SkellyMovement : MonoBehaviour
         switch (strikeMode)
         {
             case 1: //strike
-            if (transform.position != strikePosition)
-            {
-                navMesh.Move(Velocity);
-            }
+            navMesh.Move(Velocity);
             break;
 
             case 3: //retreat
-
+            
+            navMesh.Move(Velocity);
+            
             break;
 
         }
