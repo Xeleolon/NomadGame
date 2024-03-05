@@ -202,27 +202,10 @@ public class SkellyMovement : MonoBehaviour
             mode = 3;
             strikeMode = 0;
             strikeHoldClock = 0;
-            if (transform.position.x > target.position.x)
-            {
-                strikePosition.x = target.position.x + 1;
-            }
-            else
-            {
-                strikePosition.x = target.position.x - 1;
-            }
-
-            if (transform.position.z > target.position.z)
-            {
-                strikePosition.z = target.position.z + 1;
-            }
-            else
-            {
-                strikePosition.z = target.position.z - 1;
-            }
+            
             repeatStrikeCount -= 1;
-            strikePosition.x = (Mathf.Round(strikePosition.x * 100))/100;
-            strikePosition.z = (Mathf.Round(strikePosition.z * 100))/100;
-            strikePosition.y = target.position.y;
+        
+            strikePosition = target.position;
         }
         else
         {

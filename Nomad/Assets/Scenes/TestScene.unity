@@ -449,12 +449,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damage: 1
+  strikePauses: {x: 1, y: 3}
+  repeatStrikes: 2
+  strikeSpeed: 3
+  strikeHold: 1
   mode: 0
   speed: 3
   rotationSpeed: 3
   inCircleSpeed: 3
   actackDistance: {x: 3, y: 5}
-  targeting: 0
   travelDistance: 5
   perimeter: {fileID: 760310731}
   maxIdle: 10
@@ -674,12 +677,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damage: 1
+  strikePauses: {x: 1, y: 3}
+  repeatStrikes: 2
+  strikeSpeed: 3
+  strikeHold: 1
   mode: 0
   speed: 3
   rotationSpeed: 3
   inCircleSpeed: 3
   actackDistance: {x: 3, y: 5}
-  targeting: 0
   travelDistance: 5
   perimeter: {fileID: 760310731}
   maxIdle: 10
@@ -1132,12 +1138,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damage: 1
+  strikePauses: {x: 1, y: 3}
+  repeatStrikes: 2
+  strikeSpeed: 3
+  strikeHold: 1
   mode: 0
   speed: 3
   rotationSpeed: 3
   inCircleSpeed: 3
   actackDistance: {x: 3, y: 5}
-  targeting: 0
   travelDistance: 5
   perimeter: {fileID: 760310731}
   maxIdle: 10
@@ -1323,7 +1332,11 @@ PrefabInstance:
       objectReference: {fileID: 2069729541}
     - target: {fileID: 1933671186, guid: c535fc458e9ee3c4f89414d5e3be0f25, type: 3}
       propertyPath: targeting
-      value: 1
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1933671186, guid: c535fc458e9ee3c4f89414d5e3be0f25, type: 3}
+      propertyPath: strikeSpeed
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 1933671186, guid: c535fc458e9ee3c4f89414d5e3be0f25, type: 3}
       propertyPath: inCircleSpeed
@@ -1331,7 +1344,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1933671186, guid: c535fc458e9ee3c4f89414d5e3be0f25, type: 3}
       propertyPath: rotationSpeed
-      value: 3
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 3801867162851592449, guid: c535fc458e9ee3c4f89414d5e3be0f25,
         type: 3}
@@ -1341,7 +1354,7 @@ PrefabInstance:
     - target: {fileID: 3801867162851592449, guid: c535fc458e9ee3c4f89414d5e3be0f25,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 3.53
+      value: 10.03
       objectReference: {fileID: 0}
     - target: {fileID: 3801867162851592449, guid: c535fc458e9ee3c4f89414d5e3be0f25,
         type: 3}
