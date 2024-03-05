@@ -103,7 +103,10 @@ public class SkellyMovement : MonoBehaviour
             break;
 
             default:
-            RandomMovement();
+            if (navMesh != null)
+            {
+                RandomMovement();
+            }
 
             break;
         }
@@ -120,8 +123,8 @@ public class SkellyMovement : MonoBehaviour
         }
         Velocity = transform.forward * speed * Time.deltaTime;
 
-        Vector3 newRotation = Vector3.RotateTowards(transform.forward, target.position, rotationSpeed * Time.deltaTime, 0.0f);
-        transform.rotation = Quaternion.LookRotation(newRotation, Vector3.up);
+        Vector3 newRotation = Vector3.RotateTowards(transform.forward, target.position - transform.position, rotationSpeed * Time.deltaTime, 0.0f);
+        transform.rotation = Quaternion.LookRotation(newRotation);
     }
     void FixedApproach()
     {
@@ -129,6 +132,7 @@ public class SkellyMovement : MonoBehaviour
         {
             navMesh.ResetPath();
         }
+        
         if (Vector3.Distance(target.position, transform.position) < inCircleDistance)
         {
             mode = 2;
