@@ -453,6 +453,7 @@ MonoBehaviour:
   repeatStrikes: 2
   strikeSpeed: 3
   strikeHold: 1
+  playerMaxDistance: 10
   mode: 0
   speed: 3
   rotationSpeed: 3
@@ -681,6 +682,7 @@ MonoBehaviour:
   repeatStrikes: 2
   strikeSpeed: 3
   strikeHold: 1
+  playerMaxDistance: 10
   mode: 0
   speed: 3
   rotationSpeed: 3
@@ -1142,6 +1144,7 @@ MonoBehaviour:
   repeatStrikes: 2
   strikeSpeed: 3
   strikeHold: 1
+  playerMaxDistance: 10
   mode: 0
   speed: 3
   rotationSpeed: 3
@@ -1320,7 +1323,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1933671186, guid: c535fc458e9ee3c4f89414d5e3be0f25, type: 3}
       propertyPath: mode
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1933671186, guid: c535fc458e9ee3c4f89414d5e3be0f25, type: 3}
       propertyPath: speed
@@ -1330,6 +1333,10 @@ PrefabInstance:
       propertyPath: target
       value: 
       objectReference: {fileID: 2069729541}
+    - target: {fileID: 1933671186, guid: c535fc458e9ee3c4f89414d5e3be0f25, type: 3}
+      propertyPath: perimeter
+      value: 
+      objectReference: {fileID: 760310731}
     - target: {fileID: 1933671186, guid: c535fc458e9ee3c4f89414d5e3be0f25, type: 3}
       propertyPath: targeting
       value: 0

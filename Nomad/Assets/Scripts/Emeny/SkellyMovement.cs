@@ -12,6 +12,7 @@ public class SkellyMovement : MonoBehaviour
     int repeatStrikeCount;
     [SerializeField] float strikeSpeed = 3;
     [SerializeField] float strikeHold = 1;
+    [SerializeField] float playerMaxDistance = 10;
     private int strikeMode;
     private Vector3 strikePosition;
     private float strikeClock; // the timer while ai incircle player
@@ -25,11 +26,14 @@ public class SkellyMovement : MonoBehaviour
     [SerializeField] float rotationSpeed = 3;
     [SerializeField] float inCircleSpeed = 3;
     [SerializeField] Vector2 actackDistance = new Vector2(3,5);
+    bool rotationAntiClockWise;
+    float rotationClock;
+    float rotationMaxTurn = 5;
     float alter;
     bool alterState;
     float inCircleDistance;
     Vector3 Velocity;
-    bool targeting;
+    bool targeting = false;
 
 
     [Header("Random Movment")]
@@ -98,6 +102,7 @@ public class SkellyMovement : MonoBehaviour
 
     void FixedUpdate()
     {
+        DecectPlayer();
         switch (mode) //what current states is the movement of the ai IN.
         {
             case 1:
@@ -121,16 +126,41 @@ public class SkellyMovement : MonoBehaviour
             break;
         }
     }
+
+    #region DecectPlayer
+    void DecectPlayer()
+    {
+        Ray ray;
+            ray = new Ray(gameObject.transform.position, gameObject.transform.forward);
+    
+            RaycastHit hit;
+    
+
+    
+            if (Physics.Raycast(ray, out hit, 1.2f))
+            {
+                if (hit.collider.gameObject.name == "Player")
+                {
+                    if (!targeting)
+                    {
+                        mode = 1;
+                        inCircleDistance = Random.Range(actackDistance.x, actackDistance.y);
+                        navMesh.updateRotation = false;
+                        targeting = true;
+                    }
+                    
+                    target = player.transform;
+
+                }
+            }
+    }
+    #endregion
+
     #region ActackMovement
 
     void Approach()
     {
-        if (!targeting)
-        {
-            inCircleDistance = Random.Range(actackDistance.x, actackDistance.y);
-            navMesh.updateRotation = false;
-            targeting = true;
-        }
+
         Velocity = transform.forward * speed * Time.deltaTime;
 
         Vector3 newRotation = Vector3.RotateTowards(transform.forward, target.position - transform.position, rotationSpeed * Time.deltaTime, 0.0f);
@@ -145,7 +175,15 @@ public class SkellyMovement : MonoBehaviour
 
         if (Vector3.Distance(target.position, transform.position) < inCircleDistance)
         {
-            mode = 2;
+            if (Vector3.Distance(transform.position, player.transform.position) > playerMaxDistance)
+            {
+                Debug.Log("Lost Player");
+                mode = 0;
+            }
+            else
+            {
+                mode = 2;
+            }
         }
         else
         {
@@ -179,6 +217,15 @@ public class SkellyMovement : MonoBehaviour
                 alterState = !alterState;
             }
         }
+        if (rotationClock > rotationMaxTurn)
+        {
+            rotationAntiClockWise = !rotationAntiClockWise;
+            rotationClock = 0;
+        }
+        else
+        {
+            rotationClock += 1 * Time.deltaTime;
+        }
         inCircleDistance = Mathf.Lerp(actackDistance.x, actackDistance.y, alter);
 
 
@@ -186,13 +233,17 @@ public class SkellyMovement : MonoBehaviour
 
     void FixedInCircle()
     {
-        if (Vector3.Distance(target.position, transform.position) > actackDistance.y + 0.2f)
+        if (Vector3.Distance(player.transform.position, transform.position) > actackDistance.y + 0.2f)
         {
             mode = 1;
         }
-        else
+        else if (!rotationAntiClockWise)
         {
-            transform.RotateAround(target.position, Vector3.up * inCircleDistance, inCircleSpeed * Time.deltaTime);
+            transform.RotateAround(player.transform.position, Vector3.up * inCircleDistance, inCircleSpeed * Time.deltaTime);
+        }
+        else if (rotationAntiClockWise)
+        {
+            transform.RotateAround(player.transform.position, Vector3.up * inCircleDistance, -inCircleSpeed * Time.deltaTime);
         }
     }
     void Strike()
@@ -205,7 +256,7 @@ public class SkellyMovement : MonoBehaviour
             
             repeatStrikeCount -= 1;
         
-            strikePosition = target.position;
+            strikePosition = player.transform.position;
         }
         else
         {
