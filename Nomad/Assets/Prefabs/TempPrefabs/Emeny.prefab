@@ -13,8 +13,8 @@ GameObject:
   - component: {fileID: 3801867162851592455}
   - component: {fileID: 3801867162851592452}
   - component: {fileID: 3801867162851592448}
-  - component: {fileID: 1933671185}
   - component: {fileID: 1933671186}
+  - component: {fileID: 891576343}
   m_Layer: 0
   m_Name: Emeny
   m_TagString: Untagged
@@ -36,7 +36,7 @@ Transform:
   m_Children:
   - {fileID: 3801867164346745412}
   m_Father: {fileID: 0}
-  m_RootOrder: 10
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &3801867162851592454
 MeshFilter:
@@ -118,7 +118,35 @@ MonoBehaviour:
   remainsPrefab: {fileID: 6370355482741390595, guid: 466a076cd909c9a46b3c4fa4ffcf6a03,
     type: 3}
   skellyType: 0
---- !u!195 &1933671185
+--- !u!114 &1933671186
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3801867162851592453}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d9daf636e6f060f4c8d44495fde5a634, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damage: 1
+  strikePauses: {x: 1, y: 3}
+  repeatStrikes: 2
+  strikeSpeed: 6
+  strikeHold: 1
+  playerMaxDistance: 10
+  mode: 0
+  speed: 4
+  rotationSpeed: 6
+  inCircleSpeed: 60
+  actackDistance: {x: 3, y: 5}
+  travelDistance: 5
+  perimeter: {fileID: 0}
+  maxIdle: 10
+  minIdle: 0.4
+  chanceIdea: 0.5
+--- !u!195 &891576343
 NavMeshAgent:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -140,25 +168,6 @@ NavMeshAgent:
   m_BaseOffset: 1
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!114 &1933671186
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3801867162851592453}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d9daf636e6f060f4c8d44495fde5a634, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  testdenistation: {fileID: 0}
-  moveGo: 0
-  travelDistance: 5
-  perimeter: {fileID: 0}
-  maxIdle: 10
-  minIdle: 0.4
-  chanceIdea: 0.5
 --- !u!1 &3801867164346745413
 GameObject:
   m_ObjectHideFlags: 0
