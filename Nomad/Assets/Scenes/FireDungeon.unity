@@ -2307,7 +2307,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &344422616
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9170,36 +9170,6 @@ PrefabInstance:
     serializedVersion: 2
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 4898741377157457631, guid: 2755097388678624fa0ac21a25ac9044,
-        type: 3}
-      propertyPath: m_CastShadows
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4898741377157457631, guid: 2755097388678624fa0ac21a25ac9044,
-        type: 3}
-      propertyPath: m_LightProbeUsage
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6044557773591912374, guid: 2755097388678624fa0ac21a25ac9044,
-        type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6460667982072683645, guid: 2755097388678624fa0ac21a25ac9044,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6460667982072683646, guid: 2755097388678624fa0ac21a25ac9044,
-        type: 3}
-      propertyPath: m_RendererIndex
-      value: -1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6460667982072683646, guid: 2755097388678624fa0ac21a25ac9044,
-        type: 3}
-      propertyPath: m_RenderPostProcessing
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 6460667982185550420, guid: 2755097388678624fa0ac21a25ac9044,
         type: 3}
       propertyPath: m_RootOrder
@@ -9259,76 +9229,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Player
-      objectReference: {fileID: 0}
-    - target: {fileID: 6460667982185550429, guid: 2755097388678624fa0ac21a25ac9044,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6460667982185550429, guid: 2755097388678624fa0ac21a25ac9044,
-        type: 3}
-      propertyPath: m_TagString
-      value: Player
-      objectReference: {fileID: 0}
-    - target: {fileID: 7581188149751263892, guid: 2755097388678624fa0ac21a25ac9044,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0.454
-      objectReference: {fileID: 0}
-    - target: {fileID: 7581188149751263892, guid: 2755097388678624fa0ac21a25ac9044,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0.724
-      objectReference: {fileID: 0}
-    - target: {fileID: 8824780163318115482, guid: 2755097388678624fa0ac21a25ac9044,
-        type: 3}
-      propertyPath: m_Type
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 8824780163318115482, guid: 2755097388678624fa0ac21a25ac9044,
-        type: 3}
-      propertyPath: m_Range
-      value: 100
-      objectReference: {fileID: 0}
-    - target: {fileID: 8824780163318115482, guid: 2755097388678624fa0ac21a25ac9044,
-        type: 3}
-      propertyPath: m_Color.b
-      value: 0.13333333
-      objectReference: {fileID: 0}
-    - target: {fileID: 8824780163318115482, guid: 2755097388678624fa0ac21a25ac9044,
-        type: 3}
-      propertyPath: m_Color.g
-      value: 0.68431455
-      objectReference: {fileID: 0}
-    - target: {fileID: 8824780163318115482, guid: 2755097388678624fa0ac21a25ac9044,
-        type: 3}
-      propertyPath: m_Color.r
-      value: 0.972549
-      objectReference: {fileID: 0}
-    - target: {fileID: 8824780163318115482, guid: 2755097388678624fa0ac21a25ac9044,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8824780163318115482, guid: 2755097388678624fa0ac21a25ac9044,
-        type: 3}
-      propertyPath: m_Intensity
-      value: 75.8
-      objectReference: {fileID: 0}
-    - target: {fileID: 8824780163318115482, guid: 2755097388678624fa0ac21a25ac9044,
-        type: 3}
-      propertyPath: m_BounceIntensity
-      value: 23.7
-      objectReference: {fileID: 0}
-    - target: {fileID: 8824780163318115482, guid: 2755097388678624fa0ac21a25ac9044,
-        type: 3}
-      propertyPath: m_ColorTemperature
-      value: 7204
-      objectReference: {fileID: 0}
-    - target: {fileID: 8824780163318115482, guid: 2755097388678624fa0ac21a25ac9044,
-        type: 3}
-      propertyPath: m_UseColorTemperature
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_AddedGameObjects: []

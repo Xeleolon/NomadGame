@@ -51,18 +51,27 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Hit",
+                    "name": "Inventory",
                     "type": "Button",
-                    "id": "aa173c93-d1d8-4100-99bf-b55220c98166",
+                    "id": "5888ca65-07da-46c4-b1c7-915e7112d866",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Inventory",
+                    "name": "FlipTool",
                     "type": "Button",
-                    "id": "5888ca65-07da-46c4-b1c7-915e7112d866",
+                    "id": "aa860e1a-e9c5-4c0b-b80c-f433f55b4b27",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "SwapTool",
+                    "type": "Button",
+                    "id": "6668b9c8-0064-49d0-a262-412aa32b6dbe",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -314,23 +323,34 @@
                 },
                 {
                     "name": "",
-                    "id": "7bcc3112-a75b-4296-ad21-bd9bdffd379c",
-                    "path": "<Mouse>/leftButton",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Keyboard&Mouse",
-                    "action": "Hit",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "7e1fa8d9-f5b9-41ac-ae26-719f78408da5",
                     "path": "<Keyboard>/e",
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard&Mouse",
                     "action": "Inventory",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "c71a2b5a-28b9-4f08-85b6-f5700b131dc7",
+                    "path": "<Keyboard>/f",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "FlipTool",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "cdaafa69-2b05-489a-bf64-fcc40740d443",
+                    "path": "<Keyboard>/q",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "SwapTool",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

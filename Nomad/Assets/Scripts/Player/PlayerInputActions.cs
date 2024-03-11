@@ -73,18 +73,27 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Hit"",
+                    ""name"": ""Inventory"",
                     ""type"": ""Button"",
-                    ""id"": ""aa173c93-d1d8-4100-99bf-b55220c98166"",
+                    ""id"": ""5888ca65-07da-46c4-b1c7-915e7112d866"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Inventory"",
+                    ""name"": ""FlipTool"",
                     ""type"": ""Button"",
-                    ""id"": ""5888ca65-07da-46c4-b1c7-915e7112d866"",
+                    ""id"": ""aa860e1a-e9c5-4c0b-b80c-f433f55b4b27"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SwapTool"",
+                    ""type"": ""Button"",
+                    ""id"": ""6668b9c8-0064-49d0-a262-412aa32b6dbe"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -336,23 +345,34 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""7bcc3112-a75b-4296-ad21-bd9bdffd379c"",
-                    ""path"": ""<Mouse>/leftButton"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse"",
-                    ""action"": ""Hit"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
                     ""id"": ""7e1fa8d9-f5b9-41ac-ae26-719f78408da5"",
                     ""path"": ""<Keyboard>/e"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
                     ""action"": ""Inventory"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c71a2b5a-28b9-4f08-85b6-f5700b131dc7"",
+                    ""path"": ""<Keyboard>/f"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""FlipTool"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""cdaafa69-2b05-489a-bf64-fcc40740d443"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""SwapTool"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -945,8 +965,9 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
         m_Player_Fire = m_Player.FindAction("Fire", throwIfNotFound: true);
         m_Player_Sprint = m_Player.FindAction("Sprint", throwIfNotFound: true);
         m_Player_Jump = m_Player.FindAction("Jump", throwIfNotFound: true);
-        m_Player_Hit = m_Player.FindAction("Hit", throwIfNotFound: true);
         m_Player_Inventory = m_Player.FindAction("Inventory", throwIfNotFound: true);
+        m_Player_FlipTool = m_Player.FindAction("FlipTool", throwIfNotFound: true);
+        m_Player_SwapTool = m_Player.FindAction("SwapTool", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1023,8 +1044,9 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Fire;
     private readonly InputAction m_Player_Sprint;
     private readonly InputAction m_Player_Jump;
-    private readonly InputAction m_Player_Hit;
     private readonly InputAction m_Player_Inventory;
+    private readonly InputAction m_Player_FlipTool;
+    private readonly InputAction m_Player_SwapTool;
     public struct PlayerActions
     {
         private @PlayerInputActions m_Wrapper;
@@ -1034,8 +1056,9 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
         public InputAction @Fire => m_Wrapper.m_Player_Fire;
         public InputAction @Sprint => m_Wrapper.m_Player_Sprint;
         public InputAction @Jump => m_Wrapper.m_Player_Jump;
-        public InputAction @Hit => m_Wrapper.m_Player_Hit;
         public InputAction @Inventory => m_Wrapper.m_Player_Inventory;
+        public InputAction @FlipTool => m_Wrapper.m_Player_FlipTool;
+        public InputAction @SwapTool => m_Wrapper.m_Player_SwapTool;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1060,12 +1083,15 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                 @Jump.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnJump;
                 @Jump.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnJump;
                 @Jump.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnJump;
-                @Hit.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnHit;
-                @Hit.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnHit;
-                @Hit.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnHit;
                 @Inventory.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnInventory;
                 @Inventory.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnInventory;
                 @Inventory.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnInventory;
+                @FlipTool.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnFlipTool;
+                @FlipTool.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnFlipTool;
+                @FlipTool.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnFlipTool;
+                @SwapTool.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSwapTool;
+                @SwapTool.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSwapTool;
+                @SwapTool.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSwapTool;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -1085,12 +1111,15 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                 @Jump.started += instance.OnJump;
                 @Jump.performed += instance.OnJump;
                 @Jump.canceled += instance.OnJump;
-                @Hit.started += instance.OnHit;
-                @Hit.performed += instance.OnHit;
-                @Hit.canceled += instance.OnHit;
                 @Inventory.started += instance.OnInventory;
                 @Inventory.performed += instance.OnInventory;
                 @Inventory.canceled += instance.OnInventory;
+                @FlipTool.started += instance.OnFlipTool;
+                @FlipTool.performed += instance.OnFlipTool;
+                @FlipTool.canceled += instance.OnFlipTool;
+                @SwapTool.started += instance.OnSwapTool;
+                @SwapTool.performed += instance.OnSwapTool;
+                @SwapTool.canceled += instance.OnSwapTool;
             }
         }
     }
@@ -1252,8 +1281,9 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
         void OnFire(InputAction.CallbackContext context);
         void OnSprint(InputAction.CallbackContext context);
         void OnJump(InputAction.CallbackContext context);
-        void OnHit(InputAction.CallbackContext context);
         void OnInventory(InputAction.CallbackContext context);
+        void OnFlipTool(InputAction.CallbackContext context);
+        void OnSwapTool(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {
