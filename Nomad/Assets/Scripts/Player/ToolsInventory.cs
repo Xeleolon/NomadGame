@@ -43,8 +43,14 @@ public class ToolsInventory : MonoBehaviour
     [Header("Inventory")]
     public WeaponItem weapon;
     private int curTool;
+    [SerializeField] GameObject toolObject;
+    [SerializeField] GameObject torchPrefab;
+    [Tooltip("0 = no torch, 3 = drenched torch, 4 = lit torch.")]
+    [Range(0, 4)]
+    [SerializeField] int torchState = 0; //0 = no torch, 2 = drenched torch, 4 = lit torch.
 
     [Header("Weapon")]
+    [SerializeField] GameObject weaponObject;
     float coolDown;
     bool canHarm = true;
     public bool gamePaused;
@@ -71,7 +77,7 @@ public class ToolsInventory : MonoBehaviour
             break;
 
             case 1:
-            
+            DropTorch();
             
             break;
         }
@@ -82,13 +88,32 @@ public class ToolsInventory : MonoBehaviour
         switch (curTool)
         {
             case 0: //change to tool mode
-            curTool = 1;
-            //hide tool
+            if (torchState > 0)
+            {
+                curTool = 1;
+                if (weaponObject != null && weaponObject.activeSelf) //hide weapon
+                {
+                    weaponObject.SetActive(false);
+                }
+
+                if (toolObject != null && !toolObject.activeSelf)
+                {
+                    toolObject.SetActive(true);
+                }
+            }
             break;
 
             case 1: //change to weapon mode
             curTool = 0;
-            //hide weapon
+            if (weaponObject != null && !weaponObject.activeSelf) //hide tool
+            {
+                weaponObject.SetActive(true);
+            }
+
+            if (toolObject != null && toolObject.activeSelf)
+            {
+                toolObject.SetActive(false);
+            }
             break;
         }
     }
@@ -110,6 +135,24 @@ public class ToolsInventory : MonoBehaviour
         }
     }
 
+    void DropTorch()
+    {
+        //spawn Torch and drop it to the ground,
+        if (torchState != 0)
+        {
+            torchState = 0;
+            if (toolObject != null && toolObject.activeSelf)
+            {
+                toolObject.SetActive(false);
+            }
+            if (torchPrefab != null)
+            {
+                Instantiate(torchPrefab, toolObject.transform.position, Quaternion.Euler(Random.Range(-1.0f, 1.0f), 0 , Random.Range(-1.0f, 1.0f)));
+            }
+        }
+
+    }
+
 
     #endregion
 
@@ -117,7 +160,7 @@ public class ToolsInventory : MonoBehaviour
 
     void Actack()
     {
-        if (coolDown <= 0 && !gamePaused)
+        if (coolDown <= 0 && !gamePaused && weapon != null)
         {
             switch (weapon.type)
             {

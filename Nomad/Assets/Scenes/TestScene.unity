@@ -1654,6 +1654,28 @@ PrefabInstance:
     serializedVersion: 2
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 4595492427973857919, guid: 2755097388678624fa0ac21a25ac9044,
+        type: 3}
+      propertyPath: weapon
+      value: 
+      objectReference: {fileID: 11400000, guid: d6dc2a4b423f0f747b74ae5e862e7260,
+        type: 2}
+    - target: {fileID: 4595492427973857919, guid: 2755097388678624fa0ac21a25ac9044,
+        type: 3}
+      propertyPath: torchState
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4595492427973857919, guid: 2755097388678624fa0ac21a25ac9044,
+        type: 3}
+      propertyPath: torchPrefab
+      value: 
+      objectReference: {fileID: 3260074229154982981, guid: 5a199d4a5236f3448b5955f5ce891c51,
+        type: 3}
+    - target: {fileID: 6460667982185550416, guid: 2755097388678624fa0ac21a25ac9044,
+        type: 3}
+      propertyPath: groundDrag
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 6460667982185550420, guid: 2755097388678624fa0ac21a25ac9044,
         type: 3}
       propertyPath: m_RootOrder
