@@ -60,6 +60,10 @@ public class DoorControl : MonoBehaviour
             ClosingDoor();
             return true;
             break;
+
+            case default:
+            Debug.LogError("Error");
+            break;
         }
         return false;
 

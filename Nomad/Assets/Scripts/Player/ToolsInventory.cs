@@ -11,6 +11,7 @@ public class ToolsInventory : MonoBehaviour
     private InputAction strike;
     private InputAction flipTool;
     private InputAction swapTool;
+    private InputAction interactWith;
     void Awake()
     {
         playerControls = new PlayerInputActions();
@@ -29,6 +30,11 @@ public class ToolsInventory : MonoBehaviour
         swapTool.Enable();
         swapTool.performed += SwapTool;
 
+        interactWith = playerControls.Player.Interact;
+        interactWith.Enable();
+        interactWith.performed += Interact;
+
+
 
     }
 
@@ -37,6 +43,7 @@ public class ToolsInventory : MonoBehaviour
         strike.Disable();
         flipTool.Disable();
         swapTool.Disable();
+        interactWith.Disable();
     }
     #endregion
 
@@ -48,6 +55,12 @@ public class ToolsInventory : MonoBehaviour
     [Tooltip("0 = no torch, 3 = drenched torch, 4 = lit torch.")]
     [Range(0, 4)]
     [SerializeField] int torchState = 0; //0 = no torch, 2 = drenched torch, 4 = lit torch.
+    [Header("Interact")]
+    [SerializeField] GameObject interactPanel;
+    private bool checkInteract;
+    InteractBase interactBase;
+    private int numCheck;
+    
 
     [Header("Weapon")]
     [SerializeField] GameObject weaponObject;
@@ -67,6 +80,86 @@ public class ToolsInventory : MonoBehaviour
             coolDown -= 1 * Time.deltaTime;
         }
     }
+
+    void FixedUpdate()
+    {
+        if (checkInteract)
+        {
+            InteractRay();
+        }
+
+        if (interactPanel != null)
+        {
+            if (interactBase != null && !interactPanel.activeSelf)
+            {
+                interactPanel.SetActive(true);
+            }
+            else if (interactBase == null && interactPanel.activeSelf)
+            {
+                interactPanel.SetActive(false);
+            }
+        }
+    }
+
+    #region Interact
+
+    void Interact(InputAction.CallbackContext context)
+    {
+        if (interactBase != null)
+        {
+            interactBase.Interact();
+        }
+    }
+
+    public void InteractCheck(bool result)
+    {
+        if (result)
+        {
+            if (checkInteract)
+            {
+                numCheck += 1;
+            }
+            else
+            {
+                checkInteract = true;
+            }
+        }
+        else if (checkInteract)
+        {
+            if (numCheck == 0)
+            {
+                checkInteract = false;
+                interactBase = null;
+            }
+            else
+            {
+                numCheck -= 1;
+            }
+        }
+    }
+    void InteractRay()
+    {
+        //fire ray
+        Ray ray;
+        ray = new Ray(gameObject.transform.position, gameObject.transform.forward);
+    
+        RaycastHit hit;
+    
+        int layerMask = 1 << 20;
+        layerMask = ~layerMask;
+    
+        if (Physics.Raycast(ray, out hit, weapon.range, layerMask))
+        {
+            interactBase = hit.collider.gameObject.GetComponent<InteractBase>();
+        }
+        else 
+        {
+            interactBase = null;
+        }
+
+    }
+    #endregion
+
     #region inputControl
     void FireTool(InputAction.CallbackContext context)
     {
@@ -151,6 +244,22 @@ public class ToolsInventory : MonoBehaviour
             }
         }
 
+    }
+
+    public void DrenchTorch(bool drench)
+    {
+        if (curTool == 1)
+        {
+            if (drench)
+            {
+                torchState = 3;
+                //torch become unlit
+            }
+            else
+            {
+                torchState = 1;
+            }
+        }
     }
 
 
