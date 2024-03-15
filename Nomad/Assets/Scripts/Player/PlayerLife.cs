@@ -6,6 +6,7 @@ public class PlayerLife : MonoBehaviour
 {
 
     #region Awake
+    public static PlayerLife instance;
     void Awake()
     {
         if (instance != null)
@@ -35,7 +36,6 @@ public class PlayerLife : MonoBehaviour
     
     [Header("Paused")]
     public bool gamePaused;
-    public static PlayerLife instance;
 
 
     void Start()

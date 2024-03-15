@@ -61,7 +61,7 @@ public class DoorControl : MonoBehaviour
             return true;
             break;
 
-            case default:
+            default:
             Debug.LogError("Error");
             break;
         }

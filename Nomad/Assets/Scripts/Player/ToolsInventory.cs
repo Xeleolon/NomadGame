@@ -7,6 +7,7 @@ public class ToolsInventory : MonoBehaviour
 {
     // Start is called before the first frame update
     #region Inputs
+    public static ToolsInventory instance;
     private PlayerInputActions playerControls;
     private InputAction strike;
     private InputAction flipTool;
@@ -14,6 +15,11 @@ public class ToolsInventory : MonoBehaviour
     private InputAction interactWith;
     void Awake()
     {
+        if (instance != null)
+        {
+            Debug.LogWarning("more than one player life!");
+        }
+        instance = this;
         playerControls = new PlayerInputActions();
     }
     void OnEnable()
@@ -49,12 +55,14 @@ public class ToolsInventory : MonoBehaviour
 
     [Header("Inventory")]
     public WeaponItem weapon;
-    private int curTool;
+    [HideInInspector] public int curTool;
     [SerializeField] GameObject toolObject;
+    [SerializeField] GameObject torchLight;
     [SerializeField] GameObject torchPrefab;
-    [Tooltip("0 = no torch, 3 = drenched torch, 4 = lit torch.")]
+    [Tooltip("0 = no torch, 2 = lit torch, 3 = drenched torch.")]
     [Range(0, 4)]
-    [SerializeField] int torchState = 0; //0 = no torch, 2 = drenched torch, 4 = lit torch.
+    [SerializeField] public int torchState = 0; //0 = no torch, 2 = lit torch, 3 = drenched torch.
+    bool torchLit;
     [Header("Interact")]
     [SerializeField] GameObject interactPanel;
     private bool checkInteract;
@@ -99,9 +107,90 @@ public class ToolsInventory : MonoBehaviour
                 interactPanel.SetActive(false);
             }
         }
+
+        if (torchState == 2 && !torchLit && torchLight != null)
+        {
+            torchLit = true;
+            if (!torchLight.activeSelf)
+            {
+                torchLight.SetActive(true);
+            }
+        }
+        else if (torchState != 2 && torchLit && torchLight != null)
+        {
+            torchLit = false;
+            if (torchLight.activeSelf)
+            {
+                torchLight.SetActive(false);
+            }
+        }
     }
 
     #region Interact
+    public bool AddTorch(int torchData)
+    {
+        if (torchState == 0)
+        {
+            torchState = 1;
+            changeTorch(torchData);
+            if (!toolObject.activeSelf)
+            {
+                toolObject.SetActive(true);
+            }
+            curTool = 1;
+            return true;
+        }
+        return false;
+    }
+
+    public void changeTorch(int tempTorchState)
+    {
+        if (torchState != 0 && curTool == 1 && torchState != tempTorchState)
+        {
+            switch (tempTorchState)
+            {
+                case 0:
+                torchState = 0;
+                if (toolObject.activeSelf)
+                {
+                    toolObject.SetActive(false);
+                }
+                break;
+
+                case 1:
+                torchState = 1;
+                Debug.Log("offcourse");
+                if (torchLight != null && torchLight.activeSelf)
+                {
+                    torchLight.SetActive(false);
+                }
+                break;
+
+                case 2:
+                //Debug.Log("Made to stage 2");
+                if (torchState != 3)
+                {
+                    //Debug.Log("Made to stage 3");
+                    torchState = 2;
+                    //turn light on
+                    if (torchLight != null && !torchLight.activeSelf)
+                    {
+                        //Debug.Log("Made to stage 4");
+                        torchLight.SetActive(true);
+                    }
+                }
+                break;
+
+                case 3:
+                torchState = 3;
+                if (torchLight != null && torchLight.activeSelf) // turn light off
+                {
+                    torchLight.SetActive(false);
+                }
+                break;
+            }
+        }
+    }
 
     void Interact(InputAction.CallbackContext context)
     {
@@ -170,7 +259,10 @@ public class ToolsInventory : MonoBehaviour
             break;
 
             case 1:
-            DropTorch();
+            if (torchState != 0 || torchState != 4)
+            {
+                torchState = 2;
+            }
             
             break;
         }
@@ -213,8 +305,9 @@ public class ToolsInventory : MonoBehaviour
 
     void FlipTool(InputAction.CallbackContext context)
     {
-        if (curTool == 0)
+        switch (curTool)
         {
+            case 0: 
             canHarm = !canHarm;
             if (canHarm)
             {
@@ -224,7 +317,12 @@ public class ToolsInventory : MonoBehaviour
             {
                 Debug.Log("Weapon Set to nock/studd end");
             }
-            //flip tool render around as well
+            break;
+
+            case 1:
+            DropTorch();
+            
+            break;
         }
     }
 
@@ -233,15 +331,18 @@ public class ToolsInventory : MonoBehaviour
         //spawn Torch and drop it to the ground,
         if (torchState != 0)
         {
-            torchState = 0;
+            
             if (toolObject != null && toolObject.activeSelf)
             {
                 toolObject.SetActive(false);
             }
             if (torchPrefab != null)
             {
-                Instantiate(torchPrefab, toolObject.transform.position, Quaternion.Euler(Random.Range(-1.0f, 1.0f), 0 , Random.Range(-1.0f, 1.0f)));
+                GameObject tempObject = Instantiate(torchPrefab, toolObject.transform.position, Quaternion.Euler(Random.Range(-1.0f, 1.0f), 0 , Random.Range(-1.0f, 1.0f)));
+                tempObject.GetComponent<PickUpTorch>().ChangeState(torchState);
             }
+
+            torchState = 0;
         }
 
     }
@@ -255,7 +356,7 @@ public class ToolsInventory : MonoBehaviour
                 torchState = 3;
                 //torch become unlit
             }
-            else
+            else if (torchState == 3)
             {
                 torchState = 1;
             }
