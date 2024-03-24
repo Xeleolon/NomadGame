@@ -11,10 +11,18 @@ public class DoorControl : MonoBehaviour
     Animator animator;
     [SerializeField] string openingAnimation;
     [SerializeField] string closingAnimation;
+    [Range(1, 10)]
+    [SerializeField] int numLocks = 1;
+    int currentNumLock;
 
     void Start()
     {
         animator = GetComponent<Animator>();
+        if (numLocks <= 0)
+        {
+            numLocks = 1;
+        }
+        currentNumLock = numLocks;
     }
 
     void FixedUpdate()
@@ -42,14 +50,19 @@ public class DoorControl : MonoBehaviour
                 }
                 else
                 {
-                    OpeningDoor();
-                    return true;
+                    currentNumLock -= 1;
+                    if (!Locked && currentNumLock <= 0)
+                    {
+                        OpeningDoor();
+                        return true;
+                    }
                 }
             }
             break;
 
             case 1:
-            if (!Locked)
+            currentNumLock -= 1;
+            if (!Locked && currentNumLock <= 0)
             {
                 OpeningDoor();
                 return true;
@@ -59,6 +72,15 @@ public class DoorControl : MonoBehaviour
             case 2:
             ClosingDoor();
             return true;
+            break;
+
+            case 3:
+            if (!DoorOpened)
+            {
+                Debug.Log("Reseting Lock");
+                currentNumLock = numLocks;
+                return true;
+            }
             break;
 
             default:

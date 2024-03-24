@@ -8,6 +8,7 @@ public class PickUpTorch : InteractBase
     [Tooltip("0 = no torch, 2 = lit torch, 3 = drenched torch.")]
     [Range(1, 3)]
     [SerializeField] private int startState = 1;
+    [SerializeField] private bool Unpickable;
     [SerializeField] private GameObject lightSource;
     private int lightState;
     private bool skipStartLight;
@@ -21,7 +22,7 @@ public class PickUpTorch : InteractBase
 
     public override void Interact()
     {
-        if (door == null && ToolsInventory.instance.AddTorch(lightState))
+        if (!Unpickable && door == null && ToolsInventory.instance.AddTorch(lightState))
         {
             Debug.Log("pick up torch");
             ToolsInventory.instance.InteractCheck(false);

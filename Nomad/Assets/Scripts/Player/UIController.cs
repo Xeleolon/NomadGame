@@ -35,11 +35,15 @@ public class UIController : MonoBehaviour //focus on controlling UI and pla
         {
             if (!MapUI.activeSelf)
             {
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
                 MapUI.SetActive(true);
                 
             }
             else if (MapUI.activeSelf)
             {
+                Cursor.lockState = CursorLockMode.Confined;
+                Cursor.visible = false;
                 //close
                 MapUI.SetActive(false);
                 

@@ -181,7 +181,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: af68547101f30fc4baae9824c7c90b89, type: 2}
+  - {fileID: 2100000, guid: 625c9a765d95ad343858828147f8a62c, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -246,6 +246,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   distance: 3
+  door: {fileID: 0}
+  doorOpeningState: 0
   startState: 1
   lightSource: {fileID: 1277228499619613314}
 --- !u!65 &-8781392032908711792
