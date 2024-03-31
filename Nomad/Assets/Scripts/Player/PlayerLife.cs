@@ -22,9 +22,6 @@ public class PlayerLife : MonoBehaviour
     [SerializeField] bool freazeDecays;
     [SerializeField] float health;
     float curHealth;
-    [SerializeField] float thirst;
-    float curThrist;
-    [SerializeField] float thirstDecay;
     [SerializeField] float hunger;
     float curHunger;
     [SerializeField] float hungerDecay;
@@ -42,7 +39,6 @@ public class PlayerLife : MonoBehaviour
     {
         curHealth = health;
         curHunger = hunger;
-        curThrist = thirst;
     }
 
     void Update()
@@ -61,14 +57,6 @@ public class PlayerLife : MonoBehaviour
 
     void SurvivalDecays()
     {
-        if (curThrist > 0)
-        {
-            curThrist -= thirstDecay * Time.deltaTime;
-        }
-        else
-        {
-            AlterHealth(0.2f * Time.deltaTime);
-        }
 
         if (curHunger > 0)
         {
@@ -93,6 +81,11 @@ public class PlayerLife : MonoBehaviour
             curHealth = health;
         }
 
+    }
+
+    public void RestRestore()
+    {
+        curHealth = health;
     }
     #endregion
     
