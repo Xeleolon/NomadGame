@@ -26,6 +26,8 @@ public class PlayerLife : MonoBehaviour
     float curHunger;
     [SerializeField] float hungerDecay;
     [Header("Inventory")]
+    [SerializeField] GameObject healthyUiPrefab;
+    [SerializeField] Transform healthParent;
     [SerializeField] float waterSkinSize = 10;
     [SerializeField] float waterSkinFill = 10;
 
@@ -39,6 +41,7 @@ public class PlayerLife : MonoBehaviour
     {
         curHealth = health;
         curHunger = hunger;
+        UpdateHealthUI();
     }
 
     void Update()
@@ -80,13 +83,49 @@ public class PlayerLife : MonoBehaviour
         {
             curHealth = health;
         }
+        UpdateHealthUI();
 
     }
 
     public void RestRestore()
     {
         curHealth = health;
+        UpdateHealthUI();
     }
+    #endregion
+
+    #region UI
+
+    void UpdateHealthUI()
+    {
+        int numChildren = healthParent.childCount;
+        int intHealth = -(Mathf.FloorToInt(-health));
+        if (numChildren != intHealth)
+        {
+            if (numChildren > intHealth)
+            {
+                //int target = numChildren - intHealth
+                for (int i = numChildren - intHealth; i > 0; i--)
+                {
+                    //remove extra element
+                    Destroy(healthParent.GetChild(0).gameObject);
+                }
+            }
+            else
+            {
+                for (int i = intHealth- numChildren; i > 0; i--)
+                {
+                    //remove extra element
+                    Instantiate(healthyUiPrefab, healthParent);
+                    Debug.Log("add health element");
+                }
+            }
+        }
+
+
+    }
+
+
     #endregion
     
 
