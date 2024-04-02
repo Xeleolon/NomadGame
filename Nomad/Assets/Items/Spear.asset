@@ -17,4 +17,4 @@ MonoBehaviour:
   damage: 1
   type: 1
   range: 3
-  actackSpeed: 1
+  actackSpeed: 0.8

@@ -38,6 +38,7 @@ public class PlayerMovement : MonoBehaviour
 
     //refernces
     [SerializeField] private Transform cameraCenter;
+    [SerializeField] private Transform mainCamera;
     [SerializeField] private Transform playerBody;
     private Rigidbody rb;
     private Vector3 newBodyTarget;
@@ -61,10 +62,14 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float cameraInputLagPeriod = 0.01f; //how long to check update around lag
     [SerializeField] private Vector2 cameraMaxVerticalAngleFromHorizon;
     [SerializeField] private float cameraOffset = 0;
+    [SerializeField] private float maxCameraDistance;
+    [SerializeField] private float cameraMovementSpeed = 1;
+    private float cameraDistance;
     void Start()
     {
         rb = GetComponent<Rigidbody>();
         newBodyTarget = cameraCenter.forward;
+        cameraDistance = maxCameraDistance;
     }
     void Update()
     {
@@ -216,6 +221,12 @@ public class PlayerMovement : MonoBehaviour
         //cameraCenter.localEulerAngles = new Vector3(0, cameraRotation.x, 0);
 
         cameraCenter.localEulerAngles = new Vector3(cameraRotation.y, cameraRotation.x, 0);
+        
+        Vector3 cameraRange = mainCamera.localPosition;
+        cameraRange.z = cameraDistance;
+        mainCamera.localPosition = cameraRange;
+
+        //mainCamera.RotateAround(cameraCenter.position, Vector3.up, cameraVelocity.x);
 
         //need to add a dead zone for up and down maybe?
         
@@ -244,6 +255,22 @@ public class PlayerMovement : MonoBehaviour
         float ClampCameraVerticalAngle(float angle)
         {
             return Mathf.Clamp(angle, -cameraMaxVerticalAngleFromHorizon.x, cameraMaxVerticalAngleFromHorizon.y);
+        }
+
+        void increaseDistance()
+        {
+            bool rightSide = Physics.Raycast(mainCamera.position, Vector3.right, 0.1f);
+            bool leftSide = Physics.Raycast(mainCamera.position, Vector3.left, 0.1f);
+            bool backSide = Physics.Raycast(mainCamera.position, Vector3.left, 0.1f);
+
+            if ((rightSide || leftSide || backSide )&& cameraDistance <= -0.5f)
+            {
+                cameraDistance += 1 * cameraMovementSpeed * Time.deltaTime;
+            }
+            else if (!rightSide && !leftSide && backSide && cameraDistance >= maxCameraDistance)
+            {
+                cameraDistance -= 1 * cameraMovementSpeed * Time.deltaTime;
+            }
         }
     }
     #endregion
