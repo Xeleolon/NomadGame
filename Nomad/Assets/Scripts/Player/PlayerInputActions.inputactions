@@ -343,11 +343,44 @@
                 },
                 {
                     "name": "",
+                    "id": "c680329b-28ff-4d73-9545-eaa4abaabc7b",
+                    "path": "<Gamepad>/start",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Inventory",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "0565890c-d2c5-4e90-886d-af945c33ab29",
+                    "path": "<Gamepad>/buttonWest",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Inventory",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "c71a2b5a-28b9-4f08-85b6-f5700b131dc7",
                     "path": "<Keyboard>/f",
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard&Mouse",
+                    "action": "FlipTool",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "2bd2079e-a378-414f-86d1-69c790d3f1b4",
+                    "path": "<Gamepad>/buttonWest",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
                     "action": "FlipTool",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -365,8 +398,30 @@
                 },
                 {
                     "name": "",
+                    "id": "45aec5f0-a47a-487b-a159-766742e2d3c7",
+                    "path": "<Gamepad>/buttonNorth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SwapTool",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "2efc6307-f47b-4af2-bc67-07b791d6109b",
                     "path": "<Keyboard>/e",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Interact",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "41f5c4a0-daff-444a-b879-9b2d3f71ecd2",
+                    "path": "<Gamepad>/buttonSouth",
                     "interactions": "",
                     "processors": "",
                     "groups": "",

@@ -44,6 +44,7 @@ public class PlayerMovement : MonoBehaviour
 
     [Header("movement")]
     [SerializeField] float speed = 3;
+    [SerializeField] float airMultiplier = 1;
     [SerializeField] float bodyRotateSpeed = 60;
     [SerializeField] float maxSlopeAngle = 45;
     [SerializeField] float groundDrag = 10f;
@@ -99,12 +100,12 @@ public class PlayerMovement : MonoBehaviour
         Vector3 newBodyRotation = Vector3.RotateTowards(playerBody.forward, newBodyTarget, bodyRotateSpeed * Time.deltaTime, 0);
         playerBody.rotation = Quaternion.LookRotation(newBodyRotation);
 
-
         moveDirection = cameraCenter.forward * inputVariables.y + cameraCenter.right * inputVariables.x/2;
-        if (grounded)
+        moveDirection.y = 0;
+        /*if (grounded)
         {
             moveDirection.y = transform.forward.y;
-        }
+        }*/
 
         //rb.AddForce(moveDirection.normalized * speed * 10f, ForceMode.Force);
     }
@@ -127,11 +128,28 @@ public class PlayerMovement : MonoBehaviour
                     rb.AddForce(Vector3.down * 20f, ForceMode.Force);
                 }
             }
-            rb.velocity = rb.velocity.normalized * speed;
+            //rb.velocity = rb.velocity.normalized * speed;
         }
-        else if (grounded)
+        else
         {
-            rb.AddForce(moveDirection.normalized * speed * 10f, ForceMode.Force);
+            if (grounded)
+            {
+                rb.AddForce(moveDirection.normalized * speed * 10f, ForceMode.Force);
+            }
+            else
+            {
+                rb.AddForce(moveDirection.normalized * speed * airMultiplier * 10f, ForceMode.Force);
+            }
+
+            
+        }
+
+        Vector3 flatVel = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
+
+        if (flatVel.magnitude > speed)
+        {
+            Vector3 limitedVel = flatVel.normalized * speed;
+            rb.velocity = new Vector3(limitedVel.x, rb.velocity.y, limitedVel.z);
         }
 
 
@@ -144,7 +162,7 @@ public class PlayerMovement : MonoBehaviour
 
     private bool OnSlope()
     {
-        if (Physics.Raycast(transform.position, Vector3.down, out slopeHit, 2 * 0.5f + 3.0f))
+        if (Physics.Raycast(transform.position, Vector3.down, out slopeHit, 2 * 0.5f + 2.0f))
         {
             float angle = Vector3.Angle(Vector3.up, slopeHit.normal);
             return angle < maxSlopeAngle && angle != 0;
@@ -153,7 +171,7 @@ public class PlayerMovement : MonoBehaviour
     }
     private void GroundCheck()
     {
-        grounded = Physics.Raycast(transform.position, Vector3.down, 2 * 0.5f, whatIsGround);
+        grounded = Physics.Raycast(transform.position, Vector3.down, 2 * 0.5f + 0.2f, whatIsGround);
 
         if (grounded)
         {
@@ -161,7 +179,7 @@ public class PlayerMovement : MonoBehaviour
         }
         else
         {
-            rb.drag = 0;
+            rb.drag = 0.2f;
         }
     }
 

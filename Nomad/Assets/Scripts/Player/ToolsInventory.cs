@@ -13,6 +13,7 @@ public class ToolsInventory : MonoBehaviour
     private InputAction flipTool;
     private InputAction swapTool;
     private InputAction interactWith;
+
     void Awake()
     {
         if (instance != null)
@@ -59,6 +60,10 @@ public class ToolsInventory : MonoBehaviour
     [SerializeField] GameObject toolObject;
     [SerializeField] GameObject torchLight;
     [SerializeField] GameObject torchPrefab;
+
+    [SerializeField] Transform playerBody;
+    [SerializeField] Animator weaponAnimator;
+    [SerializeField] string weaponActack;
     [Tooltip("0 = no torch, 2 = lit torch, 3 = drenched torch.")]
     [Range(0, 4)]
     [SerializeField] public int torchState = 0; //0 = no torch, 2 = lit torch, 3 = drenched torch.
@@ -230,7 +235,7 @@ public class ToolsInventory : MonoBehaviour
     {
         //fire ray
         Ray ray;
-        ray = new Ray(gameObject.transform.position, gameObject.transform.forward);
+        ray = new Ray(gameObject.transform.position, playerBody.forward);
     
         RaycastHit hit;
     
@@ -390,8 +395,12 @@ public class ToolsInventory : MonoBehaviour
     {
         if (canHarm)
         {
+            if (weaponActack != null)
+            {
+                weaponAnimator.Play(weaponActack);
+            }
             Ray ray;
-            ray = new Ray(gameObject.transform.position, gameObject.transform.forward);
+            ray = new Ray(gameObject.transform.position, playerBody.forward);
     
             RaycastHit hit;
     
@@ -405,9 +414,9 @@ public class ToolsInventory : MonoBehaviour
                 {
                     emeny.Damage(weapon.damage);
                     Debug.Log("Hit " + hit.collider.gameObject.name);
-                    coolDown = weapon.actackSpeed;
                 }
             }
+            coolDown = weapon.actackSpeed;
         }
     }
     #endregion
