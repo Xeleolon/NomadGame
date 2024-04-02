@@ -12,14 +12,14 @@ public class PlayerMovement : MonoBehaviour
         playerControls = new PlayerInputActions(); 
     }
 
-    private InputAction moveInput;
+    private InputAction moveInputs;
     private InputAction jumpInput;
     private InputAction lookInput;
     
     void OnEnable()
     {
-        moveInput = playerControls.Player.Move;
-        moveInput.Enable();
+        moveInputs = playerControls.Player.Move;
+        moveInputs.Enable();
 
         jumpInput = playerControls.Player.Jump;
         jumpInput.Enable();
@@ -30,38 +30,157 @@ public class PlayerMovement : MonoBehaviour
 
     void OnDisable()
     {
-        moveInput.Disable();
+        moveInputs.Disable();
         jumpInput.Disable();
     }
 
     #endregion
 
+    //refernces
+    [SerializeField] private Transform cameraCenter;
+    [SerializeField] private Transform playerBody;
+    private Rigidbody rb;
+    private Vector3 newBodyTarget;
 
+    [Header("movement")]
+    [SerializeField] float speed = 3;
+    [SerializeField] float bodyRotateSpeed = 60;
+    [SerializeField] float maxSlopeAngle = 45;
+    [SerializeField] float groundDrag = 10f;
+    [SerializeField] LayerMask whatIsGround;
+
+    [Header("Camera Controls")]
     //camera Input
     [Tooltip("a mutiples the camera Input")]
-    //[Range(1,30)]
+    [Range(0.5f,5)]
     [SerializeField] private float cameraSensitivity = 1;
     [Tooltip("Speed of rotation")]
     //[Range(1000,10000)]
     [SerializeField] private float cameraAcceleration = 1000;
     [SerializeField] private float cameraInputLagPeriod = 0.01f; //how long to check update around lag
-    [SerializeField] private float cameraMaxVerticalAngleFromHorizon = 90;
-    [SerializeField] private Transform cameraTransform;
+    [SerializeField] private Vector2 cameraMaxVerticalAngleFromHorizon;
+    [SerializeField] private float cameraOffset = 0;
+    void Start()
+    {
+        rb = GetComponent<Rigidbody>();
+        newBodyTarget = cameraCenter.forward;
+    }
     void Update()
     {
+        GroundCheck();
         CameraMovementCallication();
+        moveVelocity();
     }
 
     void FixedUpdate()
     {
-
+        addMovementForce();
     }
+
+    #region Movement
+    Vector3 moveDirection;
+    float lastPlayerHeight;
+    RaycastHit slopeHit;
+    bool grounded;
+    void moveVelocity()
+    {
+        rb.useGravity = !OnSlope();
+
+        Vector2 inputVariables = moveInputs.ReadValue<Vector2>();
+
+        //get player body to look in direction of movement
+        if (playerBody != null && (rb.velocity.x != 0 || rb.velocity.y != 0))
+        {
+            //playerBody.LookAt(cameraCenter.forward);
+            newBodyTarget = cameraCenter.forward;
+            newBodyTarget.y = playerBody.forward.y;
+        }
+
+        Vector3 newBodyRotation = Vector3.RotateTowards(playerBody.forward, newBodyTarget, bodyRotateSpeed * Time.deltaTime, 0);
+        playerBody.rotation = Quaternion.LookRotation(newBodyRotation);
+
+
+        moveDirection = cameraCenter.forward * inputVariables.y + cameraCenter.right * inputVariables.x/2;
+        if (grounded)
+        {
+            moveDirection.y = transform.forward.y;
+        }
+
+        //rb.AddForce(moveDirection.normalized * speed * 10f, ForceMode.Force);
+    }
+
+    void addMovementForce()
+    {
+
+        if (OnSlope())
+        {
+            rb.AddForce(GetSlopeMoveDirection() * speed * 10f, ForceMode.Force);
+
+            if(rb.velocity.y > 0)
+            {
+                if (transform.position.y < lastPlayerHeight)
+                {
+                    rb.AddForce(Vector3.down * 60f, ForceMode.Force);
+                }
+                else
+                {
+                    rb.AddForce(Vector3.down * 20f, ForceMode.Force);
+                }
+            }
+            rb.velocity = rb.velocity.normalized * speed;
+        }
+        else if (grounded)
+        {
+            rb.AddForce(moveDirection.normalized * speed * 10f, ForceMode.Force);
+        }
+
+
+
+        Vector3 GetSlopeMoveDirection()
+        {
+            return Vector3.ProjectOnPlane(moveDirection, slopeHit.normal).normalized;
+        }
+    }
+
+    private bool OnSlope()
+    {
+        if (Physics.Raycast(transform.position, Vector3.down, out slopeHit, 2 * 0.5f + 3.0f))
+        {
+            float angle = Vector3.Angle(Vector3.up, slopeHit.normal);
+            return angle < maxSlopeAngle && angle != 0;
+        }
+        return false;
+    }
+    private void GroundCheck()
+    {
+        grounded = Physics.Raycast(transform.position, Vector3.down, 2 * 0.5f, whatIsGround);
+
+        if (grounded)
+        {
+            rb.drag = groundDrag;
+        }
+        else
+        {
+            rb.drag = 0;
+        }
+    }
+
+
+    #endregion
+
+
+
     #region CameraControles
+    
     //camera private collection
     private Vector2 cameraLastInputEvent; //a container holding the last input before lag occured
     private float cameraInputLagClock; //timer to help deal with lag and allow smooth camera motion
     private Vector2 cameraVelocity;
     private Vector2 cameraRotation; //house the camera rotation acrosss functions
+
+
+
+
     void CameraMovementCallication()
     {
         Vector2 cameraSpeed = GetMouseInput() * new Vector2(cameraSensitivity, cameraSensitivity);
@@ -76,8 +195,11 @@ public class PlayerMovement : MonoBehaviour
         cameraRotation.y = ClampCameraVerticalAngle(cameraRotation.y);
 
         //transform.localEulerAngles = new Vector3(0, cameraRotation.x, 0);
+        //cameraCenter.localEulerAngles = new Vector3(0, cameraRotation.x, 0);
 
-        cameraTransform.localEulerAngles = new Vector3(cameraRotation.y, cameraRotation.x, 0);
+        cameraCenter.localEulerAngles = new Vector3(cameraRotation.y, cameraRotation.x, 0);
+
+        //need to add a dead zone for up and down maybe?
         
         
         //take mouseinput inverts y and make sure it comes through without lag
@@ -88,7 +210,7 @@ public class PlayerMovement : MonoBehaviour
             //collect mouse input
             Vector2 mouseInput = lookInput.ReadValue<Vector2>();
 
-            mouseInput.y = -mouseInput.y; //invert y
+            mouseInput.y = -mouseInput.y/2; //invert y
 
             cameraRotation += cameraVelocity * Time.deltaTime;
 
@@ -103,7 +225,7 @@ public class PlayerMovement : MonoBehaviour
 
         float ClampCameraVerticalAngle(float angle)
         {
-            return Mathf.Clamp(angle, -cameraMaxVerticalAngleFromHorizon, cameraMaxVerticalAngleFromHorizon);
+            return Mathf.Clamp(angle, -cameraMaxVerticalAngleFromHorizon.x, cameraMaxVerticalAngleFromHorizon.y);
         }
     }
     #endregion
