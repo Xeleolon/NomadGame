@@ -19,6 +19,9 @@ public class SkellyMovement : MonoBehaviour
     private float strikeHoldClock; //the actacks hold 
 
     [Header("ActackMovements")]
+    [SerializeField] private float dectectRange = 2;
+    public Color standardColor;
+    public Color actackColor;
     GameObject player;
     Transform target;
     public int mode = 0; // 0 for not actack 1 for chasing target, 2 for incircling, 3 for actack
@@ -74,6 +77,7 @@ public class SkellyMovement : MonoBehaviour
             minPerimeter = orginPerimeter - rangePerimeter + objectSize;
         }
         repeatStrikeCount = repeatStrikes;
+        standardColor = GetComponent<MeshRenderer>().material.color;
 
     }
 
@@ -137,16 +141,18 @@ public class SkellyMovement : MonoBehaviour
     
 
     
-            if (Physics.Raycast(ray, out hit, 1.2f))
+            if (Physics.Raycast(ray, out hit, dectectRange))
             {
                 if (hit.collider.gameObject.name == "Player")
                 {
                     if (!targeting)
                     {
+                        Debug.Log("Player Targeted");
                         mode = 1;
                         inCircleDistance = Random.Range(actackDistance.x, actackDistance.y);
                         navMesh.updateRotation = false;
                         targeting = true;
+                        GetComponent<MeshRenderer>().material.color = actackColor;
                     }
                     
                     target = player.transform;
@@ -175,6 +181,10 @@ public class SkellyMovement : MonoBehaviour
 
         if (Vector3.Distance(target.position, transform.position) < inCircleDistance)
         {
+                mode = 2;
+        }
+        else
+        {
             if (Vector3.Distance(transform.position, player.transform.position) > playerMaxDistance)
             {
                 Debug.Log("Lost Player");
@@ -182,12 +192,8 @@ public class SkellyMovement : MonoBehaviour
             }
             else
             {
-                mode = 2;
+                navMesh.Move(Velocity);
             }
-        }
-        else
-        {
-            navMesh.Move(Velocity);
         }
     }
 
@@ -367,6 +373,7 @@ public class SkellyMovement : MonoBehaviour
         if (targeting)
         {
             targeting = false;
+            GetComponent<MeshRenderer>().material.color = standardColor;
             navMesh.updateRotation = true;
         }
         bool lastIdling = false;

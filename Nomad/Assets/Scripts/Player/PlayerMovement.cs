@@ -5,376 +5,108 @@ using UnityEngine.InputSystem;
 
 public class PlayerMovement : MonoBehaviour
 {
-    #region Camera
-[System.Serializable]
-public class CameraControls
-{
-    [Header("Camera Movement")]
-    //Camera Control
-    [Tooltip("The rotation acceleration, in degrees / second")]
-    [Range(1000, 10000)]
-    [SerializeField] private float cameraAcceleration;
-    [Tooltip("A mutipler to the input. Describes the maximum speed in degrees / second.")]
-    [Range(1, 30)]
-    [SerializeField] private float cameraSensitivity;
-    [Tooltip("The Maximum angle from the horizon the player can rotote, in degrees")]
-    [SerializeField] private float cameraMaxVerticalAngleFromHorizon;
-    [Tooltip("The period to wait until resetting the input value. Set this as low as possible without encountering stuttering from camera")]
-    [SerializeField] private float cameraInputLagPeriod;
-    [SerializeField] private GameObject mainCamera;
-    private Vector2 cameraRotation;
+    #region Inputs/Awake,OnEnable,OnDisable
+    private PlayerInputActions playerControls;
+    void Awake()
+    {
+        playerControls = new PlayerInputActions(); 
+    }
+
+    private InputAction moveInput;
+    private InputAction jumpInput;
+    private InputAction lookInput;
+    
+    void OnEnable()
+    {
+        moveInput = playerControls.Player.Move;
+        moveInput.Enable();
+
+        jumpInput = playerControls.Player.Jump;
+        jumpInput.Enable();
+
+        lookInput = playerControls.Player.Look;
+        lookInput.Enable();
+    }
+
+    void OnDisable()
+    {
+        moveInput.Disable();
+        jumpInput.Disable();
+    }
+
+    #endregion
+
+
+    //camera Input
+    [Tooltip("a mutiples the camera Input")]
+    //[Range(1,30)]
+    [SerializeField] private float cameraSensitivity = 1;
+    [Tooltip("Speed of rotation")]
+    //[Range(1000,10000)]
+    [SerializeField] private float cameraAcceleration = 1000;
+    [SerializeField] private float cameraInputLagPeriod = 0.01f; //how long to check update around lag
+    [SerializeField] private float cameraMaxVerticalAngleFromHorizon = 90;
+    [SerializeField] private Transform cameraTransform;
+    void Update()
+    {
+        CameraMovementCallication();
+    }
+
+    void FixedUpdate()
+    {
+
+    }
+    #region CameraControles
+    //camera private collection
+    private Vector2 cameraLastInputEvent; //a container holding the last input before lag occured
+    private float cameraInputLagClock; //timer to help deal with lag and allow smooth camera motion
     private Vector2 cameraVelocity;
-    private Vector2 cameraLastInputEvent;
-    private float cameraInputLagTimer;
-    private InputAction look;
-    public void EnableCamera(Transform player, PlayerInputActions playerControls)
+    private Vector2 cameraRotation; //house the camera rotation acrosss functions
+    void CameraMovementCallication()
     {
-        //mainCamera = GameObject.FindWithTag("MainCamera");
-        cameraVelocity = Vector2.zero;
-        cameraInputLagTimer = 0;
-        cameraLastInputEvent = Vector2.zero;
-
-        Vector3 euler = player.localEulerAngles;
-        euler.x = mainCamera.transform.localEulerAngles.x;
-        if(euler.x >= 180)
-        {
-            euler.x -= 360;
-        }
-        euler.x = ClampCameraVerticalAngle(euler.x);
-
-        player.localEulerAngles = new Vector3(0, euler.y, euler.z);
-        mainCamera.transform.localEulerAngles = new Vector3(euler.x,0 , 0);
-
-        cameraRotation = new Vector2(euler.y, euler.x);
-
-        look = playerControls.Player.Look;
-        look.Enable();
-    }
-
-    public void DisableCamera()
-    {
-        look.Disable();
-    }
-    public void MoveCamera(Transform player)
-    {
-        //Debug.Log("Moving Camera");
         Vector2 cameraSpeed = GetMouseInput() * new Vector2(cameraSensitivity, cameraSensitivity);
 
         // Calculate new rotation and store it for future changes
         cameraVelocity = new Vector2(
             Mathf.MoveTowards(cameraVelocity.x, cameraSpeed.x, cameraAcceleration * Time.deltaTime),
-            Mathf.MoveTowards(cameraVelocity.y, cameraSpeed.y, cameraAcceleration * Time.deltaTime));
+            Mathf.MoveTowards(cameraVelocity.x, cameraSpeed.x, cameraAcceleration * Time.deltaTime));
         
-        cameraRotation += cameraVelocity * Time.deltaTime;
+        cameraRotation += cameraVelocity;// * Time.deltaTime;
 
         cameraRotation.y = ClampCameraVerticalAngle(cameraRotation.y);
 
-        // convert the camera rotation to euler angles 
-        player.localEulerAngles = new Vector3(0, cameraRotation.x, 0);
-        mainCamera.transform.localEulerAngles = new Vector3(cameraRotation.y, 0 ,0);
-    }
-    public void FreazeCamera(Transform player) //Freaze rotation on pause
-    {
-        //if you want the camera to rotate on pause apply the rotation here.
-        player.localEulerAngles = new Vector3(0, cameraRotation.x, 0);
-        mainCamera.transform.localEulerAngles = new Vector3(cameraRotation.y, 0 ,0);
-    }
-    private float ClampCameraVerticalAngle(float angle)
-    {
-        //Debug.Log("Clamping camera");
-        return Mathf.Clamp(angle, -cameraMaxVerticalAngleFromHorizon, cameraMaxVerticalAngleFromHorizon);
-    }
-    private Vector2 GetMouseInput()
-    {
-        cameraInputLagTimer += Time.deltaTime;
+        //transform.localEulerAngles = new Vector3(0, cameraRotation.x, 0);
 
-
-        Vector2 mouseInput = look.ReadValue<Vector2>();
-        mouseInput.y = -mouseInput.y; //invert y
-
-        if ((Mathf.Approximately(0, mouseInput.x) && Mathf.Approximately(0, mouseInput.y)) == false || cameraInputLagTimer >= cameraInputLagPeriod)
+        cameraTransform.localEulerAngles = new Vector3(cameraRotation.y, cameraRotation.x, 0);
+        
+        
+        //take mouseinput inverts y and make sure it comes through without lag
+        Vector2 GetMouseInput()
         {
-            cameraLastInputEvent = mouseInput;
-            cameraInputLagTimer = 0;
+            cameraInputLagClock += Time.deltaTime;
+
+            //collect mouse input
+            Vector2 mouseInput = lookInput.ReadValue<Vector2>();
+
+            mouseInput.y = -mouseInput.y; //invert y
+
+            cameraRotation += cameraVelocity * Time.deltaTime;
+
+            if ((Mathf.Approximately(0, mouseInput.x) && Mathf.Approximately(0, mouseInput.y)) == false || cameraInputLagClock >= cameraInputLagPeriod)
+            {
+                cameraLastInputEvent = mouseInput;
+                cameraInputLagClock = 0;
+            }
+
+            return cameraLastInputEvent;
         }
 
-        
-        return cameraLastInputEvent;
+        float ClampCameraVerticalAngle(float angle)
+        {
+            return Mathf.Clamp(angle, -cameraMaxVerticalAngleFromHorizon, cameraMaxVerticalAngleFromHorizon);
+        }
     }
-    public void SetSensitivity(float newSensitivity)
-    {
-        cameraSensitivity = newSensitivity;
-    }
-}
-#endregion
-
-    [Header("Player Movement")]
-    
-    [SerializeField] private float speed = 3;
-
-
-    [SerializeField] private float jumpForce = 3;
-    [SerializeField] private float jumpCooldown = 1;
-    [SerializeField] private float airMultiplier = 1;
-    private bool climbing;
-    [SerializeField] private float climbSpeed = 3;
-    private bool readyToJump;
-
-
-    [SerializeField] private float groundDrag;
-
-    [SerializeField] private float maxSlopeAngle = 45;
-    [Tooltip("How long before slope caluciation apply")]
-
-    private Vector3 moveDirection;
-    private Vector2 moveInputs; //house the info collected from inputs
-    private bool exitingSlope;
-
-    private Rigidbody rb;
-
-    private RaycastHit slopeHit;
-    private float lastPlayerHeight;
-    [Header ("Sliding")]
-    [SerializeField] private float slideForce;
-    private bool sliding = false;
-    private int slideTicket = 0;
-
-    [Header ("Ground Check")]
-    [SerializeField] private float playerHeight = 2;
-    public float maxWorldHeight = 100;
-    [SerializeField] private LayerMask whatIsGround;
-    [Header ("Animations")]
-    bool grounded;
-
-    #region Enable & Disable
-    //Input System
-    private PlayerInputActions playerControls; //this is the script which holds all the inpuct actions
-    private InputAction move;
-    private InputAction sprint;
-    private InputAction jumpInput;
-
-    public CameraControls cameraControls;
-    void Awake()
-    {
-        playerControls = new PlayerInputActions();
-    }
-    void OnEnable()
-    {
-        cameraControls.EnableCamera(transform, playerControls);
-        
-        // Input enable have to do this for the new input system
-        move = playerControls.Player.Move;
-        move.Enable();
-
-        sprint = playerControls.Player.Sprint;
-        sprint.Enable();
-
-        jumpInput = playerControls.Player.Jump;
-        jumpInput.Enable();
-    }
-
-    void OnDisable()
-    {
-        //Input disable have to do this for the new input system
-        move.Disable();
-        sprint.Disable();
-        jumpInput.Disable();
-        cameraControls.DisableCamera();
-    }
-
     #endregion
 
-    void Start()
-    {
-        rb = GetComponent<Rigidbody>();
-        lastPlayerHeight = transform.position.y;
-        ResetJump();
-
-    }
-
-    void Update()
-    {
-            rb.useGravity = !OnSlope();
-            GroundCheck();
-            moveInputs = move.ReadValue<Vector2>(); //collector data from input before comparing as have a need to split the data into x and y
-            MovementInputs();
-
-            JumpFunction();
-
-            cameraControls.MoveCamera(transform);
-    }
-    void FixedUpdate()
-    {
-        
-            if (transform.position.y >= maxWorldHeight)
-            {
-                Vector3 HeightLock = transform.position;
-                HeightLock.y = maxWorldHeight;
-                transform.position = HeightLock;
-            }
-            if (sliding)
-            {
-                Debug.Log("SLiding");
-                SlidingMovement();
-            }
-
-            if (OnSlope() && !exitingSlope)
-            {
-                rb.AddForce(GetSlopeMoveDirection() * speed * 15f, ForceMode.Force);
-
-                if(rb.velocity.y > 0)
-                {
-                    if (transform.position.y < lastPlayerHeight) //slope movement going directly down
-                    {
-                        rb.AddForce(Vector3.down * 60f, ForceMode.Force);
-                    }
-                    else //slope movement up adding down force so player not just running and jumping off the stairs, might add it to a sprint 
-                    {
-                        rb.AddForce(Vector3.down * 20f, ForceMode.Force);
-                    }
-                }
-            }
-            else if (climbing || grounded)
-            {
-                rb.AddForce(moveDirection.normalized * speed * 10f, ForceMode.Force);
-            }
-            else if (!grounded)
-            {
-                rb.AddForce(moveDirection.normalized * speed * 10f * airMultiplier, ForceMode.Force);
-            }
-
-            lastPlayerHeight = transform.position.y;
-        
-    }
-   
-    #region Movement
-    void MovementInputs()
-    {
-        
-        moveDirection = transform.forward * moveInputs.y + transform.right * moveInputs.x;
-
-        //SpeedControl
-        if (transform.position.y < maxWorldHeight && OnSlope() && !exitingSlope && rb.velocity.magnitude > speed)
-        {
-            rb.velocity = rb.velocity.normalized * speed;
-        }
-        else
-        { 
-            Vector3 flatVel = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
-
-            //limit velocity if needed
-            if (flatVel.magnitude > speed)
-            {
-                Vector3 limitedVel = flatVel.normalized * speed;
-                rb.velocity = new Vector3(limitedVel.x, rb.velocity.y, limitedVel.z);
-            }
-
-        }
-    }
-
-    private bool OnSlope()
-    {
-        if (Physics.Raycast(transform.position, Vector3.down, out slopeHit, playerHeight * 0.5f + 0.3f))
-        {
-            float angle = Vector3.Angle(Vector3.up, slopeHit.normal);
-            return angle < maxSlopeAngle && angle != 0;
-        }
-        return false;
-    }
-
-    private Vector3 GetSlopeMoveDirection()
-    {
-        return Vector3.ProjectOnPlane(moveDirection, slopeHit.normal).normalized;
-    }
-
-    public void Sliding(bool state)
-    {
-        if (state)
-        {
-            sliding = true;
-            slideTicket += 1;
-        }
-        else if (slideTicket <= 1)
-        {
-            sliding = false;
-            slideTicket = 0;
-        }
-        else
-        {
-            slideTicket -= 1;
-        }
-    }
-
-    private void SlidingMovement()
-    {
-        if (!OnSlope() || rb.velocity.y > -0.1f)
-        {
-            Vector4 inputDirection = transform.forward * moveInputs.y + transform.right * moveInputs.x;
     
-            rb.AddForce(inputDirection.normalized * slideForce, ForceMode.Force);
-        }
-        else
-        {
-            rb.AddForce(GetSlopeMoveDirection() * slideForce, ForceMode.Force);
-        }
-    }
-
-    private void GroundCheck()
-    {
-        bool oldGrounded = grounded;
-        grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.2f, whatIsGround);
-
-        if (!oldGrounded && grounded)
-        {
-        }
-        if (grounded)
-        {
-                rb.drag = groundDrag;
-        }
-        else
-        {
-            rb.drag = 0;
-        }
-    }
-    private void JumpFunction()
-    {
-        if (jumpInput.ReadValue<float>() > 0)
-        {
-            if (climbing)
-            {
-                rb.velocity = new Vector3(rb.velocity.x, climbSpeed, rb.velocity.z);
-            }
-            else if (readyToJump && grounded && transform.position.y <= maxWorldHeight)
-            {
-                exitingSlope = true;
-                readyToJump = false;
-                rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
-    
-                rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
-    
-                Invoke(nameof(ResetJump), jumpCooldown);
-            }
-
-        }
-
-    }
-
-    private void ResetJump()
-    {
-        readyToJump = true;
-        exitingSlope = false;
-    }
-
-    public void ForceOnGround(bool newOnGround)
-    {
-        grounded = newOnGround;
-    }
-
-    public void ClimbingOn(bool value)
-    {
-        climbing = value;
-    }
-    
-
-    #endregion
 }

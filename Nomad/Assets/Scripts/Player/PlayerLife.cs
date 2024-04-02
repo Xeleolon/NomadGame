@@ -28,8 +28,7 @@ public class PlayerLife : MonoBehaviour
     [Header("Inventory")]
     [SerializeField] GameObject healthyUiPrefab;
     [SerializeField] Transform healthParent;
-    [SerializeField] float waterSkinSize = 10;
-    [SerializeField] float waterSkinFill = 10;
+    private Vector3 spawnPoint;
 
 
     
@@ -39,6 +38,7 @@ public class PlayerLife : MonoBehaviour
 
     void Start()
     {
+        spawnPoint = transform.position;
         curHealth = health;
         curHunger = hunger;
         UpdateHealthUI();
@@ -67,17 +67,19 @@ public class PlayerLife : MonoBehaviour
         }
         else
         {
-            AlterHealth(0.2f * Time.deltaTime);
+            //AlterHealth(-(0.2f * Time.deltaTime));
         }
     }
 
     public void AlterHealth(float temp)
     {
         curHealth += temp;
+        //Debug.Log("Player recieved damage");
 
         if (curHealth <= 0)
         {
             Debug.Log("Player Died");
+            Respawn();
         }
         else if (curHealth > health)
         {
@@ -86,9 +88,15 @@ public class PlayerLife : MonoBehaviour
         UpdateHealthUI();
 
     }
-
-    public void RestRestore()
+    void Respawn()
     {
+        curHealth = health;
+        transform.position = spawnPoint;
+    }
+
+    public void RestRestore(Vector3 newPosition)
+    {
+        spawnPoint = newPosition;
         curHealth = health;
         UpdateHealthUI();
     }
@@ -99,11 +107,13 @@ public class PlayerLife : MonoBehaviour
     void UpdateHealthUI()
     {
         int numChildren = healthParent.childCount;
-        int intHealth = -(Mathf.FloorToInt(-health));
+        int intHealth = -(Mathf.FloorToInt(-curHealth));
+        //Debug.Log(numChildren + " " + intHealth + " " + curHealth);
         if (numChildren != intHealth)
         {
             if (numChildren > intHealth)
             {
+                Debug.Log("removing ui element");
                 //int target = numChildren - intHealth
                 for (int i = numChildren - intHealth; i > 0; i--)
                 {

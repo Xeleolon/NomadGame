@@ -17,6 +17,10 @@ public class LevelManager : MonoBehaviour
     }
 
     #endregion
+    private bool gameFrozen;
+    public delegate void onGameFreeze();
+    public onGameFreeze freezeGame;
+    public onGameFreeze unFreezeGame;
 
     [Header("DayNightCycle")]
     [SerializeField] float dayLength = 10;
@@ -86,6 +90,19 @@ public class LevelManager : MonoBehaviour
             }
             nightBool = true;
             Debug.Log("Night time");
+        }
+    }
+
+    public void FreezeGame(bool freeze)
+    {
+        gameFrozen = freeze;
+        if (gameFrozen)
+        {
+            freezeGame.Invoke();
+        }
+        else
+        {
+            unFreezeGame.Invoke();
         }
     }
 }

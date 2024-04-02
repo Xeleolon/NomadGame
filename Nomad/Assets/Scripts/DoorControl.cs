@@ -72,7 +72,6 @@ public class DoorControl : MonoBehaviour
             case 2:
             ClosingDoor();
             return true;
-            break;
 
             case 3:
             if (!DoorOpened)

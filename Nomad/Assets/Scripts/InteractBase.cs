@@ -5,7 +5,7 @@ using UnityEngine;
 public class InteractBase : MonoBehaviour
 {
     [Header("Interact Base")]
-    [SerializeField] float distance = 3f;
+    //[SerializeField] float distance = 3f;
     [Tooltip("0 for open&Close, 1 for Open, 2 for Close")]
     [SerializeField] public DoorControl door;
     [SerializeField] int doorOpeningState;

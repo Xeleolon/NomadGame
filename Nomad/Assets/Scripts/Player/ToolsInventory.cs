@@ -259,7 +259,7 @@ public class ToolsInventory : MonoBehaviour
             break;
 
             case 1:
-            if (torchState != 0 || torchState != 4)
+            if (torchState != 0 && torchState != 3)
             {
                 torchState = 2;
             }
