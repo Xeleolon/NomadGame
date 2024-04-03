@@ -11,20 +11,39 @@ public class CameraTrigger : MonoBehaviour
     public float pauseRange = 3;
     public string[] avoidingTags;
     [Header("Camera Movement")]
-    [SerializeField] public Vector2 maxCameraDistance = new Vector2(-3, -0.5f);
+    [SerializeField] public Vector2 cameraRange = new Vector2(-3, -0.5f);
     [SerializeField] private float cameraMovementSpeed = 1;
+    [SerializeField] private float offSet = 0.2f;
+    [SerializeField] private float borderSpot;
+    [SerializeField] private bool Test;
     private float cameraDistance;
     private bool cameracolliding;
     float newDistance;
     void Start()
     {
-        cameraDistance = maxCameraDistance.x;
+        cameraDistance = cameraRange.x;
+        borderSpot = cameraDistance;
     }
     void Update()
     {
         if (collision)
         {
-            AlterCameraDistance(1);
+            if (borderSpot < cameraDistance)
+            {
+                if (!Test)
+                {
+                    AlterCameraDistance(1);
+                }
+                Debug.Log("I Work Here");
+            }
+            else if (borderSpot > cameraDistance)
+            {
+                if (Test)
+                {
+                    AlterCameraDistance(1);
+                }
+                Debug.Log("I Not Working");
+            }
         }
         else
         {
@@ -33,7 +52,7 @@ public class CameraTrigger : MonoBehaviour
                 
                 if (!rayColliderCheck())
                 {
-                    lastestCollision = transform.forward * maxCameraDistance.x * 2;
+                    lastestCollision = transform.forward * cameraRange.x * 2;
                 }
                 AlterCameraDistance(-1);
             }
@@ -49,9 +68,45 @@ public class CameraTrigger : MonoBehaviour
             {
                 collision = true;
             }
+            SetTargetDistance(other.ClosestPointOnBounds(transform.position));
+            //Debug.Log("This is what was given " + other.ClosestPointOnBounds(transform.position));
             
             collisionCount += 1;
         }
+        
+    }
+    void OnTriggerStay(Collider other)
+    {
+        if (CheckCollisionType(other.gameObject))
+        {
+            SetTargetDistance(other.ClosestPointOnBounds(transform.position));
+        }
+    }
+
+    void SetTargetDistance(Vector3 newDistance)
+    {
+        newDistance = new Vector3(0, 0, newDistance.z);
+        Debug.Log("This is what has been made " + newDistance);
+        
+        //newDistance = transform.TransformDirection(newDistance);
+        Debug.Log("This is what has been made " + newDistance);
+        float newBorderSpot = newDistance.z - offSet;
+        Debug.Log("This is the pre border spot" + newBorderSpot);
+        if (newBorderSpot >= cameraRange.y)
+        {
+            newBorderSpot = cameraRange.y;
+        }
+        else if (newBorderSpot <= cameraRange.x)
+        {
+            newBorderSpot = cameraRange.x;
+        }
+        Debug.Log("This is the Post border spot" + newBorderSpot + " " + borderSpot);
+
+        if (borderSpot != newBorderSpot) //check if the location is not already in use
+        {
+            borderSpot = newBorderSpot;
+        }
+        
         
     }
     
@@ -89,7 +144,7 @@ public class CameraTrigger : MonoBehaviour
         int layerMask = 1 << 10;
         layerMask = ~layerMask;
     
-        if (Physics.Raycast(ray, out hit, -maxCameraDistance.x, layerMask))
+        if (Physics.Raycast(ray, out hit, -cameraRange.x, layerMask))
         {
             lastestCollision = hit.point;
             return true;
@@ -111,33 +166,24 @@ public class CameraTrigger : MonoBehaviour
 
             newDistance = Mathf.Clamp(newDistance, 0, 1);
             
-            //cameraDistance = Mathf.Lerp(maxCameraDistance.x, maxCameraDistance.y, newDistance);
-            /*if (cameraDistance >= maxCameraDistance.y && distance == 1)
-            {
-                cameraDistance = Mathf.SmoothDamp(cameraDistance, maxCameraDistance.y, ref newDistance, cameraMovementSmoothness, cameraMovementSpeed);
-            }
-            else if (cameraDistance <= maxCameraDistance.x && distance == -1)
-            {
-                newDistance = -newDistance;
-                cameraDistance = Mathf.SmoothDamp(cameraDistance, maxCameraDistance.x, ref newDistance, cameraMovementSmoothness, cameraMovementSpeed);
-            }*/
+            
 
-            if (cameraDistance >= maxCameraDistance.y + 0.2f)
+            if (cameraDistance >= cameraRange.y + 0.2f)
             {
-                cameraDistance = maxCameraDistance.y;
+                cameraDistance = cameraRange.y;
             }
-            else if (cameraDistance <= maxCameraDistance.x - 0.2f)
+            else if (cameraDistance <= cameraRange.x - 0.2f)
             {
-                cameraDistance = maxCameraDistance.x;
+                cameraDistance = cameraRange.x;
             }
             else
             {
-                cameraDistance = Mathf.SmoothStep(maxCameraDistance.x - 0.2f, maxCameraDistance.y + 0.2f, newDistance);
+                cameraDistance = Mathf.SmoothStep(cameraRange.x, cameraRange.y, newDistance);
             }
 
 
-            Vector3 cameraRange = transform.localPosition;
-            cameraRange.z = cameraDistance;
-            transform.localPosition = cameraRange;
+            Vector3 newPlacement = transform.localPosition;
+            newPlacement.z = cameraDistance;
+            transform.localPosition = newPlacement;
         }
 }

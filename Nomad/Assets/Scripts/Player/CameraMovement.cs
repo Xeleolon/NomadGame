@@ -10,6 +10,8 @@ public class CameraMovement : MonoBehaviour
     private float cameraCurSeat; //float for the target of the camera position;
     [SerializeField] private float speed = 2;
     private float startPlace;
+    bool collision;
+    int collisionCount;
     
     private float rateToPlace;
     void Start()
@@ -20,6 +22,12 @@ public class CameraMovement : MonoBehaviour
     
     void Update()
     {
+        if (!collision && cameraCurSeat != transform.localPosition.z)
+        {
+            rateToPlace = 0;
+            startPlace = transform.localPosition.z;
+            cameraCurSeat = cameraRange.x;
+        }
         MoveCameraClear();
 
     }
@@ -33,7 +41,9 @@ public class CameraMovement : MonoBehaviour
             rateToPlace += speed * Time.deltaTime;
             rateToPlace = Mathf.Clamp(rateToPlace, 0, 1);
 
-            float newPlacement = Mathf.SmoothStep(startPlace, cameraCurSeat, rateToPlace);
+            //float newPlacement = Mathf.SmoothStep(startPlace, cameraCurSeat, rateToPlace);
+            float newPlacement = Mathf.Lerp(startPlace, cameraCurSeat, rateToPlace);
+            newPlacement = Mathf.Clamp(newPlacement, cameraRange.x, cameraRange.y);
             cameraCurrent.z = newPlacement;
             transform.localPosition = cameraCurrent;
         }
@@ -46,6 +56,11 @@ public class CameraMovement : MonoBehaviour
         if (CheckCollisionType(other.gameObject))
         {
             SetTargetDistance(other.ClosestPointOnBounds(transform.position));
+            if (collisionCount == 0)
+            {
+                collision = true;
+            }
+            collisionCount += 1;
         }
         
     }
@@ -56,10 +71,24 @@ public class CameraMovement : MonoBehaviour
             SetTargetDistance(other.ClosestPointOnBounds(transform.position));
         }
     }
+    void OnTriggerExit(Collider other)
+    {
+        if (CheckCollisionType(other.gameObject))
+        {
+            SetTargetDistance(other.ClosestPointOnBounds(transform.position));
+            collisionCount -= 1;
+            if (collisionCount <= 0)
+            {
+                collisionCount = 0;
+                collision = false;
+            }
+        }
+    }
 
     void SetTargetDistance(Vector3 newDistance)
     {
-        newDistance = transform.InverseTransformDirection(newDistance);
+        newDistance = new Vector3(0, 0, newDistance.z);
+        //newDistance = transform.TransformDirection(newDistance);
         float newCameraSeat = newDistance.z - offSet;
 
         if (newCameraSeat >= cameraRange.y)
@@ -75,7 +104,7 @@ public class CameraMovement : MonoBehaviour
         {
             rateToPlace = 0;
             startPlace = transform.localPosition.z;
-            cameraCurSeat = newCameraSeat;;
+            cameraCurSeat = newCameraSeat;
         }
         
         
