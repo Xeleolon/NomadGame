@@ -22,8 +22,9 @@ public class CameraMovement : MonoBehaviour
     
     void Update()
     {
-        if (!collision && cameraCurSeat != transform.localPosition.z)
+        if (!collision && cameraCurSeat != cameraRange.x)
         {
+            Debug.Log("active");
             rateToPlace = 0;
             startPlace = transform.localPosition.z;
             cameraCurSeat = cameraRange.x;
