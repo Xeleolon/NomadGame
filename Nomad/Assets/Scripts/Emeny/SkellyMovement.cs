@@ -394,7 +394,7 @@ public class SkellyMovement : MonoBehaviour
             {
                 idleClock = Random.Range(minIdle, maxIdle);
                 idle = true;
-                Debug.Log("AI Idling");
+                //Debug.Log("AI Idling");
             }
             else //generate random movement
             {

@@ -4,28 +4,38 @@ using UnityEngine;
 
 public class CameraTrigger : MonoBehaviour
 {
-    public PlayerMovement player;
     bool collision;
     Vector3 lastestCollision;
+    float orginalDistance;
     int collisionCount;
     public float pauseRange = 3;
     public string[] avoidingTags;
-    void FixedUpdate()
+    [Header("Camera Movement")]
+    [SerializeField] public Vector2 maxCameraDistance = new Vector2(-3, -0.5f);
+    [SerializeField] private float cameraMovementSpeed = 1;
+    private float cameraDistance;
+    private bool cameracolliding;
+    float newDistance;
+    void Start()
+    {
+        cameraDistance = maxCameraDistance.x;
+    }
+    void Update()
     {
         if (collision)
         {
-            player.AlterCameraDistance(1);
+            AlterCameraDistance(1);
         }
         else
         {
-            if (Vector3.Distance(lastestCollision, transform.position) > pauseRange)
+            if (Vector3.Distance(lastestCollision, transform.position) > orginalDistance - pauseRange)
             {
                 
                 if (!rayColliderCheck())
                 {
-                    lastestCollision = transform.forward * player.maxCameraDistance.x * 2;
+                    lastestCollision = transform.forward * maxCameraDistance.x * 2;
                 }
-                player.AlterCameraDistance(-1);
+                AlterCameraDistance(-1);
             }
         }
     }
@@ -34,6 +44,7 @@ public class CameraTrigger : MonoBehaviour
         if (CheckCollisionType(other.gameObject))
         {
             lastestCollision = other.ClosestPointOnBounds(transform.position);
+            orginalDistance = Vector3.Distance(lastestCollision, transform.position);
             if (collisionCount == 0)
             {
                 collision = true;
@@ -66,9 +77,7 @@ public class CameraTrigger : MonoBehaviour
                 return false;
             }
         }
-        
         return true;
-        
     }
     bool rayColliderCheck()
     {
@@ -80,7 +89,7 @@ public class CameraTrigger : MonoBehaviour
         int layerMask = 1 << 10;
         layerMask = ~layerMask;
     
-        if (Physics.Raycast(ray, out hit, -player.maxCameraDistance.x, layerMask))
+        if (Physics.Raycast(ray, out hit, -maxCameraDistance.x, layerMask))
         {
             lastestCollision = hit.point;
             return true;
@@ -95,5 +104,40 @@ public class CameraTrigger : MonoBehaviour
     }
 
 
-    
+    public void AlterCameraDistance(float distance)
+        {
+            newDistance += distance * Time.deltaTime * cameraMovementSpeed;
+
+
+            newDistance = Mathf.Clamp(newDistance, 0, 1);
+            
+            //cameraDistance = Mathf.Lerp(maxCameraDistance.x, maxCameraDistance.y, newDistance);
+            /*if (cameraDistance >= maxCameraDistance.y && distance == 1)
+            {
+                cameraDistance = Mathf.SmoothDamp(cameraDistance, maxCameraDistance.y, ref newDistance, cameraMovementSmoothness, cameraMovementSpeed);
+            }
+            else if (cameraDistance <= maxCameraDistance.x && distance == -1)
+            {
+                newDistance = -newDistance;
+                cameraDistance = Mathf.SmoothDamp(cameraDistance, maxCameraDistance.x, ref newDistance, cameraMovementSmoothness, cameraMovementSpeed);
+            }*/
+
+            if (cameraDistance >= maxCameraDistance.y + 0.2f)
+            {
+                cameraDistance = maxCameraDistance.y;
+            }
+            else if (cameraDistance <= maxCameraDistance.x - 0.2f)
+            {
+                cameraDistance = maxCameraDistance.x;
+            }
+            else
+            {
+                cameraDistance = Mathf.SmoothStep(maxCameraDistance.x - 0.2f, maxCameraDistance.y + 0.2f, newDistance);
+            }
+
+
+            Vector3 cameraRange = transform.localPosition;
+            cameraRange.z = cameraDistance;
+            transform.localPosition = cameraRange;
+        }
 }

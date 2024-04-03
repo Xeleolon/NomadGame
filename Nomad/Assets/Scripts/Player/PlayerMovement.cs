@@ -62,15 +62,11 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float cameraInputLagPeriod = 0.01f; //how long to check update around lag
     [SerializeField] private Vector2 cameraMaxVerticalAngleFromHorizon;
     [SerializeField] private float cameraOffset = 0;
-    [SerializeField] public Vector2 maxCameraDistance = new Vector2(-3, -0.5f);
-    [SerializeField] private float cameraMovementSpeed = 1;
 
-    private float cameraDistance;
     void Start()
     {
         rb = GetComponent<Rigidbody>();
         newBodyTarget = cameraCenter.forward;
-        cameraDistance = maxCameraDistance.x;
     }
     void Update()
     {
@@ -201,8 +197,6 @@ public class PlayerMovement : MonoBehaviour
     private float cameraInputLagClock; //timer to help deal with lag and allow smooth camera motion
     private Vector2 cameraVelocity;
     private Vector2 cameraRotation; //house the camera rotation acrosss functions
-    private bool cameracolliding;
-    float newDistance;
 
 
 
@@ -264,42 +258,7 @@ public class PlayerMovement : MonoBehaviour
         }*/
     }
 
-    public void AlterCameraDistance(float distance)
-        {
-            newDistance += distance * Time.deltaTime * cameraMovementSpeed;
-
-
-            newDistance = Mathf.Clamp(newDistance, 0, 1);
-            
-            //cameraDistance = Mathf.Lerp(maxCameraDistance.x, maxCameraDistance.y, newDistance);
-            /*if (cameraDistance >= maxCameraDistance.y && distance == 1)
-            {
-                cameraDistance = Mathf.SmoothDamp(cameraDistance, maxCameraDistance.y, ref newDistance, cameraMovementSmoothness, cameraMovementSpeed);
-            }
-            else if (cameraDistance <= maxCameraDistance.x && distance == -1)
-            {
-                newDistance = -newDistance;
-                cameraDistance = Mathf.SmoothDamp(cameraDistance, maxCameraDistance.x, ref newDistance, cameraMovementSmoothness, cameraMovementSpeed);
-            }*/
-
-            if (cameraDistance >= maxCameraDistance.y + 0.2f)
-            {
-                cameraDistance = maxCameraDistance.y;
-            }
-            else if (cameraDistance <= maxCameraDistance.x - 0.2f)
-            {
-                cameraDistance = maxCameraDistance.x;
-            }
-            else
-            {
-                cameraDistance = Mathf.SmoothStep(maxCameraDistance.x - 0.2f, maxCameraDistance.y + 0.2f, newDistance);
-            }
-
-
-            Vector3 cameraRange = mainCamera.localPosition;
-            cameraRange.z = cameraDistance;
-            mainCamera.localPosition = cameraRange;
-        }
+    
             //cameracolliding = true;
     #endregion
 
