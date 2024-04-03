@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: 891576343}
   m_Layer: 0
   m_Name: Emeny
-  m_TagString: Untagged
+  m_TagString: Emeny
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -36,7 +36,7 @@ Transform:
   m_Children:
   - {fileID: 3801867164346745412}
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 22
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &3801867162851592454
 MeshFilter:
@@ -136,10 +136,13 @@ MonoBehaviour:
   strikeSpeed: 6
   strikeHold: 1
   playerMaxDistance: 10
+  dectectRange: 5
+  standardColor: {r: 1, g: 1, b: 1, a: 0}
+  actackColor: {r: 0.5754717, g: 0, b: 0.3836477, a: 0}
   mode: 0
   speed: 4
   rotationSpeed: 6
-  inCircleSpeed: 60
+  inCircleSpeed: 80
   actackDistance: {x: 3, y: 5}
   travelDistance: 5
   perimeter: {fileID: 0}
