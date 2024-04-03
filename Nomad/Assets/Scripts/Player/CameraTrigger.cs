@@ -6,9 +6,11 @@ public class CameraTrigger : MonoBehaviour
 {
     public PlayerMovement player;
     bool collision;
+    Vector3 lastestCollision;
     int collisionCount;
+    public float pauseRange = 3;
     public string[] avoidingTags;
-    void Update()
+    void FixedUpdate()
     {
         if (collision)
         {
@@ -16,17 +18,27 @@ public class CameraTrigger : MonoBehaviour
         }
         else
         {
-            player.AlterCameraDistance(-1);
+            if (Vector3.Distance(lastestCollision, transform.position) > pauseRange)
+            {
+                
+                if (!rayColliderCheck())
+                {
+                    lastestCollision = transform.forward * player.maxCameraDistance.x * 2;
+                }
+                player.AlterCameraDistance(-1);
+            }
         }
     }
     void OnTriggerEnter(Collider other)
     {
         if (CheckCollisionType(other.gameObject))
         {
+            lastestCollision = other.ClosestPointOnBounds(transform.position);
             if (collisionCount == 0)
             {
                 collision = true;
             }
+            
             collisionCount += 1;
         }
         
@@ -58,4 +70,30 @@ public class CameraTrigger : MonoBehaviour
         return true;
         
     }
+    bool rayColliderCheck()
+    {
+        Ray ray;
+        ray = new Ray(transform.position, transform.TransformDirection(Vector3.back));
+    
+        RaycastHit hit;
+    
+        int layerMask = 1 << 10;
+        layerMask = ~layerMask;
+    
+        if (Physics.Raycast(ray, out hit, -player.maxCameraDistance.x, layerMask))
+        {
+            lastestCollision = hit.point;
+            return true;
+        }
+        
+        return false;
+    }
+
+    float collisionPointToFloat(Vector3 collisionPoint)
+    {
+        return Vector3.Distance(collisionPoint, transform.position);
+    }
+
+
+    
 }

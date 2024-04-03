@@ -62,7 +62,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float cameraInputLagPeriod = 0.01f; //how long to check update around lag
     [SerializeField] private Vector2 cameraMaxVerticalAngleFromHorizon;
     [SerializeField] private float cameraOffset = 0;
-    [SerializeField] private Vector2 maxCameraDistance = new Vector2(-3, -0.5f);
+    [SerializeField] public Vector2 maxCameraDistance = new Vector2(-3, -0.5f);
     [SerializeField] private float cameraMovementSpeed = 1;
 
     private float cameraDistance;
