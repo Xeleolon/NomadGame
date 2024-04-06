@@ -8,6 +8,7 @@ public class EmenyHealth : MonoBehaviour
     private float curHealth;
     [SerializeField] GameObject remainsPrefab;
     public bool skellyType;
+    public SkellyMovement movementScript;
     private void Start()
     {
     
@@ -41,6 +42,10 @@ public class EmenyHealth : MonoBehaviour
             if (health <= 0)
             {
                 Killed();
+            }
+            else
+            {
+                movementScript.TakeDamage();
             }
         }
         else

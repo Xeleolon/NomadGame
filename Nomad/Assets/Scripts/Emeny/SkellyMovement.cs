@@ -130,6 +130,22 @@ public class SkellyMovement : MonoBehaviour
             break;
         }
     }
+    public void TakeDamage()
+    {
+        if (navMesh.hasPath)
+        {
+            navMesh.ResetPath();
+            
+        }
+        Velocity = -transform.forward * speed;
+        navMesh.Move(Velocity);
+
+        if (mode == 0)
+        {
+            mode = 1;
+        }
+
+    }
 
     #region DecectPlayer
     void DecectPlayer()
