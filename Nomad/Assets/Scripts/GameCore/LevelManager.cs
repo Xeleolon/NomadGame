@@ -105,4 +105,9 @@ public class LevelManager : MonoBehaviour
             unFreezeGame.Invoke();
         }
     }
+
+    public void AlterEmenyBallance()
+    {
+        //increase amount of emeny spawn during night vs day
+    }
 }

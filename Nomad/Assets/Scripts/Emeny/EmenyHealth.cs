@@ -5,16 +5,21 @@ using UnityEngine;
 public class EmenyHealth : MonoBehaviour
 {
     [SerializeField] private float health = 3;
+    [SerializeField] private bool dayCreature;
     private float curHealth;
     [SerializeField] GameObject remainsPrefab;
-    public bool skellyType;
+    [SerializeField] GameObject particaleEffectPrefab; 
     public SkellyMovement movementScript;
     private void Start()
     {
-    
-        if (skellyType)
+
+        if(dayCreature)
         {
-            LevelManager.instance.onSunRiseCallback += Killed;
+            LevelManager.instance.onSunSetCallback += dayNightShift;
+        }
+        else
+        {
+            LevelManager.instance.onSunRiseCallback += dayNightShift;
         }
         curHealth = health;
     }
@@ -25,8 +30,12 @@ public class EmenyHealth : MonoBehaviour
     }
     private void Killed()
     {
-        Instantiate(remainsPrefab, transform.position, Quaternion.identity);
-        if (skellyType)
+        if (remainsPrefab != null)
+        {
+            Instantiate(remainsPrefab, transform.position, Quaternion.identity);
+        }
+        
+        if (!dayCreature)
         {
             LevelManager.instance.onSunRiseCallback -= Killed;
         }
@@ -43,7 +52,7 @@ public class EmenyHealth : MonoBehaviour
             {
                 Killed();
             }
-            else
+            else if (movementScript != null)
             {
                 movementScript.TakeDamage();
             }
@@ -51,6 +60,26 @@ public class EmenyHealth : MonoBehaviour
         else
         {
             Debug.LogError("!!!attemping to apply damage when zero health!!!");
+        }
+    }
+
+    void dayNightShift()
+    {
+        if (dayCreature)
+        {
+            if (particaleEffectPrefab != null)
+            {
+                Instantiate(particaleEffectPrefab, transform.position, Quaternion.identity);
+            }
+            Destroy(gameObject);
+        }
+        else
+        {
+            if (particaleEffectPrefab != null)
+            {
+                Instantiate(particaleEffectPrefab, transform.position, Quaternion.identity);
+            }
+            Killed();
         }
     }
 }
