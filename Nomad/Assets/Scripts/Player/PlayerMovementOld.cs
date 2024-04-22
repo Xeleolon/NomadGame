@@ -43,7 +43,7 @@ public class CameraControls
         euler.x = ClampCameraVerticalAngle(euler.x);
 
         player.localEulerAngles = new Vector3(0, euler.y, euler.z);
-        mainCamera.transform.localEulerAngles = new Vector3(euler.x,0 , 0);
+        mainCamera.transform.localEulerAngles = new Vector3(euler.x, 0 , 0);
 
         cameraRotation = new Vector2(euler.y, euler.x);
 

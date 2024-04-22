@@ -52,7 +52,7 @@ public class BaseEmenyMovement : MonoBehaviour
         {
             Velocity += transform.right * speed.y * Time.deltaTime;
         }
-        Debug.Log(speed + " " + Velocity);
+        //Debug.Log(speed + " " + Velocity);
 
         if (rotate)
         {//transform.LookAt(rotationTarget, Vector3.up);

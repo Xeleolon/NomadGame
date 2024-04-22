@@ -29,6 +29,7 @@ public class SkellyMovement : MonoBehaviour
     [SerializeField] float rotationSpeed = 3;
     [SerializeField] float inCircleSpeed = 3;
     [SerializeField] Vector2 actackDistance = new Vector2(3,5);
+    [SerializeField] float recallDistance = 1;
     bool rotationAntiClockWise;
     float rotationClock;
     float rotationMaxTurn = 5;
@@ -98,6 +99,10 @@ public class SkellyMovement : MonoBehaviour
             UpdateStrike();
             break;
 
+            case 4:
+            DamageRecall();
+            break;
+
             default:
             RandomMovement();
             break;
@@ -121,6 +126,11 @@ public class SkellyMovement : MonoBehaviour
             FixedStrike();
             break;
 
+            case 4:
+            //recall
+            navMesh.Move(Velocity);
+            break;
+
             default:
             if (navMesh != null)
             {
@@ -130,6 +140,8 @@ public class SkellyMovement : MonoBehaviour
             break;
         }
     }
+
+    private Vector3 recallStart;
     public void TakeDamage()
     {
         if (navMesh.hasPath)
@@ -137,14 +149,28 @@ public class SkellyMovement : MonoBehaviour
             navMesh.ResetPath();
             
         }
-        Velocity = -transform.forward * speed;
-        navMesh.Move(Velocity);
+        recallStart = transform.position;
 
-        if (mode == 0)
+        mode = 4;
+
+    }
+
+    private void DamageRecall()
+    {
+        Debug.Log("Damage Recall");
+        if (Vector3.Distance(recallStart, transform.position) > recallDistance)
         {
+            //DamageRecall Complete
             mode = 1;
         }
+        else
+        {
+            Vector3 newRotation = Vector3.RotateTowards(transform.forward, target.position - transform.position, rotationSpeed * Time.deltaTime, 0.0f);
+            transform.rotation = Quaternion.LookRotation(newRotation);
 
+
+            Velocity = -transform.forward * strikeSpeed * 2 * Time.deltaTime;
+        }
     }
 
     #region DecectPlayer

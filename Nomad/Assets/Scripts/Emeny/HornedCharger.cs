@@ -118,7 +118,7 @@ public class HornedCharger : BaseEmenyMovement
         {
             curMode = 3;
             actackClock = Random.Range(actackPause.x, actackPause.y);
-            ChargePosition = transform.forward * (Vector3.Distance(player.position, transform.position) + actackOverShoot);
+            ChargePosition = Vector3.forward * (Vector3.Distance(player.position, transform.position) + actackOverShoot);
         }
         else
         {
@@ -143,7 +143,7 @@ public class HornedCharger : BaseEmenyMovement
 
                     case 1:
                     //Debug.Log("Exiting out here at collisionCheck");
-                    Move(Vector2.zero, ChargePosition, true);
+                    //Move(Vector2.zero, alterChargePosition, true);
                     ExitCharge(); 
                     break;
 
@@ -154,7 +154,7 @@ public class HornedCharger : BaseEmenyMovement
                 }
             }
 
-            Move(new Vector2(speedCharge, 0), ChargePosition, true);
+            Move(new Vector2(speedCharge, 0), alterChargePosition, true);
         }
         else
         {
@@ -202,7 +202,7 @@ public class HornedCharger : BaseEmenyMovement
             return false;
     }
 
-    void OnCollisionEnter(Collision collision)
+    /*void OnCollisionEnter(Collision collision)
     {
         if (!collided && collision.gameObject.tag != ground && curMode == 3)
         {
@@ -230,7 +230,7 @@ public class HornedCharger : BaseEmenyMovement
             collided = false;
             hitPlayer = true;
         }
-    }
+    }*/
 
 
 }
