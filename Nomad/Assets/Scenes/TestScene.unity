@@ -2097,7 +2097,7 @@ GameObject:
   - component: {fileID: 1654891757}
   m_Layer: 7
   m_Name: Plane
-  m_TagString: Untagged
+  m_TagString: Respawn
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 127
@@ -2422,7 +2422,7 @@ MonoBehaviour:
   curMode: 0
   actackPause: {x: 0.5, y: 1}
   actackOverShoot: 3
-  ground: 
+  ground: Respawn
   agroColor: {r: 0.990566, g: 0.21960661, b: 0.71510166, a: 0}
   actackingColor: {r: 1, g: 0.11792451, b: 0.11792451, a: 0}
 --- !u!65 &1876296941

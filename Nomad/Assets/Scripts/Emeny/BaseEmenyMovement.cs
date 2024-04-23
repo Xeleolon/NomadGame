@@ -32,11 +32,12 @@ public class BaseEmenyMovement : MonoBehaviour
     {
         if (Velocity != Vector3.zero)
         {
-            rb.AddForce(Velocity, ForceMode.Force);
+            //rb.AddForce(Velocity, ForceMode.Force);
+            transform.position = transform.position + Velocity;
         }
         else
         {
-            rb.velocity = Vector3.zero;
+            //rb.velocity = Vector3.zero;
         }
     }
 
@@ -57,7 +58,7 @@ public class BaseEmenyMovement : MonoBehaviour
         if (rotate)
         {//transform.LookAt(rotationTarget, Vector3.up);
             Vector3 targetRotation = rotationTarget - transform.position;
-            targetRotation.y = transform.position.y;
+            targetRotation.y = transform.forward.y;
             
             Vector3 newRotation = Vector3.RotateTowards(transform.forward, targetRotation, rotationSpeed * 2 * Time.deltaTime, 0.0f);
             Quaternion deltaRotation = Quaternion.LookRotation(newRotation);
