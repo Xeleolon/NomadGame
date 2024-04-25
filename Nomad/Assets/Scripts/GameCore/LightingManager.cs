@@ -11,6 +11,7 @@ public class LightingManager : MonoBehaviour
     [SerializeField] private LightingPreset preset;
     [SerializeField] private float cycleSpeed = 1;
     [SerializeField] private bool pause;
+    private bool nightTime;
 
     //Variables
     [SerializeField, Range(0, 24)] private float dayCycle;
@@ -24,12 +25,38 @@ public class LightingManager : MonoBehaviour
         {
             dayCycle += Time.deltaTime * cycleSpeed;
             dayCycle %= 24; //clamos between 0 to 24
+            
+            UpdateDayCycle(true);
             UpdateLighting(dayCycle/24f);
         } 
         else
         {
+            
+            UpdateDayCycle(false);
             UpdateLighting(dayCycle/24f);
         }
+    }
+    private void UpdateDayCycle(bool playing)
+    {
+        if (!nightTime && (dayCycle >= 18 || dayCycle < 6))
+        {
+            Debug.Log("Turning to night at" + dayCycle);
+            nightTime = true;
+            if (playing)
+            {
+                LevelManager.instance.DayNightShift(nightTime);
+            }
+        }
+        else if (nightTime && dayCycle >= 6 && dayCycle < 18)
+        {
+            Debug.Log("Turning to day at" + dayCycle);
+            nightTime = false;
+            if (playing)
+            {
+                LevelManager.instance.DayNightShift(nightTime);
+            }
+        }
+        
     }
     
 
