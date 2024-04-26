@@ -30,9 +30,10 @@ public class EmenyHealth : MonoBehaviour
     }
     private void Killed()
     {
-        if (remainsPrefab != null)
+        if (remainsPrefab != null && SpawnCylce.instance.makeSpace(true))
         {
-            Instantiate(remainsPrefab, transform.position, Quaternion.identity);
+            GameObject temp = Instantiate(remainsPrefab, transform.position, Quaternion.identity);
+            SpawnCylce.instance.AddSpawnPoint(temp, true);
         }
         
         if (!dayCreature)
@@ -65,6 +66,8 @@ public class EmenyHealth : MonoBehaviour
 
     void dayNightShift()
     {
+        LevelManager.instance.onSunRiseCallback -= dayNightShift;
+        LevelManager.instance.onSunSetCallback -= dayNightShift;
         if (dayCreature)
         {
             if (particaleEffectPrefab != null)

@@ -67,6 +67,12 @@ public class SkellyMovement : MonoBehaviour
 
         player = GameObject.FindWithTag("Player");
         target = player.transform;
+        if (perimeter == null)
+        {
+            perimeter = SpawnCylce.instance.premiter;
+        }
+
+
         if (perimeter != null)
         {
             Vector3 rangePerimeter = perimeter.areaSize/2;

@@ -115,9 +115,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 3
+  dayCreature: 0
   remainsPrefab: {fileID: 6370355482741390595, guid: 466a076cd909c9a46b3c4fa4ffcf6a03,
     type: 3}
-  skellyType: 0
+  particaleEffectPrefab: {fileID: 2886289661241085768, guid: 6ac29e49a82da5a41a1c76b954d47672,
+    type: 3}
+  movementScript: {fileID: 1933671186}
 --- !u!114 &1933671186
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -144,6 +147,7 @@ MonoBehaviour:
   rotationSpeed: 6
   inCircleSpeed: 80
   actackDistance: {x: 3, y: 5}
+  recallDistance: 1
   travelDistance: 5
   perimeter: {fileID: 0}
   maxIdle: 10

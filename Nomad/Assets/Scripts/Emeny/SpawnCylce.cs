@@ -4,17 +4,29 @@ using UnityEngine;
 
 public class SpawnCylce : MonoBehaviour
 {
+    public static SpawnCylce instance;
+    void Awake ()
+    {
+        if (instance != null)
+        {
+            Debug.LogWarning("More Than One instance of LevelManager found!");
+        }
+        instance = this;
+    }
     [SerializeField] int maxAreaSpawn = 10;
     public int dayCount = 2;
     public int nightCount = 0;
     [SerializeField] Transform[] daySpawnPoints;
     [SerializeField] Transform[] nightSpawnPoints;
+    public AIZoner premiter;
     public GameObject dayPrefab;
     public GameObject nightPrefab;
     void Start()
     {
         LevelManager.instance.onSunSetCallback += nightSpawn;
         LevelManager.instance.onSunRiseCallback += daySpawn;
+
+       
 
     }
 
@@ -43,7 +55,45 @@ public class SpawnCylce : MonoBehaviour
             }
 
             Instantiate(nightPrefab, nightSpawnPoints[spawnLocation].position, Quaternion.identity);
+            
         }
+    }
+
+    public bool makeSpace(bool emenyTpye)
+    {
+        if (emenyTpye)
+        {
+            if (nightSpawnPoints.Length < maxAreaSpawn)
+            {
+                Transform[] tempPoints = new Transform[nightSpawnPoints.Length];
+                for (int i = 0; i < nightSpawnPoints.Length; i ++)
+                {
+                    tempPoints[i] = nightSpawnPoints[i];
+                }
+
+                nightSpawnPoints = new Transform[tempPoints.Length + 1];
+                for (int i = 0; i < tempPoints.Length; i ++)
+                {
+                    nightSpawnPoints[i] = tempPoints[i];
+                }
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        return false;
+    }
+
+    public void AddSpawnPoint(GameObject newAddition, bool emenyTpye)
+    {
+        if (emenyTpye)
+        {
+            nightSpawnPoints[nightSpawnPoints.Length - 1] = newAddition.transform;
+        }
+
     }
 
 }
