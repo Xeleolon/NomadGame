@@ -1172,58 +1172,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1403486973}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &930167103 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6821162237071595927, guid: fec997c1dee0d4c449e2bc30e6e34f67,
-    type: 3}
-  m_PrefabInstance: {fileID: 8600758300189174063}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &930167106
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 930167103}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 63db683227440fd449bb7dda0406a0e7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  directionLight: {fileID: 203844588}
-  moonLight: {fileID: 1435990638}
-  preset: {fileID: 11400000, guid: d1591e85340d8aa42973fe2fce96638c, type: 2}
-  cycleSpeed: 0.85
-  pause: 0
-  dayCycle: 18.5
---- !u!114 &930167107
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 930167103}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4a434328241009e4ab311281df4028b4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxAreaSpawn: 10
-  dayCount: 2
-  nightCount: 1
-  daySpawnPoints:
-  - {fileID: 1787369625}
-  - {fileID: 1402175122}
-  - {fileID: 762248915}
-  nightSpawnPoints:
-  - {fileID: 1489258258}
-  - {fileID: 1598460713}
-  - {fileID: 792694159}
-  premiter: {fileID: 760310731}
-  dayPrefab: {fileID: 8270322919751412240, guid: 3dd5187e2dac2a74b926927b43a5cb7b,
-    type: 3}
-  nightPrefab: {fileID: 2804048333991240644, guid: 068da5d08ad313941b48ff8a0bbc69ab,
-    type: 3}
 --- !u!1 &1012817737 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3801867162851592453, guid: c535fc458e9ee3c4f89414d5e3be0f25,
@@ -3746,16 +3694,38 @@ PrefabInstance:
     serializedVersion: 2
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1092074525231827244, guid: fec997c1dee0d4c449e2bc30e6e34f67,
-        type: 3}
-      propertyPath: sunSource
+    - target: {fileID: 930167106, guid: fec997c1dee0d4c449e2bc30e6e34f67, type: 3}
+      propertyPath: moonLight
       value: 
-      objectReference: {fileID: 203844588}
-    - target: {fileID: 1092074525231827244, guid: fec997c1dee0d4c449e2bc30e6e34f67,
-        type: 3}
-      propertyPath: freazeDayCycle
-      value: 1
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1435990638}
+    - target: {fileID: 930167107, guid: fec997c1dee0d4c449e2bc30e6e34f67, type: 3}
+      propertyPath: premiter
+      value: 
+      objectReference: {fileID: 760310731}
+    - target: {fileID: 930167107, guid: fec997c1dee0d4c449e2bc30e6e34f67, type: 3}
+      propertyPath: daySpawnPoints.Array.data[0]
+      value: 
+      objectReference: {fileID: 1787369625}
+    - target: {fileID: 930167107, guid: fec997c1dee0d4c449e2bc30e6e34f67, type: 3}
+      propertyPath: daySpawnPoints.Array.data[1]
+      value: 
+      objectReference: {fileID: 1402175122}
+    - target: {fileID: 930167107, guid: fec997c1dee0d4c449e2bc30e6e34f67, type: 3}
+      propertyPath: daySpawnPoints.Array.data[2]
+      value: 
+      objectReference: {fileID: 762248915}
+    - target: {fileID: 930167107, guid: fec997c1dee0d4c449e2bc30e6e34f67, type: 3}
+      propertyPath: nightSpawnPoints.Array.data[0]
+      value: 
+      objectReference: {fileID: 1489258258}
+    - target: {fileID: 930167107, guid: fec997c1dee0d4c449e2bc30e6e34f67, type: 3}
+      propertyPath: nightSpawnPoints.Array.data[1]
+      value: 
+      objectReference: {fileID: 1598460713}
+    - target: {fileID: 930167107, guid: fec997c1dee0d4c449e2bc30e6e34f67, type: 3}
+      propertyPath: nightSpawnPoints.Array.data[2]
+      value: 
+      objectReference: {fileID: 792694159}
     - target: {fileID: 5940299283223448679, guid: fec997c1dee0d4c449e2bc30e6e34f67,
         type: 3}
       propertyPath: m_RootOrder
