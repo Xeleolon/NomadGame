@@ -212,9 +212,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 3
+  dayCreature: 0
   remainsPrefab: {fileID: 6370355482741390595, guid: 466a076cd909c9a46b3c4fa4ffcf6a03,
     type: 3}
-  skellyType: 1
+  particaleEffectPrefab: {fileID: 0}
+  movementScript: {fileID: 0}
 --- !u!195 &3279065262456938963
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -249,8 +251,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9daf636e6f060f4c8d44495fde5a634, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  testdenistation: {fileID: 0}
-  moveGo: 0
+  damage: 1
+  strikePauses: {x: 1, y: 3}
+  repeatStrikes: 2
+  strikeSpeed: 3
+  strikeHold: 1
+  playerMaxDistance: 10
+  dectectRange: 2
+  standardColor: {r: 0.4431373, g: 0.4431373, b: 0.3803922, a: 0}
+  actackColor: {r: 1, g: 0.06132078, b: 0.06132078, a: 0}
+  mode: 0
+  speed: 3
+  rotationSpeed: 3
+  inCircleSpeed: 3
+  actackDistance: {x: 3, y: 5}
+  recallDistance: 1
   travelDistance: 5
   perimeter: {fileID: 0}
   maxIdle: 10

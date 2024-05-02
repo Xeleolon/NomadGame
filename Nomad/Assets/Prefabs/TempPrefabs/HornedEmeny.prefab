@@ -133,10 +133,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rotationSpeed: 5
-  speedCharge: 20
+  speedCharge: 12
   speedNeutral: 6
   damage: 1
-  AgroDistance: {x: 6, y: 10}
+  AgroDistance: {x: 8, y: 10}
   targetPlayer: 0
   targetBush: {fileID: 0}
   curMode: 0
