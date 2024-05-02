@@ -13,7 +13,8 @@ public class SpawnCylce : MonoBehaviour
         }
         instance = this;
     }
-    [SerializeField] int maxAreaSpawn = 10;
+    [SerializeField] int maxAreaSpawnDay = 10;
+    [SerializeField] int maxAreaSpawnNight = 20;
     public int dayCount = 2;
     public int nightCount = 0;
     [SerializeField] Transform[] daySpawnPoints;
@@ -46,6 +47,10 @@ public class SpawnCylce : MonoBehaviour
 
     void nightSpawn()
     {
+        if (dayCount >= maxAreaSpawnDay)
+        {
+            dayCount += 1;
+        }
         for (int i = 0; i < nightCount; i++)
         {
             int spawnLocation = 0;
@@ -63,7 +68,7 @@ public class SpawnCylce : MonoBehaviour
     {
         if (emenyTpye)
         {
-            if (nightSpawnPoints.Length < maxAreaSpawn)
+            if (nightSpawnPoints.Length < maxAreaSpawnNight)
             {
                 Transform[] tempPoints = new Transform[nightSpawnPoints.Length];
                 for (int i = 0; i < nightSpawnPoints.Length; i ++)
@@ -91,6 +96,10 @@ public class SpawnCylce : MonoBehaviour
     {
         if (emenyTpye)
         {
+            if (nightCount >= maxAreaSpawnNight)
+            {
+                nightCount += 1;
+            }
             nightSpawnPoints[nightSpawnPoints.Length - 1] = newAddition.transform;
         }
 
