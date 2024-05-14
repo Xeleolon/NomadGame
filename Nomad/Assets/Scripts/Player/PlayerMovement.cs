@@ -49,6 +49,9 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] float bodyRotateSpeed = 60;
     [SerializeField] float maxSlopeAngle = 45;
     [SerializeField] float groundDrag = 10f;
+    [SerializeField] private float jumpForce = 3;
+    [SerializeField] private float jumpCooldown = 1;
+    private bool readyToJump;
     [SerializeField] LayerMask whatIsGround;
 
     [Header("Camera Controls")]
@@ -67,12 +70,14 @@ public class PlayerMovement : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         newBodyTarget = cameraCenter.forward;
+        ResetJump();
     }
     void Update()
     {
         GroundCheck();
         CameraMovementCallication();
         moveVelocity();
+        JumpFunction();
     }
 
     void FixedUpdate()
@@ -183,6 +188,33 @@ public class PlayerMovement : MonoBehaviour
         {
             rb.drag = 0.2f;
         }
+    }
+
+    private void JumpFunction()
+    {
+        if (jumpInput.ReadValue<float>() > 0)
+        {
+            //Debug.Log("attemp Jump " + readyToJump + grounded);
+            if (readyToJump && grounded)
+            {
+                //Debug.Log("Jump");
+                //exitingSlope = true;
+                readyToJump = false;
+                rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
+    
+                rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
+    
+                Invoke(nameof(ResetJump), jumpCooldown);
+            }
+
+        }
+
+    }
+
+    private void ResetJump()
+    {
+        readyToJump = true;
+        //exitingSlope = false;
     }
 
 
