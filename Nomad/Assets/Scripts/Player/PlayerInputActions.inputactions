@@ -60,27 +60,36 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "FlipTool",
-                    "type": "Button",
-                    "id": "aa860e1a-e9c5-4c0b-b80c-f433f55b4b27",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "SwapTool",
-                    "type": "Button",
-                    "id": "6668b9c8-0064-49d0-a262-412aa32b6dbe",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
                     "name": "Interact",
                     "type": "Button",
                     "id": "304b6153-d081-4225-b40c-b25a6705eef2",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "ToolA",
+                    "type": "Button",
+                    "id": "855feb96-6306-41ed-b19e-90f42ac79aa4",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "ToolB",
+                    "type": "Button",
+                    "id": "a2057cf6-36a4-4587-be55-70d7cbb0dce3",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "ToolC",
+                    "type": "Button",
+                    "id": "782448e3-32cd-4ea1-b447-44b20ef89c6e",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -365,50 +374,6 @@
                 },
                 {
                     "name": "",
-                    "id": "c71a2b5a-28b9-4f08-85b6-f5700b131dc7",
-                    "path": "<Keyboard>/f",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Keyboard&Mouse",
-                    "action": "FlipTool",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "2bd2079e-a378-414f-86d1-69c790d3f1b4",
-                    "path": "<Gamepad>/buttonWest",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "FlipTool",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "cdaafa69-2b05-489a-bf64-fcc40740d443",
-                    "path": "<Keyboard>/q",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Keyboard&Mouse",
-                    "action": "SwapTool",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "45aec5f0-a47a-487b-a159-766742e2d3c7",
-                    "path": "<Gamepad>/buttonNorth",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "SwapTool",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "2efc6307-f47b-4af2-bc67-07b791d6109b",
                     "path": "<Keyboard>/e",
                     "interactions": "",
@@ -426,6 +391,72 @@
                     "processors": "",
                     "groups": "",
                     "action": "Interact",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "ea60034b-8e63-4b00-b0ff-2b5778ce82c8",
+                    "path": "<Keyboard>/1",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ToolA",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "83ac77d8-1138-4b4d-8c49-031426f02fe2",
+                    "path": "<Keyboard>/leftArrow",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ToolA",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d763711c-2c40-40a6-93c3-e75ef2067dbb",
+                    "path": "<Keyboard>/2",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ToolB",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "ad41749b-4eba-46dd-ba13-a34d0473b931",
+                    "path": "<Keyboard>/upArrow",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ToolB",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "9f1b406f-1db1-4e2d-abde-7084ee73c749",
+                    "path": "<Keyboard>/3",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ToolC",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "47ee10c7-107b-49b1-b7f4-ce2d43abf7ac",
+                    "path": "<Keyboard>/rightArrow",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ToolC",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

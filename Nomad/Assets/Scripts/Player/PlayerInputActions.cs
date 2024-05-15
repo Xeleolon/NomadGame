@@ -82,27 +82,36 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""FlipTool"",
-                    ""type"": ""Button"",
-                    ""id"": ""aa860e1a-e9c5-4c0b-b80c-f433f55b4b27"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""SwapTool"",
-                    ""type"": ""Button"",
-                    ""id"": ""6668b9c8-0064-49d0-a262-412aa32b6dbe"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
                     ""name"": ""Interact"",
                     ""type"": ""Button"",
                     ""id"": ""304b6153-d081-4225-b40c-b25a6705eef2"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ToolA"",
+                    ""type"": ""Button"",
+                    ""id"": ""855feb96-6306-41ed-b19e-90f42ac79aa4"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ToolB"",
+                    ""type"": ""Button"",
+                    ""id"": ""a2057cf6-36a4-4587-be55-70d7cbb0dce3"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ToolC"",
+                    ""type"": ""Button"",
+                    ""id"": ""782448e3-32cd-4ea1-b447-44b20ef89c6e"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -387,50 +396,6 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""c71a2b5a-28b9-4f08-85b6-f5700b131dc7"",
-                    ""path"": ""<Keyboard>/f"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse"",
-                    ""action"": ""FlipTool"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""2bd2079e-a378-414f-86d1-69c790d3f1b4"",
-                    ""path"": ""<Gamepad>/buttonWest"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""FlipTool"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""cdaafa69-2b05-489a-bf64-fcc40740d443"",
-                    ""path"": ""<Keyboard>/q"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse"",
-                    ""action"": ""SwapTool"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""45aec5f0-a47a-487b-a159-766742e2d3c7"",
-                    ""path"": ""<Gamepad>/buttonNorth"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""SwapTool"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
                     ""id"": ""2efc6307-f47b-4af2-bc67-07b791d6109b"",
                     ""path"": ""<Keyboard>/e"",
                     ""interactions"": """",
@@ -448,6 +413,72 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Interact"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ea60034b-8e63-4b00-b0ff-2b5778ce82c8"",
+                    ""path"": ""<Keyboard>/1"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ToolA"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""83ac77d8-1138-4b4d-8c49-031426f02fe2"",
+                    ""path"": ""<Keyboard>/leftArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ToolA"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d763711c-2c40-40a6-93c3-e75ef2067dbb"",
+                    ""path"": ""<Keyboard>/2"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ToolB"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ad41749b-4eba-46dd-ba13-a34d0473b931"",
+                    ""path"": ""<Keyboard>/upArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ToolB"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9f1b406f-1db1-4e2d-abde-7084ee73c749"",
+                    ""path"": ""<Keyboard>/3"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ToolC"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""47ee10c7-107b-49b1-b7f4-ce2d43abf7ac"",
+                    ""path"": ""<Keyboard>/rightArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ToolC"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1041,9 +1072,10 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
         m_Player_Sprint = m_Player.FindAction("Sprint", throwIfNotFound: true);
         m_Player_Jump = m_Player.FindAction("Jump", throwIfNotFound: true);
         m_Player_Inventory = m_Player.FindAction("Inventory", throwIfNotFound: true);
-        m_Player_FlipTool = m_Player.FindAction("FlipTool", throwIfNotFound: true);
-        m_Player_SwapTool = m_Player.FindAction("SwapTool", throwIfNotFound: true);
         m_Player_Interact = m_Player.FindAction("Interact", throwIfNotFound: true);
+        m_Player_ToolA = m_Player.FindAction("ToolA", throwIfNotFound: true);
+        m_Player_ToolB = m_Player.FindAction("ToolB", throwIfNotFound: true);
+        m_Player_ToolC = m_Player.FindAction("ToolC", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1121,9 +1153,10 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Sprint;
     private readonly InputAction m_Player_Jump;
     private readonly InputAction m_Player_Inventory;
-    private readonly InputAction m_Player_FlipTool;
-    private readonly InputAction m_Player_SwapTool;
     private readonly InputAction m_Player_Interact;
+    private readonly InputAction m_Player_ToolA;
+    private readonly InputAction m_Player_ToolB;
+    private readonly InputAction m_Player_ToolC;
     public struct PlayerActions
     {
         private @PlayerInputActions m_Wrapper;
@@ -1134,9 +1167,10 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
         public InputAction @Sprint => m_Wrapper.m_Player_Sprint;
         public InputAction @Jump => m_Wrapper.m_Player_Jump;
         public InputAction @Inventory => m_Wrapper.m_Player_Inventory;
-        public InputAction @FlipTool => m_Wrapper.m_Player_FlipTool;
-        public InputAction @SwapTool => m_Wrapper.m_Player_SwapTool;
         public InputAction @Interact => m_Wrapper.m_Player_Interact;
+        public InputAction @ToolA => m_Wrapper.m_Player_ToolA;
+        public InputAction @ToolB => m_Wrapper.m_Player_ToolB;
+        public InputAction @ToolC => m_Wrapper.m_Player_ToolC;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1164,15 +1198,18 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                 @Inventory.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnInventory;
                 @Inventory.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnInventory;
                 @Inventory.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnInventory;
-                @FlipTool.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnFlipTool;
-                @FlipTool.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnFlipTool;
-                @FlipTool.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnFlipTool;
-                @SwapTool.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSwapTool;
-                @SwapTool.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSwapTool;
-                @SwapTool.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSwapTool;
                 @Interact.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnInteract;
                 @Interact.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnInteract;
                 @Interact.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnInteract;
+                @ToolA.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnToolA;
+                @ToolA.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnToolA;
+                @ToolA.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnToolA;
+                @ToolB.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnToolB;
+                @ToolB.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnToolB;
+                @ToolB.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnToolB;
+                @ToolC.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnToolC;
+                @ToolC.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnToolC;
+                @ToolC.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnToolC;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -1195,15 +1232,18 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                 @Inventory.started += instance.OnInventory;
                 @Inventory.performed += instance.OnInventory;
                 @Inventory.canceled += instance.OnInventory;
-                @FlipTool.started += instance.OnFlipTool;
-                @FlipTool.performed += instance.OnFlipTool;
-                @FlipTool.canceled += instance.OnFlipTool;
-                @SwapTool.started += instance.OnSwapTool;
-                @SwapTool.performed += instance.OnSwapTool;
-                @SwapTool.canceled += instance.OnSwapTool;
                 @Interact.started += instance.OnInteract;
                 @Interact.performed += instance.OnInteract;
                 @Interact.canceled += instance.OnInteract;
+                @ToolA.started += instance.OnToolA;
+                @ToolA.performed += instance.OnToolA;
+                @ToolA.canceled += instance.OnToolA;
+                @ToolB.started += instance.OnToolB;
+                @ToolB.performed += instance.OnToolB;
+                @ToolB.canceled += instance.OnToolB;
+                @ToolC.started += instance.OnToolC;
+                @ToolC.performed += instance.OnToolC;
+                @ToolC.canceled += instance.OnToolC;
             }
         }
     }
@@ -1366,9 +1406,10 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
         void OnSprint(InputAction.CallbackContext context);
         void OnJump(InputAction.CallbackContext context);
         void OnInventory(InputAction.CallbackContext context);
-        void OnFlipTool(InputAction.CallbackContext context);
-        void OnSwapTool(InputAction.CallbackContext context);
         void OnInteract(InputAction.CallbackContext context);
+        void OnToolA(InputAction.CallbackContext context);
+        void OnToolB(InputAction.CallbackContext context);
+        void OnToolC(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

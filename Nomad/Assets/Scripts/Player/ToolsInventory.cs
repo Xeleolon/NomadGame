@@ -29,20 +29,17 @@ public class ToolsInventory : MonoBehaviour
         strike.Enable();
         strike.performed += FireTool;
 
-        flipTool = playerControls.Player.FlipTool;
-        flipTool.Enable();
-        flipTool.performed += FlipTool;
+        //flipTool = playerControls.Player.FlipTool;
+        //flipTool.Enable();
+        //flipTool.performed += FlipTool;
 
-        swapTool = playerControls.Player.SwapTool;
-        swapTool.Enable();
-        swapTool.performed += SwapTool;
+        //swapTool = playerControls.Player.SwapTool;
+        //swapTool.Enable();
+        //swapTool.performed += SwapTool;
 
         interactWith = playerControls.Player.Interact;
         interactWith.Enable();
         interactWith.performed += Interact;
-
-
-
     }
 
     void OnDisable()
