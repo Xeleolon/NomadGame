@@ -9,7 +9,7 @@ public class TriggerDector : MonoBehaviour
     {
         if (other.gameObject.tag == "Player")
         {
-            ToolsInventory tools = other.GetComponent<ToolsInventory>();
+            PlayerLife tools = other.GetComponent<PlayerLife>();
             tools.DrenchTorch(drench);
         }
     }

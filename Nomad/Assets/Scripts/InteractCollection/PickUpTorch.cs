@@ -36,14 +36,14 @@ public class PickUpTorch : InteractBase
 
     void TorchStaticInteraction()
     {
-         if (ToolsInventory.instance.curTool == 1)
+         if (PlayerLife.instance.curTool == 2)
          {
-            switch (ToolsInventory.instance.torchState)
+            switch (PlayerLife.instance.torchState)
             {
                 case 1:
                 if (lightState == 2)
                 {
-                    ToolsInventory.instance.changeTorch(lightState);
+                    PlayerLife.instance.changeTorch(lightState);
                 }
                 break;
                 case 2:
@@ -62,7 +62,7 @@ public class PickUpTorch : InteractBase
                 case 3:
                 if (lightState == 2)
                 {
-                    ToolsInventory.instance.changeTorch(1);
+                    PlayerLife.instance.changeTorch(1);
                 }
                 break;
             }

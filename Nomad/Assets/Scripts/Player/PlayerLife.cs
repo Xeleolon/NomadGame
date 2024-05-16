@@ -103,7 +103,7 @@ public class ToolInfo
     [SerializeField] int toolB = 0;
 
     [SerializeField] int toolC = 0;
-    [SerializeField] int curTool = 0;
+    [SerializeField] public int curTool = 0;
     [SerializeField] Animator toolsAnimator;
 
     [Header("Weapons")]
@@ -119,7 +119,7 @@ public class ToolInfo
     [Header("Tools")]
     //torch
     [SerializeField] ToolInfo torchInfo;
-    [SerializeField] int torchState = 0; //0 = no torch, 2 = lit torch, 3 = drenched torch.
+    [SerializeField] public int torchState = 0; //0 = no torch, 2 = lit torch, 3 = drenched torch.
     [SerializeField] GameObject torchLight;
     [SerializeField] GameObject torchPrefab;
 
@@ -317,7 +317,16 @@ public class ToolInfo
 
             case 1:
             //spear
-            spearInfo.ActivateObject(true);
+            if (spear != null)
+            { 
+                spearInfo.ActivateObject(true); 
+            }
+            else
+            {
+                spearInfo.ActivateObject(false);
+                Debug.Log("spear data missing");
+                curTool = 0;
+            }
 
             torchInfo.ActivateObject(false);
             bowInfo.ActivateObject(false);
@@ -333,7 +342,16 @@ public class ToolInfo
 
             case 3:
             //bow
-            bowInfo.ActivateObject(true);
+            if (bow != null)
+            { 
+                bowInfo.ActivateObject(true); 
+            }
+            else
+            {
+                bowInfo.ActivateObject(false);
+                Debug.Log("bow data missing");
+                curTool = 0;
+            }
 
             spearInfo.ActivateObject(false);
             torchInfo.ActivateObject(false);
@@ -359,7 +377,7 @@ public class ToolInfo
                 toolsAnimator.Play(spearInfo.interactAnimation);
             }
             Ray ray;
-            ray = new Ray(gameObject.transform.position, playerBody.forward);
+            ray = new Ray(transform.position, playerBody.forward);
     
             RaycastHit hit;
     
@@ -381,7 +399,98 @@ public class ToolInfo
     #endregion
 
     #region Torch
+    public void changeTorch(int tempTorchState)
+    {
+        if (torchState != 0 && curTool == 1 && torchState != tempTorchState)
+        {
+            switch (tempTorchState)
+            {
+                case 0:
+                torchState = 0;
+                torchInfo.ActivateObject(false);
+                break;
 
+                case 1:
+                torchState = 1;
+                Debug.Log("offcourse");
+                if (torchLight != null && torchLight.activeSelf)
+                {
+                    torchLight.SetActive(false);
+                }
+                break;
+
+                case 2:
+                //Debug.Log("Made to stage 2");
+                if (torchState != 3)
+                {
+                    //Debug.Log("Made to stage 3");
+                    torchState = 2;
+                    //turn light on
+                    if (torchLight != null && !torchLight.activeSelf)
+                    {
+                        //Debug.Log("Made to stage 4");
+                        torchLight.SetActive(true);
+                    }
+                }
+                break;
+
+                case 3:
+                torchState = 3;
+                if (torchLight != null && torchLight.activeSelf) // turn light off
+                {
+                    torchLight.SetActive(false);
+                }
+                break;
+            }
+        }
+    }
+
+    public bool AddTorch(int torchData)
+    {
+        if (torchState == 0)
+        {
+            torchState = 1;
+            curTool = 2;
+            ToolChange();
+            changeTorch(torchData);
+            
+            return true;
+        }
+        return false;
+    }
+    void DropTorch()
+    {
+        //spawn Torch and drop it to the ground,
+        if (torchState != 0)
+        {
+            
+            torchInfo.ActivateObject(false);
+            if (torchPrefab != null)
+            {
+                GameObject tempObject = Instantiate(torchPrefab, playerBody.forward * 1.5f, Quaternion.Euler(Random.Range(-1.0f, 1.0f), 0 , Random.Range(-1.0f, 1.0f)));
+                tempObject.GetComponent<PickUpTorch>().ChangeState(torchState);
+            }
+
+            torchState = 0;
+        }
+
+    }
+
+    public void DrenchTorch(bool drench)
+    {
+        if (curTool == 1)
+        {
+            if (drench)
+            {
+                torchState = 3;
+                //torch become unlit
+            }
+            else if (torchState == 3)
+            {
+                torchState = 1;
+            }
+        }
+    }
     #endregion
 
 

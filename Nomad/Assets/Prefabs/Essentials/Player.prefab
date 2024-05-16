@@ -262,7 +262,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7771939465882092393}
-  - component: {fileID: 7771939465882092392}
   m_Layer: 15
   m_Name: Spear
   m_TagString: Untagged
@@ -286,26 +285,6 @@ Transform:
   m_Father: {fileID: 2700543971962854697}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!95 &7771939465882092392
-Animator:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 263149059895056208}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 52b87f7e2c246944b9c250fb97088177, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &427053836996229083
 GameObject:
   m_ObjectHideFlags: 0
@@ -640,7 +619,7 @@ Transform:
   - {fileID: 2700543972091085099}
   - {fileID: 2700543971962854697}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!136 &2700543971393520738
 CapsuleCollider:
@@ -691,17 +670,19 @@ MonoBehaviour:
   coins: 0
   arrows: 10
   maxArrows: 20
-  toolA: 0
-  toolB: 0
+  playerBody: {fileID: 2700543971962854697}
+  toolA: 1
+  toolB: 2
   toolC: 0
   curTool: 0
-  spear: {fileID: 0}
+  toolsAnimator: {fileID: 1603491645}
+  spear: {fileID: 11400000, guid: d6dc2a4b423f0f747b74ae5e862e7260, type: 2}
   spearInfo:
     locked: 0
     heldRefernce: {fileID: 263149059895056208}
-    interactAnimation: 
+    interactAnimation: SpearActack
     secondAnimation: 
-    idealAnimation: 
+    idealAnimation: SpearStatic
   bow: {fileID: 0}
   bowInfo:
     locked: 0
@@ -716,8 +697,9 @@ MonoBehaviour:
     secondAnimation: 
     idealAnimation: 
   torchState: 0
-  torchLight: {fileID: 0}
-  torchPrefab: {fileID: 0}
+  torchLight: {fileID: 7153053426821582932}
+  torchPrefab: {fileID: 3260074229154982981, guid: 5a199d4a5236f3448b5955f5ce891c51,
+    type: 3}
   healthyUiPrefab: {fileID: 3408451865311018968, guid: e145c53d6c1d2fd4aab2e46217489b5e,
     type: 3}
   healthParent: {fileID: 2700543971507673954}
@@ -742,7 +724,7 @@ MonoBehaviour:
   torchPrefab: {fileID: 3260074229154982981, guid: 5a199d4a5236f3448b5955f5ce891c51,
     type: 3}
   playerBody: {fileID: 2700543971962854697}
-  weaponAnimator: {fileID: 7771939465882092392}
+  weaponAnimator: {fileID: 0}
   weaponActack: SpearActack
   torchState: 1
   interactPanel: {fileID: 8994432979050747129}
@@ -1092,6 +1074,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2700543971962854697}
+  - component: {fileID: 1603491645}
   m_Layer: 15
   m_Name: BodyRotation
   m_TagString: Untagged
@@ -1117,6 +1100,26 @@ Transform:
   m_Father: {fileID: 2700543971393520743}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!95 &1603491645
+Animator:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2700543971962854698}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 5cbe8b19b282e1a458f27f98706b42ac, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &2700543972091085268
 GameObject:
   m_ObjectHideFlags: 0
@@ -1350,14 +1353,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5046413785747874681}
-  m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.455, y: -0.212, z: 0.715}
+  m_LocalRotation: {x: 0.5827528, y: -0, z: -0, w: 0.8126495}
+  m_LocalPosition: {x: 0.455, y: -0.673, z: 0.254}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7771939465882092393}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 71.289, y: 0, z: 0}
 --- !u!33 &8857592694312908390
 MeshFilter:
   m_ObjectHideFlags: 0
