@@ -53,7 +53,7 @@ public class ToolInfo
     {
         strike = playerControls.Player.Fire;
         strike.Enable();
-        //strike.performed += FireTool;
+        strike.performed += FireTool;
 
         inputToolA = playerControls.Player.ToolA;
         inputToolA.Enable();
@@ -141,6 +141,7 @@ public class ToolInfo
         curHealth = health;
         curHunger = hunger;
         UpdateHealthUI();
+        ToolChange();
     }
 
     void Update()
@@ -222,6 +223,7 @@ public class ToolInfo
             break;
 
             case 1: //Spear
+            SpearActack();
 
             break;
 
@@ -255,6 +257,7 @@ public class ToolInfo
         if (toolA == 0)
         {
             Debug.Log("No tool in selection A");
+            curTool = toolC;
             ToolChange();
             return;
         }
@@ -271,6 +274,7 @@ public class ToolInfo
         if (toolB == 0)
         {
             Debug.Log("No tool in selection B");
+            curTool = toolC;
             ToolChange();
             return;
         }
@@ -287,6 +291,7 @@ public class ToolInfo
         if (toolC == 0)
         {
             Debug.Log("No tool in selection C");
+            curTool = toolC;
             ToolChange();
             return;
         }
@@ -348,10 +353,11 @@ public class ToolInfo
     {
         if (canHarm)
         {
-            /*if (weaponActack != null)
+            Debug.Log("spear Actacked");
+            if (spearInfo.interactAnimation != null)
             {
-                //toolAnimator.Play(weaponActack);
-            }*/
+                toolsAnimator.Play(spearInfo.interactAnimation);
+            }
             Ray ray;
             ray = new Ray(gameObject.transform.position, playerBody.forward);
     

@@ -24,7 +24,7 @@ public class PickUpTorch : InteractBase
     {
         if (!Unpickable && door == null && ToolsInventory.instance.AddTorch(lightState))
         {
-            Debug.Log("pick up torch");
+            //Debug.Log("pick up torch");
             ToolsInventory.instance.InteractCheck(false);
             Destroy(gameObject);
         }
@@ -49,13 +49,13 @@ public class PickUpTorch : InteractBase
                 case 2:
                 if (lightState == 1)
                 {
-                    Debug.Log("Changing to light");
+                    //Debug.Log("Changing to light");
                     ChangeState(2);
                     OpenDoor();
                 }
                 else if (lightState == 3)
                 {
-                    Debug.Log("Changing to off");
+                    //Debug.Log("Changing to off");
                     ChangeState(1);
                 }
                 break;
@@ -72,7 +72,7 @@ public class PickUpTorch : InteractBase
     public void ChangeState(int newState)
     {
         skipStartLight = true;
-        Debug.Log("made to stage 1 : " + newState);
+        //Debug.Log("made to stage 1 : " + newState);
         if (lightState != newState)
         {
             switch (newState)
@@ -83,7 +83,7 @@ public class PickUpTorch : InteractBase
 
                 case 1:
                 lightState = 1;
-                Debug.Log("offcourse");
+                //Debug.Log("offcourse");
                 if (lightSource != null && lightSource.activeSelf)
                 {
                     lightSource.SetActive(false);
