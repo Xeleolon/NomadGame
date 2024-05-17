@@ -229,11 +229,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9683c9a1779047a499acc2f7523016af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  displayInstructions: 
   door: {fileID: 0}
   doorOpeningState: 1
   startState: 1
   Unpickable: 0
   lightSource: {fileID: 1277228499619613314}
+  pickUpStatement: Pick Up Torch
+  lightStatement: Light Torch
+  unDrenchStatement: UnDrench Torch
 --- !u!65 &-8781392032908711792
 BoxCollider:
   m_ObjectHideFlags: 0

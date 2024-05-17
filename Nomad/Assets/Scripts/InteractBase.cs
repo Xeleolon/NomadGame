@@ -5,6 +5,7 @@ using UnityEngine;
 public class InteractBase : MonoBehaviour
 {
     [Header("Interact Base")]
+    public string displayInstructions;
     //[SerializeField] float distance = 3f;
     [Tooltip("0 for open&Close, 1 for Open, 2 for Close")]
     [SerializeField] public DoorControl door;
@@ -25,7 +26,12 @@ public class InteractBase : MonoBehaviour
         }
     }
 
-    void OnTriggerEnter(Collider other)
+    public virtual bool Requirements()
+    {
+        return true;
+    }
+
+    /*void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.tag == "Player")
         {
@@ -61,6 +67,6 @@ public class InteractBase : MonoBehaviour
             }
             tools.InteractCheck(false);
         }
-    }
+    } */
     
 }

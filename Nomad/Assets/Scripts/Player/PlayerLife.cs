@@ -105,6 +105,7 @@ public class ToolInfo
     [SerializeField] int toolC = 0;
     [SerializeField] public int curTool = 0;
     [SerializeField] Animator toolsAnimator;
+    private InteractionTrigger interactTrigger;
 
     [Header("Weapons")]
     //spear
@@ -118,7 +119,7 @@ public class ToolInfo
     
     [Header("Tools")]
     //torch
-    [SerializeField] ToolInfo torchInfo;
+    [SerializeField] public ToolInfo torchInfo;
     [SerializeField] public int torchState = 0; //0 = no torch, 2 = lit torch, 3 = drenched torch.
     [SerializeField] GameObject torchLight;
     [SerializeField] GameObject torchPrefab;
@@ -142,6 +143,7 @@ public class ToolInfo
         curHunger = hunger;
         UpdateHealthUI();
         ToolChange();
+        interactTrigger = playerBody.GetComponent<InteractionTrigger>();
     }
 
     void Update()
@@ -362,6 +364,11 @@ public class ToolInfo
             
             break;
 
+        }
+
+        if (interactTrigger != null)
+        { 
+            interactTrigger.RequirementCheck();
         }
     }
     #endregion

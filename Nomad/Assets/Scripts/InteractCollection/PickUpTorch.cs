@@ -10,22 +10,26 @@ public class PickUpTorch : InteractBase
     [SerializeField] private int startState = 1;
     [SerializeField] private bool Unpickable;
     [SerializeField] private GameObject lightSource;
+    [SerializeField] private string pickUpStatement;
+    [SerializeField] private string lightStatement;
+    [SerializeField] private string unDrenchStatement;
     private int lightState;
     private bool skipStartLight;
+    private PlayerLife playerLife;
     void Start()
     {
         if (!skipStartLight)
         {
             ChangeState(startState);
         }
+        playerLife = PlayerLife.instance;
     }
 
     public override void Interact()
     {
-        if (!Unpickable && door == null && ToolsInventory.instance.AddTorch(lightState))
+        if (!Unpickable && door == null && playerLife.AddTorch(lightState))
         {
             //Debug.Log("pick up torch");
-            ToolsInventory.instance.InteractCheck(false);
             Destroy(gameObject);
         }
         else //take effect from light source
@@ -34,16 +38,54 @@ public class PickUpTorch : InteractBase
         }
     }
 
+    public override bool Requirements()
+    {
+        int curTool = playerLife.curTool;
+        int torchState = playerLife.torchState;
+
+        if (curTool != 2)
+        {
+            if (playerLife.torchInfo.locked || torchState == 0)
+            {
+                //torch no they
+                displayInstructions = pickUpStatement;
+                return true;
+            }
+
+            return false;
+        }
+        if (torchState == 2 && (startState == 1 || startState == 3))
+        {
+            //this torch unlit
+            displayInstructions = lightStatement;
+            return true;
+        }
+        else if (torchState == 1 && startState == 2)
+        {
+            //player torch unlit
+            displayInstructions = lightStatement;
+            return true;
+        }
+        else if (torchState == 3 && startState == 2)
+        {
+            //torch undrenched
+            displayInstructions = unDrenchStatement;
+            return true;
+        }
+
+        return false;
+    }
+
     void TorchStaticInteraction()
     {
-         if (PlayerLife.instance.curTool == 2)
+         if (playerLife.curTool == 2)
          {
-            switch (PlayerLife.instance.torchState)
+            switch (playerLife.torchState)
             {
                 case 1:
                 if (lightState == 2)
                 {
-                    PlayerLife.instance.changeTorch(lightState);
+                    playerLife.changeTorch(lightState);
                 }
                 break;
                 case 2:
@@ -62,7 +104,7 @@ public class PickUpTorch : InteractBase
                 case 3:
                 if (lightState == 2)
                 {
-                    PlayerLife.instance.changeTorch(1);
+                    playerLife.changeTorch(1);
                 }
                 break;
             }
