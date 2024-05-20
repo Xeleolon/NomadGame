@@ -44,6 +44,7 @@ public class PlayerMovement : MonoBehaviour
     private Vector3 newBodyTarget;
 
     [Header("movement")]
+    [SerializeField] bool freazeMovement;
     [SerializeField] float speed = 3;
     [SerializeField] float airMultiplier = 1;
     [SerializeField] float bodyRotateSpeed = 60;
@@ -76,8 +77,15 @@ public class PlayerMovement : MonoBehaviour
     {
         GroundCheck();
         CameraMovementCallication();
-        moveVelocity();
-        JumpFunction();
+        if (!freazeMovement)
+        {
+            moveVelocity();
+            JumpFunction();
+        }
+        else
+        {
+            rb.useGravity = false;
+        }
     }
 
     void FixedUpdate()

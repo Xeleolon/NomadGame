@@ -73,8 +73,8 @@ public class SwingMovementTest : MonoBehaviour
         Vector2 inputVariables = move.ReadValue<Vector2>();
         if (inputVariables != Vector2.zero)
         {
-            //rb.AddForce(transform.right * speed * Time.deltaTime, ForceMode.Force);
-            rb.AddRelativeTorque(transform.right * speed * Time.deltaTime, ForceMode.Force);
+            rb.AddForce(transform.right * speed * Time.deltaTime, ForceMode.Force);
+            //rb.AddRelativeTorque(transform.right * speed * Time.deltaTime, ForceMode.Force);
         }
     }
 }
