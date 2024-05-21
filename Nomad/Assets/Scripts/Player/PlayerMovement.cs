@@ -43,7 +43,9 @@ public class PlayerMovement : MonoBehaviour
     private Rigidbody rb;
     private Vector3 newBodyTarget;
 
+    enum MovementType {walking, freefalling, slope, climbing, swinging}
     [Header("movement")]
+    MovementType curMovmenent = MovementType.walking;
     [SerializeField] bool freazeMovement;
     [SerializeField] float speed = 3;
     [SerializeField] float airMultiplier = 1;
@@ -54,6 +56,9 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float jumpCooldown = 1;
     private bool readyToJump;
     [SerializeField] LayerMask whatIsGround;
+
+    [Header("climbing and swinging")]
+    [SerializeField] private float climbSpeed = 3;
 
     [Header("Camera Controls")]
     //camera Input
@@ -75,7 +80,6 @@ public class PlayerMovement : MonoBehaviour
     }
     void Update()
     {
-        GroundCheck();
         CameraMovementCallication();
         if (!freazeMovement)
         {
@@ -100,7 +104,7 @@ public class PlayerMovement : MonoBehaviour
     bool grounded;
     void moveVelocity()
     {
-        rb.useGravity = !OnSlope();
+        CheckMovmenentState(false);
 
         Vector2 inputVariables = moveInputs.ReadValue<Vector2>();
 
@@ -117,19 +121,21 @@ public class PlayerMovement : MonoBehaviour
 
         moveDirection = cameraCenter.forward * inputVariables.y + cameraCenter.right * inputVariables.x/2;
         moveDirection.y = 0;
-        /*if (grounded)
-        {
-            moveDirection.y = transform.forward.y;
-        }*/
-
-        //rb.AddForce(moveDirection.normalized * speed * 10f, ForceMode.Force);
     }
 
     void addMovementForce()
     {
 
-        if (OnSlope())
+        switch (curMovmenent)
         {
+            case MovementType.walking: //Walking
+
+            rb.AddForce(moveDirection.normalized * speed * 10f, ForceMode.Force);
+            NormalizeAllMovement();
+            break;
+
+            case MovementType.slope: //Slope
+
             rb.AddForce(GetSlopeMoveDirection() * speed * 10f, ForceMode.Force);
 
             if(rb.velocity.y > 0)
@@ -143,37 +149,74 @@ public class PlayerMovement : MonoBehaviour
                     rb.AddForce(Vector3.down * 20f, ForceMode.Force);
                 }
             }
-            //rb.velocity = rb.velocity.normalized * speed;
-        }
-        else
-        {
-            if (grounded)
+
+            Vector3 GetSlopeMoveDirection()
             {
-                rb.AddForce(moveDirection.normalized * speed * 10f, ForceMode.Force);
-            }
-            else
-            {
-                rb.AddForce(moveDirection.normalized * speed * airMultiplier * 10f, ForceMode.Force);
+                return Vector3.ProjectOnPlane(moveDirection, slopeHit.normal).normalized;
             }
 
-            
+            break;
+
+            case MovementType.freefalling: //FreeFalling
+
+            rb.AddForce(moveDirection.normalized * speed * airMultiplier * 10f, ForceMode.Force);
+            break;
+
+            case MovementType.climbing: // climbing
+            Debug.Log("Set to climbing");
+            break;
+
+
+            case MovementType.swinging: // swining
+            Debug.Log("Set to swinging");
+            break;
         }
 
-        Vector3 flatVel = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
 
-        if (flatVel.magnitude > speed)
+        void NormalizeAllMovement()
         {
-            Vector3 limitedVel = flatVel.normalized * speed;
-            rb.velocity = new Vector3(limitedVel.x, rb.velocity.y, limitedVel.z);
-        }
-
-
-
-        Vector3 GetSlopeMoveDirection()
-        {
-            return Vector3.ProjectOnPlane(moveDirection, slopeHit.normal).normalized;
+            Vector3 flatVel = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
+    
+            if (flatVel.magnitude > speed)
+            {
+                Vector3 limitedVel = flatVel.normalized * speed;
+                rb.velocity = new Vector3(limitedVel.x, rb.velocity.y, limitedVel.z);
+            }
         }
     }
+
+    void CheckMovmenentState(bool forceOut)
+    {
+        if (!forceOut && (curMovmenent == MovementType.swinging || curMovmenent == MovementType.climbing))
+        {
+            return;
+        }
+
+        if (OnSlope())
+        {
+            if (curMovmenent != MovementType.slope)
+            {
+                rb.useGravity = false;
+                curMovmenent =  MovementType.slope;
+            }
+            return;
+        }
+
+        rb.useGravity = true;
+
+        if (GroundCheck())
+        {
+            curMovmenent = MovementType.freefalling;
+            return;
+        }
+        
+        curMovmenent = MovementType.walking;
+        return;
+    }
+
+    #endregion
+
+    #region Slope And Jump Movement;
 
     private bool OnSlope()
     {
@@ -184,18 +227,19 @@ public class PlayerMovement : MonoBehaviour
         }
         return false;
     }
-    private void GroundCheck()
+    private bool GroundCheck()
     {
-        grounded = Physics.Raycast(transform.position, Vector3.down, 2 * 0.5f + 0.2f, whatIsGround);
+        bool grounded = Physics.Raycast(transform.position, Vector3.down, 2 * 0.5f + 0.2f, whatIsGround);
 
         if (grounded)
         {
             rb.drag = groundDrag;
+            return true;
         }
-        else
-        {
-            rb.drag = 0.2f;
-        }
+
+        rb.drag = 0.2f;
+        return false;
+        
     }
 
     private void JumpFunction()
@@ -224,8 +268,43 @@ public class PlayerMovement : MonoBehaviour
         readyToJump = true;
         //exitingSlope = false;
     }
+    #endregion 
+    #region Ladder Movement
+    public void ChangeMovement(MovementType newMovement, Vector3 hopPosition)
+    {
 
+        switch (newMovement)
+        {
+            case MovementType.climbing:
 
+            break;
+
+            case MovementType.swinging
+
+            break;
+        }
+        curMovmenent = newMovement;
+    }
+    private void Climbing()
+    {
+        rb.useGravity = !OnSlope();
+
+        Vector2 inputVariables = moveInputs.ReadValue<Vector2>();
+
+        //get player body to look in direction of movement
+        if (playerBody != null && (rb.velocity.x != 0 || rb.velocity.y != 0))
+        {
+            //playerBody.LookAt(cameraCenter.forward);
+            newBodyTarget = cameraCenter.forward;
+            newBodyTarget.y = playerBody.forward.y;
+        }
+
+        Vector3 newBodyRotation = Vector3.RotateTowards(playerBody.forward, newBodyTarget, bodyRotateSpeed * Time.deltaTime, 0);
+        playerBody.rotation = Quaternion.LookRotation(newBodyRotation);
+
+        moveDirection = cameraCenter.forward * inputVariables.y + cameraCenter.right * inputVariables.x/2;
+        moveDirection.y = 0;
+    }
     #endregion
 
 
