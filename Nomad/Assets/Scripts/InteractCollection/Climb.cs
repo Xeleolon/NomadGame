@@ -6,9 +6,13 @@ public class Climb : InteractBase
 {
 
     private PlayerMovement player;
-    private Vector3 offSetPosition{get {return offSet + transform.position;} set {offSet = value - transform.position;}}
+    private Vector3 offSetPosition {get {return offSet + transform.position;} set {offSet = value - transform.position;}}
+    //{get{return new Vector3(maxWidth.x, maxHieght, maxWidth.y) + transform.position;}
+    //set{Vector3 offSet = value - transform.position; maxWidth = new Vector2(offSet.x, offSet.y); maxHieght = offSet.y;}}
+    [SerializeField] private Vector3 offSet;
+    //[SerializeField] private float maxHieght;
 
-    [SerializeField] public Vector3 offSet;
+    //[SerializeField] private Vector2 maxWidth;
     void Start()
     {
         player = PlayerMovement.instance;
@@ -34,6 +38,7 @@ public class Climb : InteractBase
     {
         Gizmos.color = Color.yellow;
         //Gizmos.DrawWireSphere(offSetPosition, 1);
+        //Gizmos.DrawWireCube(transform.position, new Vector3(offSetPosition.x, offSetPosition.y, offSetPosition.x));
         Vector3 radius = new Vector3(1, 2, 1);
         Gizmos.DrawWireCube(offSetPosition, radius);
 

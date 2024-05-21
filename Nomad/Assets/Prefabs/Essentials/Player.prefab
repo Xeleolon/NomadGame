@@ -619,7 +619,7 @@ Transform:
   - {fileID: 2700543972091085099}
   - {fileID: 2700543971962854697}
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!136 &2700543971393520738
 CapsuleCollider:
@@ -789,9 +789,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c2116b73b2b2a1b43ac38f6c63713205, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cameraCenter: {fileID: 2700543972091085099}
-  mainCamera: {fileID: 2700543971506883138}
-  playerBody: {fileID: 2700543971962854697}
+  curMovmenent: 0
+  freazeMovement: 0
   speed: 8
   airMultiplier: 1
   bodyRotateSpeed: 3
@@ -802,11 +801,16 @@ MonoBehaviour:
   whatIsGround:
     serializedVersion: 2
     m_Bits: 128
+  climbSpeed: 3
   cameraSensitivity: 1.5
   cameraAcceleration: 100
   cameraInputLagPeriod: 0.01
   cameraMaxVerticalAngleFromHorizon: {x: -10, y: 10}
   cameraOffset: 10
+  references:
+    cameraCenter: {fileID: 2700543972091085099}
+    mainCamera: {fileID: 2700543971506883138}
+    playerBody: {fileID: 2700543971962854697}
 --- !u!1 &2700543971506883150
 GameObject:
   m_ObjectHideFlags: 0

@@ -5199,6 +5199,26 @@ PrefabInstance:
       propertyPath: m_Name
       value: Ladder
       objectReference: {fileID: 0}
+    - target: {fileID: 4807264378292321598, guid: 649b0f9b7b9300b41911173127526e81,
+        type: 3}
+      propertyPath: offSet.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4807264378292321598, guid: 649b0f9b7b9300b41911173127526e81,
+        type: 3}
+      propertyPath: maxHieght
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4807264378292321598, guid: 649b0f9b7b9300b41911173127526e81,
+        type: 3}
+      propertyPath: maxWidth.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4807264378292321598, guid: 649b0f9b7b9300b41911173127526e81,
+        type: 3}
+      propertyPath: maxWidth.y
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_AddedGameObjects: []
   m_SourcePrefab: {fileID: 100100000, guid: 649b0f9b7b9300b41911173127526e81, type: 3}

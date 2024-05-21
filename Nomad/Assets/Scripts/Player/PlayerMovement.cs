@@ -43,16 +43,24 @@ public class PlayerMovement : MonoBehaviour
     #endregion
 
     //refernces
-    [SerializeField] private Transform cameraCenter;
-    [SerializeField] private Transform mainCamera;
-    [SerializeField] private Transform playerBody;
+    #region Variables
+    [System.Serializable]
+    public class References
+    {
+        public Transform cameraCenter;
+        public Transform mainCamera;
+        public Transform playerBody;
+    }
+    
+    private Transform cameraCenter {get {return references.cameraCenter;} set {references.cameraCenter = value;}}
+    private Transform mainCamera {get {return references.mainCamera;} set {references.mainCamera = value;}}
+    private Transform playerBody {get {return references.playerBody;} set {references.playerBody = value;}}
     private Rigidbody rb;
     private Vector3 newBodyTarget;
 
     public enum MovementType {walking, freefalling, slope, climbing, swinging}
-
-    [Header("movement")]
-    MovementType curMovmenent = MovementType.walking;
+    [SerializeField] MovementType curMovmenent = MovementType.walking;
+    [Header("Movement")]
     [SerializeField] bool freazeMovement;
     [SerializeField] float speed = 3;
     [SerializeField] float airMultiplier = 1;
@@ -64,21 +72,35 @@ public class PlayerMovement : MonoBehaviour
     private bool readyToJump;
     [SerializeField] LayerMask whatIsGround;
 
+
     [Header("climbing and swinging")]
     [SerializeField] private float climbSpeed = 3;
 
-    [Header("Camera Controls")]
-    //camera Input
-    [Tooltip("a mutiples the camera Input")]
-    [Range(0.5f,5)]
-    [SerializeField] private float cameraSensitivity = 1;
-    [Tooltip("Speed of rotation")]
-    //[Range(1000,10000)]
-    [SerializeField] private float cameraAcceleration = 1000;
-    [SerializeField] private float cameraInputLagPeriod = 0.01f; //how long to check update around lag
-    [SerializeField] private Vector2 cameraMaxVerticalAngleFromHorizon;
-    [SerializeField] private float cameraOffset = 0;
+    [System.Serializable]
+    public class CameraControls
+    {
+        [Tooltip("a mutiples the camera Input")] [Range(0.5f,5)]
+        public float cameraSensitivity = 1.5f;
+        [Tooltip("Speed of rotation")]
+        public float cameraAcceleration = 100;
+        [Tooltip("how long to check update around lag")]
+        public float cameraInputLagPeriod = 0.01f;
+        public Vector2 cameraMaxVerticalAngleFromHorizon = new Vector2(-10, 10);
+        public float cameraOffset = 10;
+    }
 
+    public CameraControls cameraControls;
+    //camera Input
+    private float cameraSensitivity {get {return cameraControls.cameraSensitivity;} set {cameraControls.cameraSensitivity = value;}}
+    
+    private float cameraAcceleration {get {return cameraControls.cameraAcceleration;} set {cameraControls.cameraAcceleration = value;}}
+    private float cameraInputLagPeriod {get {return cameraControls.cameraInputLagPeriod;} set {cameraControls.cameraInputLagPeriod = value;}}
+    private Vector2 cameraMaxVerticalAngleFromHorizon {get {return cameraControls.cameraMaxVerticalAngleFromHorizon;} set {cameraControls.cameraMaxVerticalAngleFromHorizon = value;}}
+    private float cameraOffset {get {return cameraControls.cameraOffset;} set {cameraControls.cameraOffset = value;}}
+
+    public References references;
+
+    #endregion
     void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -114,20 +136,37 @@ public class PlayerMovement : MonoBehaviour
         CheckMovmenentState(false);
 
         Vector2 inputVariables = moveInputs.ReadValue<Vector2>();
+        Vector3 newBodyRotation;
 
-        //get player body to look in direction of movement
-        if (playerBody != null && (rb.velocity.x != 0 || rb.velocity.y != 0))
+        switch (curMovmenent)
         {
-            //playerBody.LookAt(cameraCenter.forward);
-            newBodyTarget = cameraCenter.forward;
-            newBodyTarget.y = playerBody.forward.y;
+            
+            case MovementType.climbing:
+                newBodyTarget.y = playerBody.forward.y;
+
+                newBodyRotation = Vector3.RotateTowards(playerBody.forward, newBodyTarget, bodyRotateSpeed * Time.deltaTime, 0);
+                playerBody.rotation = Quaternion.LookRotation(newBodyRotation);
+        
+                moveDirection = cameraCenter.up * inputVariables.y + playerBody.right * inputVariables.x/2;
+
+            break;
+
+            default:
+                //get player body to look in direction of movement
+                if (playerBody != null && (rb.velocity.x != 0 || rb.velocity.y != 0))
+                {
+                    //playerBody.LookAt(cameraCenter.forward);
+                    newBodyTarget = cameraCenter.forward;
+                    newBodyTarget.y = playerBody.forward.y;
+                }
+        
+                newBodyRotation = Vector3.RotateTowards(playerBody.forward, newBodyTarget, bodyRotateSpeed * Time.deltaTime, 0);
+                playerBody.rotation = Quaternion.LookRotation(newBodyRotation);
+        
+                moveDirection = cameraCenter.forward * inputVariables.y + cameraCenter.right * inputVariables.x/2;
+                moveDirection.y = 0;
+            break;
         }
-
-        Vector3 newBodyRotation = Vector3.RotateTowards(playerBody.forward, newBodyTarget, bodyRotateSpeed * Time.deltaTime, 0);
-        playerBody.rotation = Quaternion.LookRotation(newBodyRotation);
-
-        moveDirection = cameraCenter.forward * inputVariables.y + cameraCenter.right * inputVariables.x/2;
-        moveDirection.y = 0;
     }
 
     void addMovementForce()
@@ -136,46 +175,48 @@ public class PlayerMovement : MonoBehaviour
         switch (curMovmenent)
         {
             case MovementType.walking: //Walking
-
-            rb.AddForce(moveDirection.normalized * speed * 10f, ForceMode.Force);
-            NormalizeAllMovement();
+                rb.AddForce(moveDirection.normalized * speed * 10f, ForceMode.Force);
+                NormalizeAllMovement();
             break;
 
             case MovementType.slope: //Slope
 
-            rb.AddForce(GetSlopeMoveDirection() * speed * 10f, ForceMode.Force);
-
-            if(rb.velocity.y > 0)
-            {
-                if (transform.position.y < lastPlayerHeight)
+                rb.AddForce(GetSlopeMoveDirection() * speed * 10f, ForceMode.Force);
+            
+                if(rb.velocity.y > 0)
                 {
-                    rb.AddForce(Vector3.down * 60f, ForceMode.Force);
+                    if (transform.position.y < lastPlayerHeight)
+                    {
+                        rb.AddForce(Vector3.down * 60f, ForceMode.Force);
+                    }
+                    else
+                    {
+                        rb.AddForce(Vector3.down * 20f, ForceMode.Force);
+                    }
                 }
-                else
+    
+                Vector3 GetSlopeMoveDirection()
                 {
-                    rb.AddForce(Vector3.down * 20f, ForceMode.Force);
+                    return Vector3.ProjectOnPlane(moveDirection, slopeHit.normal).normalized;
                 }
-            }
-
-            Vector3 GetSlopeMoveDirection()
-            {
-                return Vector3.ProjectOnPlane(moveDirection, slopeHit.normal).normalized;
-            }
+                NormalizeAllMovement();
 
             break;
 
             case MovementType.freefalling: //FreeFalling
-
-            rb.AddForce(moveDirection.normalized * speed * airMultiplier * 10f, ForceMode.Force);
+                rb.AddForce(moveDirection.normalized * speed * airMultiplier * 10f, ForceMode.Force);
+                NormalizeAllMovement();
             break;
 
             case MovementType.climbing: // climbing
-            Debug.Log("Set to climbing");
+                Debug.Log("Set to climbing");
+                rb.AddForce(moveDirection.normalized * climbSpeed * 10f, ForceMode.Force);
+                NormalizeAllMovement();
             break;
 
 
             case MovementType.swinging: // swining
-            Debug.Log("Set to swinging");
+                Debug.Log("Set to swinging");
             break;
         }
 
@@ -196,6 +237,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (!forceOut && (curMovmenent == MovementType.swinging || curMovmenent == MovementType.climbing))
         {
+            rb.useGravity = false;
             return;
         }
 
@@ -292,7 +334,11 @@ public class PlayerMovement : MonoBehaviour
         switch (newMovement)
         {
             case MovementType.climbing:
-
+                //if (playerBody != null)
+                //{
+                    newBodyTarget = cameraCenter.TransformDirection(hopPosition);
+                    Debug.Log("newBodyTarget");
+                //}
             break;
 
             case MovementType.swinging:
@@ -300,26 +346,6 @@ public class PlayerMovement : MonoBehaviour
             break;
         }
         curMovmenent = newMovement;
-    }
-    private void Climbing()
-    {
-        rb.useGravity = !OnSlope();
-
-        Vector2 inputVariables = moveInputs.ReadValue<Vector2>();
-
-        //get player body to look in direction of movement
-        if (playerBody != null && (rb.velocity.x != 0 || rb.velocity.y != 0))
-        {
-            //playerBody.LookAt(cameraCenter.forward);
-            newBodyTarget = cameraCenter.forward;
-            newBodyTarget.y = playerBody.forward.y;
-        }
-
-        Vector3 newBodyRotation = Vector3.RotateTowards(playerBody.forward, newBodyTarget, bodyRotateSpeed * Time.deltaTime, 0);
-        playerBody.rotation = Quaternion.LookRotation(newBodyRotation);
-
-        moveDirection = cameraCenter.forward * inputVariables.y + cameraCenter.right * inputVariables.x/2;
-        moveDirection.y = 0;
     }
     #endregion
 
