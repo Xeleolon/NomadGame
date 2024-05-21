@@ -130,7 +130,9 @@ public class PlayerMovement : MonoBehaviour
     Vector3 moveDirection;
     float lastPlayerHeight;
     RaycastHit slopeHit;
+    RaycastHit climbHit;
     bool grounded;
+    Vector2 lastInputs;
     void moveVelocity()
     {
         CheckMovmenentState(false);
@@ -140,13 +142,35 @@ public class PlayerMovement : MonoBehaviour
 
         switch (curMovmenent)
         {
-            
             case MovementType.climbing:
+                bool sideHit = false;
                 newBodyTarget.y = playerBody.forward.y;
 
                 newBodyRotation = Vector3.RotateTowards(playerBody.forward, newBodyTarget, bodyRotateSpeed * Time.deltaTime, 0);
                 playerBody.rotation = Quaternion.LookRotation(newBodyRotation);
-        
+
+                if (!climbingRayCast())
+                {
+                    if (lastInputs.x < 0 && inputVariables.x <= 0)
+                    {
+                        inputVariables.x = 0;
+                        sideHit = true;
+                    }
+                    else if (lastInputs.x > 0 && inputVariables.x >= 0)
+                    {
+                        inputVariables.x = 0;
+                        sideHit = true;
+                    }
+                    Debug.Log("attemping to freaze variables" + lastInputs.x);
+                }
+                
+                if (!sideHit)
+                {
+                    lastInputs.x = inputVariables.x;
+                }
+
+                lastInputs.y = inputVariables.y;
+
                 moveDirection = cameraCenter.up * inputVariables.y + playerBody.right * inputVariables.x/2;
 
             break;
@@ -337,6 +361,7 @@ public class PlayerMovement : MonoBehaviour
                 //if (playerBody != null)
                 //{
                     newBodyTarget = cameraCenter.TransformDirection(hopPosition);
+                    lastInputs = Vector2.zero;
                     Debug.Log("newBodyTarget");
                 //}
             break;
@@ -346,6 +371,18 @@ public class PlayerMovement : MonoBehaviour
             break;
         }
         curMovmenent = newMovement;
+    }
+
+    private bool climbingRayCast()
+    {
+        if (Physics.Raycast(transform.position, playerBody.forward, out climbHit, 1 * 0.5f + 2.0f))
+        {
+            if (climbHit.collider.gameObject.GetComponent<Climb>() != null)
+            {
+                return true;
+            }
+        }
+        return false;
     }
     #endregion
 
