@@ -7,8 +7,14 @@ public class PlayerMovement : MonoBehaviour
 {
     #region Inputs/Awake,OnEnable,OnDisable
     private PlayerInputActions playerControls;
+    public static PlayerMovement instance;
     void Awake()
     {
+        if (instance != null)
+        {
+            Debug.LogWarning("more than one player life!");
+        }
+        instance = this;
         playerControls = new PlayerInputActions(); 
     }
 
@@ -43,7 +49,8 @@ public class PlayerMovement : MonoBehaviour
     private Rigidbody rb;
     private Vector3 newBodyTarget;
 
-    enum MovementType {walking, freefalling, slope, climbing, swinging}
+    public enum MovementType {walking, freefalling, slope, climbing, swinging}
+
     [Header("movement")]
     MovementType curMovmenent = MovementType.walking;
     [SerializeField] bool freazeMovement;
@@ -270,6 +277,15 @@ public class PlayerMovement : MonoBehaviour
     }
     #endregion 
     #region Ladder Movement
+    public bool CurMovmenentMatch(MovementType newMovement)
+    {
+        if (curMovmenent == newMovement)
+        {
+            return true;
+        }
+        
+        return false;
+    }
     public void ChangeMovement(MovementType newMovement, Vector3 hopPosition)
     {
 
@@ -279,7 +295,7 @@ public class PlayerMovement : MonoBehaviour
 
             break;
 
-            case MovementType.swinging
+            case MovementType.swinging:
 
             break;
         }
