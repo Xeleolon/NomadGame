@@ -75,6 +75,14 @@ public class PlayerMovement : MonoBehaviour
 
     [Header("climbing and swinging")]
     [SerializeField] private float climbSpeed = 3;
+    //Swinging var
+    [SerializeField] private float maxSwingDistance = 25f;
+    [SerializeField] Transform ropeTool;
+    private Vector3 swingPoint;
+    private SpringJoint joint;
+    //Swinging refs
+
+    [SerializeField] LineRenderer lr;
 
     [System.Serializable]
     public class CameraControls
@@ -124,6 +132,14 @@ public class PlayerMovement : MonoBehaviour
     void FixedUpdate()
     {
         addMovementForce();
+    }
+
+    void LateUpdate()
+    {
+        if (curMovmenent == MovementType.swinging)
+        {
+            DrawRope();
+        }
     }
 
     #region Movement
@@ -240,7 +256,9 @@ public class PlayerMovement : MonoBehaviour
 
 
             case MovementType.swinging: // swining
-                Debug.Log("Set to swinging");
+                //Debug.Log("Set to swinging");
+                rb.AddForce(moveDirection.normalized * speed * 10f, ForceMode.Force);
+                NormalizeAllMovement();
             break;
         }
 
@@ -259,10 +277,18 @@ public class PlayerMovement : MonoBehaviour
 
     void CheckMovmenentState(bool forceOut)
     {
-        if (!forceOut && (curMovmenent == MovementType.swinging || curMovmenent == MovementType.climbing))
+        if (!forceOut)
         {
-            rb.useGravity = false;
-            return;
+            if (curMovmenent == MovementType.climbing)
+            {
+                rb.useGravity = false;
+                return;
+            }
+            else if (curMovmenent == MovementType.swinging)
+            {
+                rb.useGravity = true;
+                return;
+            }
         }
 
         if (OnSlope())
@@ -320,10 +346,14 @@ public class PlayerMovement : MonoBehaviour
         if (jumpInput.ReadValue<float>() > 0)
         {
             //Debug.Log("attemp Jump " + readyToJump + grounded);
-            if (readyToJump && grounded)
+            if (readyToJump && (curMovmenent == MovementType.swinging || grounded))
             {
                 //Debug.Log("Jump");
                 //exitingSlope = true;
+                if (curMovmenent == MovementType.swinging)
+                {
+                    StopSwing();
+                }
                 readyToJump = false;
                 rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
     
@@ -385,7 +415,54 @@ public class PlayerMovement : MonoBehaviour
         return false;
     }
     #endregion
+    #region Swinging
 
+    public void StartSwing(Vector3 swingAnchor)
+    {
+        curMovmenent = MovementType.swinging;
+        
+        swingPoint = swingAnchor;
+        joint = gameObject.AddComponent<SpringJoint>();
+        joint.autoConfigureConnectedAnchor = false;
+        joint.connectedAnchor = swingPoint;
+
+        float distanceFromPoint = Vector3.Distance(transform.position, swingPoint);
+
+        // the distance grapple will try to keep from grapple point.
+        joint.maxDistance = distanceFromPoint * 0.8f;
+        joint.minDistance = distanceFromPoint * 0.25f;
+
+        //customize values
+        joint.spring = 4.5f;
+        joint.damper = 7f;
+        joint.massScale = 4.5f;
+
+        //visualisation
+
+        lr.positionCount = 2;
+    }
+
+    void StopSwing()
+    {
+        curMovmenent = MovementType.freefalling;
+        lr.positionCount = 0;
+        Destroy(joint);
+    }
+    private Vector3 currentGrapplePosition;
+
+    void DrawRope()
+    {
+        if (!joint) 
+        {
+            return;
+        }
+
+        currentGrapplePosition = Vector3.Lerp(currentGrapplePosition, swingPoint, Time.deltaTime * 8f);
+
+        lr.SetPosition(0,ropeTool.position);
+        lr.SetPosition(1, swingPoint);
+    }
+    #endregion
 
 
     #region CameraControles
