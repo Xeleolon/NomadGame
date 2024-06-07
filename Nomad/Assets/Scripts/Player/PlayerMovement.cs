@@ -136,10 +136,7 @@ public class PlayerMovement : MonoBehaviour
 
     void LateUpdate()
     {
-        if (curMovmenent == MovementType.swinging)
-        {
-            DrawRope();
-        }
+        DrawRope();
     }
 
     #region Movement
@@ -422,9 +419,11 @@ public class PlayerMovement : MonoBehaviour
         curMovmenent = MovementType.swinging;
         
         swingPoint = swingAnchor;
+        Debug.Log(swingPoint);
         joint = gameObject.AddComponent<SpringJoint>();
         joint.autoConfigureConnectedAnchor = false;
         joint.connectedAnchor = swingPoint;
+        joint.anchor = Vector3.zero;
 
         float distanceFromPoint = Vector3.Distance(transform.position, swingPoint);
 
@@ -452,14 +451,15 @@ public class PlayerMovement : MonoBehaviour
 
     void DrawRope()
     {
-        if (!joint) 
+        //Debug.Log("testing");
+        if (curMovmenent != MovementType.swinging)
         {
             return;
         }
 
         currentGrapplePosition = Vector3.Lerp(currentGrapplePosition, swingPoint, Time.deltaTime * 8f);
 
-        lr.SetPosition(0,ropeTool.position);
+        lr.SetPosition(0, ropeTool.position);
         lr.SetPosition(1, swingPoint);
     }
     #endregion
