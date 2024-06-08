@@ -116,6 +116,15 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ClimbRope"",
+                    ""type"": ""Value"",
+                    ""id"": ""a7de6528-582b-4956-961c-49ab7341b67c"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -481,6 +490,39 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                     ""action"": ""ToolC"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""1D Axis"",
+                    ""id"": ""34a8d01e-21dc-40e8-9114-e3c66bc0d28c"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ClimbRope"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""54a4a4c3-0b70-4663-8ed8-cd64dad986c2"",
+                    ""path"": ""<Keyboard>/shift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ClimbRope"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""2320bbe9-b3a0-4a9b-a0b0-85467060a446"",
+                    ""path"": ""<Keyboard>/c"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ClimbRope"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
                 }
             ]
         },
@@ -1076,6 +1118,7 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
         m_Player_ToolA = m_Player.FindAction("ToolA", throwIfNotFound: true);
         m_Player_ToolB = m_Player.FindAction("ToolB", throwIfNotFound: true);
         m_Player_ToolC = m_Player.FindAction("ToolC", throwIfNotFound: true);
+        m_Player_ClimbRope = m_Player.FindAction("ClimbRope", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1157,6 +1200,7 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_ToolA;
     private readonly InputAction m_Player_ToolB;
     private readonly InputAction m_Player_ToolC;
+    private readonly InputAction m_Player_ClimbRope;
     public struct PlayerActions
     {
         private @PlayerInputActions m_Wrapper;
@@ -1171,6 +1215,7 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
         public InputAction @ToolA => m_Wrapper.m_Player_ToolA;
         public InputAction @ToolB => m_Wrapper.m_Player_ToolB;
         public InputAction @ToolC => m_Wrapper.m_Player_ToolC;
+        public InputAction @ClimbRope => m_Wrapper.m_Player_ClimbRope;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1210,6 +1255,9 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                 @ToolC.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnToolC;
                 @ToolC.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnToolC;
                 @ToolC.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnToolC;
+                @ClimbRope.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnClimbRope;
+                @ClimbRope.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnClimbRope;
+                @ClimbRope.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnClimbRope;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -1244,6 +1292,9 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                 @ToolC.started += instance.OnToolC;
                 @ToolC.performed += instance.OnToolC;
                 @ToolC.canceled += instance.OnToolC;
+                @ClimbRope.started += instance.OnClimbRope;
+                @ClimbRope.performed += instance.OnClimbRope;
+                @ClimbRope.canceled += instance.OnClimbRope;
             }
         }
     }
@@ -1410,6 +1461,7 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
         void OnToolA(InputAction.CallbackContext context);
         void OnToolB(InputAction.CallbackContext context);
         void OnToolC(InputAction.CallbackContext context);
+        void OnClimbRope(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

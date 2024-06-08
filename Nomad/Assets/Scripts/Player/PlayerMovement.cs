@@ -21,6 +21,7 @@ public class PlayerMovement : MonoBehaviour
     private InputAction moveInputs;
     private InputAction jumpInput;
     private InputAction lookInput;
+    private InputAction climbRopeInput;
     
     void OnEnable()
     {
@@ -32,12 +33,17 @@ public class PlayerMovement : MonoBehaviour
 
         lookInput = playerControls.Player.Look;
         lookInput.Enable();
+
+        climbRopeInput = playerControls.Player.ClimbRope;
+        climbRopeInput.Enable();
     }
 
     void OnDisable()
     {
         moveInputs.Disable();
         jumpInput.Disable();
+        climbRopeInput.Disable();
+
     }
 
     #endregion
@@ -413,6 +419,10 @@ public class PlayerMovement : MonoBehaviour
     }
     #endregion
     #region Swinging
+    public void SwingMovement()
+    {
+
+    }
 
     public void StartSwing(Vector3 swingAnchor)
     {
