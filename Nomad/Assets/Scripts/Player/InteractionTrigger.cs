@@ -9,8 +9,14 @@ public class InteractionTrigger : MonoBehaviour
     #region Inputs
     private PlayerInputActions playerControls;
     private InputAction interactWith;
+    public static InteractionTrigger instance;
     void Awake()
     {
+        if (instance != null)
+        {
+            Debug.LogWarning("more than one player life!");
+        }
+        instance = this;
         playerControls = new PlayerInputActions();
     }
     void OnEnable()
@@ -36,6 +42,7 @@ public class InteractionTrigger : MonoBehaviour
     [Header("UI")]
     [SerializeField] TMP_Text functionName;
     [SerializeField] GameObject interactPopup;
+    
     void Start()
     {
         if (interactBase == null && interactPopup.activeSelf)
@@ -54,15 +61,20 @@ public class InteractionTrigger : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
+        InteractCheck(other.gameObject);        
+    }
+
+    public void InteractCheck(GameObject other)
+    {
         InteractBase newInteractBase;
 
-        newInteractBase = other.gameObject.GetComponent<InteractBase>();
+        newInteractBase = gameObject.GetComponent<InteractBase>();
         if (newInteractBase == null)
         {
             return;
         }
         Debug.Log(" test working");
-        lastObjectRef = other.gameObject;
+        lastObjectRef = gameObject;
         interactBase = newInteractBase;
 
         //change display label
@@ -70,7 +82,7 @@ public class InteractionTrigger : MonoBehaviour
 
         if (display == "")
         {
-            display = other.gameObject.name;
+            display = gameObject.name;
         }
         
         if (functionName != null)
@@ -81,8 +93,6 @@ public class InteractionTrigger : MonoBehaviour
             
 
         RequirementCheck();
-
-        
     }
 
     public void RequirementCheck()
@@ -121,18 +131,22 @@ public class InteractionTrigger : MonoBehaviour
 
     void OnTriggerExit(Collider other)
     {
-        if (other.gameObject != lastObjectRef)
+        InteractExiting(other.gameObject);
+
+    }
+
+    public void InteractExiting(GameObject other)
+    {
+        if (gameObject != lastObjectRef)
         {
             return;
         }
-        Debug.Log("Exiting " + other.gameObject);
+        Debug.Log("Exiting " + gameObject);
         interactBase = null;
 
         if (interactPopup != null && interactPopup.activeSelf)
         {
             interactPopup.SetActive(false);
         }
-        
-
     }
 }

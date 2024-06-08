@@ -82,7 +82,9 @@ public class PlayerMovement : MonoBehaviour
     [Header("climbing and swinging")]
     [SerializeField] private float climbSpeed = 3;
     //Swinging var
-    [SerializeField] private float maxSwingDistance = 25f;
+    //[SerializeField] private float maxSwingDistance = 25f;
+    [SerializeField] float swingMultiplier = 1;
+    [SerializeField] private float extendRopeSpeed = 3;
     [SerializeField] Transform ropeTool;
     private Vector3 swingPoint;
     private SpringJoint joint;
@@ -158,6 +160,7 @@ public class PlayerMovement : MonoBehaviour
 
         Vector2 inputVariables = moveInputs.ReadValue<Vector2>();
         Vector3 newBodyRotation;
+        float ropeVariables = climbRopeInput.ReadValue<float>();
 
         switch (curMovmenent)
         {
@@ -192,6 +195,42 @@ public class PlayerMovement : MonoBehaviour
 
                 moveDirection = cameraCenter.up * inputVariables.y + playerBody.right * inputVariables.x/2;
 
+            break;
+
+            case MovementType.swinging:
+                
+                //movement must follow camera when swinging
+                newBodyTarget = cameraCenter.forward;
+                newBodyTarget.y = playerBody.forward.y;
+
+
+                //movement
+                if (ropeVariables == 0)
+                {
+                    newBodyRotation = Vector3.RotateTowards(playerBody.forward, newBodyTarget, bodyRotateSpeed * Time.deltaTime, 0);
+                    playerBody.rotation = Quaternion.LookRotation(newBodyRotation);
+            
+                    moveDirection = cameraCenter.forward * inputVariables.y + cameraCenter.right * inputVariables.x/2;
+                    moveDirection.y = 0;
+                }
+                else
+                {
+                    moveDirection = Vector3.zero;
+                    float extendDistance = Vector3.Distance(transform.position, swingPoint);
+                    if (ropeVariables < 0)
+                    {
+                        Debug.Log("Extending Cable");
+                        extendDistance += extendRopeSpeed * Time.deltaTime;
+                    }
+                    else
+                    {
+                        Debug.Log("shorting Cable");
+                        extendDistance -= extendRopeSpeed * Time.deltaTime;
+                    }
+
+                    joint.maxDistance = extendDistance * 0.8f;
+                    joint.minDistance = extendDistance * 0.25f;
+                }
             break;
 
             default:
@@ -260,7 +299,7 @@ public class PlayerMovement : MonoBehaviour
 
             case MovementType.swinging: // swining
                 //Debug.Log("Set to swinging");
-                rb.AddForce(moveDirection.normalized * speed * 10f, ForceMode.Force);
+                rb.AddForce(moveDirection.normalized * speed * swingMultiplier * 10f, ForceMode.Force);
                 NormalizeAllMovement();
             break;
         }
@@ -419,10 +458,6 @@ public class PlayerMovement : MonoBehaviour
     }
     #endregion
     #region Swinging
-    public void SwingMovement()
-    {
-
-    }
 
     public void StartSwing(Vector3 swingAnchor)
     {

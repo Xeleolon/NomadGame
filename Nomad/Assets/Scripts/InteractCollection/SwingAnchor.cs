@@ -17,7 +17,7 @@ public class SwingAnchor : InteractBase
 
     public override void Interact()
     {
-        Debug.Log(swingPostion + " | " + transform.position);
+        //Debug.Log(swingPostion + " | " + transform.position);
         player.StartSwing(swingPostion);
     }
 
@@ -26,7 +26,7 @@ public class SwingAnchor : InteractBase
         Gizmos.color = Color.yellow;
         //Gizmos.DrawWireSphere(offSetPosition, 1);
         //Gizmos.DrawWireCube(transform.position, new Vector3(offSetPosition.x, offSetPosition.y, offSetPosition.x));
-        Debug.Log(swingPostion + " " + transform.position);
+        //Debug.Log(swingPostion + " " + transform.position);
         Vector3 radius = new Vector3(1f, 1f, 1f);
         Gizmos.DrawWireCube(swingPostion, radius);
 

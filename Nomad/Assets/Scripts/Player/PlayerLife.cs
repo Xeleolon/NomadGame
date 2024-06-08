@@ -38,7 +38,6 @@ public class ToolInfo
     private InputAction inputToolA;
     private InputAction inputToolB;
     private InputAction inputToolC;
-    private InputAction interactWith;
     void Awake()
     {
         if (instance != null)
@@ -67,9 +66,6 @@ public class ToolInfo
         inputToolC.Enable();
         inputToolC.performed += ToolCSelect;
 
-        interactWith = playerControls.Player.Interact;
-        interactWith.Enable();
-        interactWith.performed += Interact;
     }
 
     void OnDisable()
@@ -78,7 +74,6 @@ public class ToolInfo
         inputToolA.Disable();
         inputToolB.Disable();
         inputToolC.Disable();
-        interactWith.Disable();
     }
     #endregion
 
@@ -205,15 +200,6 @@ public class ToolInfo
     #endregion
     
     #region InputInteract/Fire
-    private InteractBase interactBase;
-
-    void Interact(InputAction.CallbackContext context) //need to swap from pure raycast to collision
-    {
-        if (interactBase != null)
-        {
-            interactBase.Interact();
-        }
-    }
 
     void FireTool(InputAction.CallbackContext context)
     {

@@ -10,6 +10,7 @@ public class InteractBase : MonoBehaviour
     [Tooltip("0 for open&Close, 1 for Open, 2 for Close")]
     [SerializeField] public DoorControl door;
     [SerializeField] int doorOpeningState;
+    [SerializeField] bool triggerInteract;
     bool triggerEnterUsed;
     ToolsInventory tools;
 
@@ -31,42 +32,20 @@ public class InteractBase : MonoBehaviour
         return true;
     }
 
-    /*void OnTriggerEnter(Collider other)
+    void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag == "Player")
+        if (triggerInteract && other.gameObject.tag == "Player")
         {
-            triggerEnterUsed = true;
-            if (tools == null)
-            {
-                tools = other.GetComponent<ToolsInventory>();
-            }
-            tools.InteractCheck(true);
+            Debug.Log("Testing");
+            InteractionTrigger.instance.InteractCheck(other.gameObject);
         }
     }
-    void OnTriggerStay(Collider other)
-    {
-        if (!!triggerEnterUsed && other.gameObject.tag == "Player")
-        {
-            triggerEnterUsed = true;
-            if (tools == null)
-            {
-                tools = other.GetComponent<ToolsInventory>();
-            }
-            tools.InteractCheck(true);
-        }
-    }
-
     void OnTriggerExit(Collider other)
     {
-        if (other.gameObject.tag == "Player")
+        if (triggerInteract && other.gameObject.tag == "Player")
         {
-            triggerEnterUsed = false;
-            if (tools == null)
-            {
-                tools = other.GetComponent<ToolsInventory>();
-            }
-            tools.InteractCheck(false);
+            InteractionTrigger.instance.InteractExiting(other.gameObject);
         }
-    } */
+    }
     
 }
