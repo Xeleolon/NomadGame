@@ -61,6 +61,7 @@ public class InteractionTrigger : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
+        Debug.Log("testing " + other.name);
         InteractCheck(other.gameObject);        
     }
 
@@ -68,9 +69,10 @@ public class InteractionTrigger : MonoBehaviour
     {
         InteractBase newInteractBase;
 
-        newInteractBase = gameObject.GetComponent<InteractBase>();
+        newInteractBase = other.GetComponent<InteractBase>();
         if (newInteractBase == null)
         {
+            Debug.Log(other.name + " no interactbase decected");
             return;
         }
         Debug.Log(" test working");

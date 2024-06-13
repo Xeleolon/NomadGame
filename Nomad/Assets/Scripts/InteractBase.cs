@@ -10,7 +10,6 @@ public class InteractBase : MonoBehaviour
     [Tooltip("0 for open&Close, 1 for Open, 2 for Close")]
     [SerializeField] public DoorControl door;
     [SerializeField] int doorOpeningState;
-    [SerializeField] bool triggerInteract;
     bool triggerEnterUsed;
     ToolsInventory tools;
 
@@ -32,6 +31,8 @@ public class InteractBase : MonoBehaviour
         return true;
     }
 
+    /*
+    [SerializeField] bool triggerInteract;
     void OnTriggerEnter(Collider other)
     {
         if (triggerInteract && other.gameObject.tag == "Player")
@@ -46,6 +47,6 @@ public class InteractBase : MonoBehaviour
         {
             InteractionTrigger.instance.InteractExiting(other.gameObject);
         }
-    }
+    }*/
     
 }
