@@ -528,7 +528,7 @@ public class PlayerMovement : MonoBehaviour
         // Calculate new rotation and store it for future changes
         cameraVelocity = new Vector2(
             Mathf.MoveTowards(cameraVelocity.x, cameraSpeed.x, cameraAcceleration * Time.deltaTime),
-            Mathf.MoveTowards(cameraVelocity.x, cameraSpeed.x, cameraAcceleration * Time.deltaTime));
+            Mathf.MoveTowards(cameraVelocity.y, cameraSpeed.y, cameraAcceleration * Time.deltaTime));
         
         cameraRotation += cameraVelocity;// * Time.deltaTime;
 

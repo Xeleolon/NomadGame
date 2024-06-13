@@ -5838,6 +5838,16 @@ PrefabInstance:
       propertyPath: maxSwingDistance
       value: -25
       objectReference: {fileID: 0}
+    - target: {fileID: 2700543972185850116, guid: 76a33cc81d07ed9428316d2799ed7b1b,
+        type: 3}
+      propertyPath: cameraControls.cameraMaxVerticalAngleFromHorizon.x
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 2700543972185850116, guid: 76a33cc81d07ed9428316d2799ed7b1b,
+        type: 3}
+      propertyPath: cameraControls.cameraMaxVerticalAngleFromHorizon.y
+      value: 30
+      objectReference: {fileID: 0}
     - target: {fileID: 2700543972815329158, guid: 76a33cc81d07ed9428316d2799ed7b1b,
         type: 3}
       propertyPath: m_Sprite
