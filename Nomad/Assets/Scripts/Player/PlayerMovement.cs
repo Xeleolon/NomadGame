@@ -101,6 +101,7 @@ public class PlayerMovement : MonoBehaviour
         public float cameraAcceleration = 100;
         [Tooltip("how long to check update around lag")]
         public float cameraInputLagPeriod = 0.01f;
+        public bool forceCameraConection;
         public Vector2 cameraMaxVerticalAngleFromHorizon = new Vector2(-10, 10);
         public float cameraOffset = 10;
     }
@@ -112,6 +113,8 @@ public class PlayerMovement : MonoBehaviour
     private float cameraAcceleration {get {return cameraControls.cameraAcceleration;} set {cameraControls.cameraAcceleration = value;}}
     private float cameraInputLagPeriod {get {return cameraControls.cameraInputLagPeriod;} set {cameraControls.cameraInputLagPeriod = value;}}
     private Vector2 cameraMaxVerticalAngleFromHorizon {get {return cameraControls.cameraMaxVerticalAngleFromHorizon;} set {cameraControls.cameraMaxVerticalAngleFromHorizon = value;}}
+    private bool forceCameraConection {get {return cameraControls.forceCameraConection;} set {cameraControls.forceCameraConection = value;}}
+
     private float cameraOffset {get {return cameraControls.cameraOffset;} set {cameraControls.cameraOffset = value;}}
 
     public References references;
@@ -235,13 +238,13 @@ public class PlayerMovement : MonoBehaviour
 
             default:
                 //get player body to look in direction of movement
-                if (playerBody != null && (rb.velocity.x != 0 || rb.velocity.y != 0))
+                if (playerBody != null && forceCameraConection || (rb.velocity.x != 0 || rb.velocity.y != 0))
                 {
                     //playerBody.LookAt(cameraCenter.forward);
                     newBodyTarget = cameraCenter.forward;
                     newBodyTarget.y = playerBody.forward.y;
                 }
-        
+
                 newBodyRotation = Vector3.RotateTowards(playerBody.forward, newBodyTarget, bodyRotateSpeed * Time.deltaTime, 0);
                 playerBody.rotation = Quaternion.LookRotation(newBodyRotation);
         
