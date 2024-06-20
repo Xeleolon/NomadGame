@@ -92,13 +92,16 @@ public class ToolInfo
     [SerializeField] int maxArrows = 20;
 
 
-    [Header("ToolSelection")]
-    [SerializeField] Transform playerBody;
-    [SerializeField] int toolA = 0;
-    [SerializeField] int toolB = 0;
+    public enum ToolType {empty, spear, torch, bow, rope}
 
-    [SerializeField] int toolC = 0;
-    [SerializeField] public int curTool = 0;
+    [Header("ToolSelection")]
+
+    [SerializeField] Transform playerBody;
+    [SerializeField] ToolType toolA = ToolType.empty;
+    [SerializeField] ToolType toolB = ToolType.empty;
+
+    [SerializeField] ToolType toolC = ToolType.empty;
+    [SerializeField] public ToolType curTool = ToolType.empty;
     [SerializeField] Animator toolsAnimator;
     private InteractionTrigger interactTrigger;
 
@@ -206,24 +209,24 @@ public class ToolInfo
         //complete spefic function for the tool.
         switch (curTool)
         {
-            case 0: //No Tool
+            case ToolType.empty: //No Tool
             //Debug.Log("Firing at with no tool 0");
             break;
 
-            case 1: //Spear
+            case ToolType.spear: //Spear
             SpearActack();
 
             break;
 
-            case 2: //Torch
+            case ToolType.torch: //Torch
 
             break;
 
-            case 3: //Bow
+            case ToolType.bow: //Bow
 
             break;
 
-            case 4: //Rope
+            case ToolType.rope: //Rope 
 
             break;
         }
@@ -242,51 +245,30 @@ public class ToolInfo
 
     void ToolASelect(InputAction.CallbackContext context)
     {
-        if (toolA == 0)
-        {
-            Debug.Log("No tool in selection A");
-            curTool = toolC;
-            ToolChange();
-            return;
-        }
-        else if (curTool != toolA)
-        {
-            Debug.Log("set tool to A");
-            curTool = toolA;
-            ToolChange();
-        }
+        ToolSelection(toolA);
     }
 
     void ToolBSelect(InputAction.CallbackContext context)
     {
-        if (toolB == 0)
-        {
-            Debug.Log("No tool in selection B");
-            curTool = toolC;
-            ToolChange();
-            return;
-        }
-        else if (curTool != toolB)
-        {
-            Debug.Log("set tool to B");
-            curTool = toolB;
-            ToolChange();
-        }
+        ToolSelection(toolB);
     }
 
     void ToolCSelect(InputAction.CallbackContext context)
     {
-        if (toolC == 0)
+        ToolSelection(toolC);
+    }
+
+    void ToolSelection(ToolType heldTool)
+    {
+        if (heldTool == ToolType.empty)
         {
-            Debug.Log("No tool in selection C");
-            curTool = toolC;
+            curTool = heldTool;
             ToolChange();
             return;
         }
-        else if (curTool != toolC)
+        else if (curTool != heldTool)
         {
-            Debug.Log("set tool to C");
-            curTool = toolC;
+            curTool = heldTool;
             ToolChange();
         }
     }
@@ -295,7 +277,7 @@ public class ToolInfo
     {
         switch (curTool)
         {
-            case 0:
+            case ToolType.empty:
             //no tool
             spearInfo.ActivateObject(false);
             torchInfo.ActivateObject(false);
@@ -303,7 +285,7 @@ public class ToolInfo
 
             break;
 
-            case 1:
+            case ToolType.spear:
             //spear
             if (spear != null)
             { 
@@ -313,14 +295,14 @@ public class ToolInfo
             {
                 spearInfo.ActivateObject(false);
                 Debug.Log("spear data missing");
-                curTool = 0;
+                curTool = ToolType.empty;
             }
 
             torchInfo.ActivateObject(false);
             bowInfo.ActivateObject(false);
             break;
 
-            case 2:
+            case ToolType.torch:
             //torch
             torchInfo.ActivateObject(true);
 
@@ -328,7 +310,7 @@ public class ToolInfo
             bowInfo.ActivateObject(false);
             break;
 
-            case 3:
+            case ToolType.bow:
             //bow
             if (bow != null)
             { 
@@ -338,14 +320,14 @@ public class ToolInfo
             {
                 bowInfo.ActivateObject(false);
                 Debug.Log("bow data missing");
-                curTool = 0;
+                curTool = ToolType.empty;
             }
 
             spearInfo.ActivateObject(false);
             torchInfo.ActivateObject(false);
             break;
 
-            case 4:
+            case ToolType.rope:
             //rope
             
             break;
@@ -394,7 +376,7 @@ public class ToolInfo
     #region Torch
     public void changeTorch(int tempTorchState)
     {
-        if (torchState != 0 && curTool == 1 && torchState != tempTorchState)
+        if (torchState != 0 && curTool == ToolType.torch && torchState != tempTorchState)
         {
             switch (tempTorchState)
             {
@@ -443,7 +425,7 @@ public class ToolInfo
         if (torchState == 0)
         {
             torchState = 1;
-            curTool = 2;
+            curTool = ToolType.torch;
             ToolChange();
             changeTorch(torchData);
             
@@ -471,7 +453,7 @@ public class ToolInfo
 
     public void DrenchTorch(bool drench)
     {
-        if (curTool == 1)
+        if (curTool == ToolType.torch)
         {
             if (drench)
             {

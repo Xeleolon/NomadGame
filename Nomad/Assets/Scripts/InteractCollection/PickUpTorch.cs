@@ -40,10 +40,10 @@ public class PickUpTorch : InteractBase
 
     public override bool Requirements()
     {
-        int curTool = playerLife.curTool;
+        PlayerLife.ToolType curTool = playerLife.curTool;
         int torchState = playerLife.torchState;
 
-        if (curTool != 2)
+        if (curTool != PlayerLife.ToolType.torch)
         {
             if (playerLife.torchInfo.locked || torchState == 0)
             {
@@ -78,7 +78,7 @@ public class PickUpTorch : InteractBase
 
     void TorchStaticInteraction()
     {
-         if (playerLife.curTool == 2)
+         if (playerLife.curTool == PlayerLife.ToolType.torch)
          {
             switch (playerLife.torchState)
             {

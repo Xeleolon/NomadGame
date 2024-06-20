@@ -56,11 +56,13 @@ public class PlayerMovement : MonoBehaviour
         public Transform cameraCenter;
         public Transform mainCamera;
         public Transform playerBody;
+        public Animator mainAnimator;
     }
     
     private Transform cameraCenter {get {return references.cameraCenter;} set {references.cameraCenter = value;}}
     private Transform mainCamera {get {return references.mainCamera;} set {references.mainCamera = value;}}
     private Transform playerBody {get {return references.playerBody;} set {references.playerBody = value;}}
+    private Animator mainAnimator {get {return references.mainAnimator;} set {references.mainAnimator = value;}}
     private Rigidbody rb;
     private Vector3 newBodyTarget;
 
@@ -92,9 +94,12 @@ public class PlayerMovement : MonoBehaviour
 
     [SerializeField] LineRenderer lr;
 
+    public enum CameraSets {standard, forceFollow, onlyHorizontal}
+
     [System.Serializable]
     public class CameraControls
     {
+        public CameraSets cameraSets = CameraSets.standard;
         [Tooltip("a mutiples the camera Input")] [Range(0.5f,5)]
         public float cameraSensitivity = 1.5f;
         [Tooltip("Speed of rotation")]
@@ -103,7 +108,10 @@ public class PlayerMovement : MonoBehaviour
         public float cameraInputLagPeriod = 0.01f;
         public bool forceCameraConection;
         public Vector2 cameraMaxVerticalAngleFromHorizon = new Vector2(-10, 10);
+        public float standardCameraClamp = 10;
         public float cameraOffset = 10;
+        public GameObject blackScreen;
+        public string blackScreenAnimationName;
     }
 
     public CameraControls cameraControls;
@@ -116,10 +124,16 @@ public class PlayerMovement : MonoBehaviour
     private bool forceCameraConection {get {return cameraControls.forceCameraConection;} set {cameraControls.forceCameraConection = value;}}
 
     private float cameraOffset {get {return cameraControls.cameraOffset;} set {cameraControls.cameraOffset = value;}}
+    private CameraSets cameraSets {get {return cameraControls.cameraSets;} set {cameraControls.cameraSets = value;}}
+    private float standardCameraClamp {get {return cameraControls.standardCameraClamp;} set {cameraControls.standardCameraClamp = value;}}
+    private GameObject blackScreen {get {return cameraControls.blackScreen;} set {cameraControls.blackScreen = value;}}
+    private string blackScreenAnimationName {get {return cameraControls.blackScreenAnimationName;} set {cameraControls.blackScreenAnimationName = value;}}
 
+    
     public References references;
 
     #endregion
+    #region Start & Update Calls
     void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -133,6 +147,7 @@ public class PlayerMovement : MonoBehaviour
         {
             moveVelocity();
             JumpFunction();
+            //CameraUpdate();
         }
         else
         {
@@ -149,6 +164,7 @@ public class PlayerMovement : MonoBehaviour
     {
         DrawRope();
     }
+    #endregion
 
     #region Movement
     Vector3 moveDirection;
@@ -237,17 +253,6 @@ public class PlayerMovement : MonoBehaviour
             break;
 
             default:
-                //get player body to look in direction of movement
-                if (playerBody != null && forceCameraConection || (rb.velocity.x != 0 || rb.velocity.y != 0))
-                {
-                    //playerBody.LookAt(cameraCenter.forward);
-                    newBodyTarget = cameraCenter.forward;
-                    newBodyTarget.y = playerBody.forward.y;
-                }
-
-                newBodyRotation = Vector3.RotateTowards(playerBody.forward, newBodyTarget, bodyRotateSpeed * Time.deltaTime, 0);
-                playerBody.rotation = Quaternion.LookRotation(newBodyRotation);
-        
                 moveDirection = cameraCenter.forward * inputVariables.y + cameraCenter.right * inputVariables.x/2;
                 moveDirection.y = 0;
             break;
@@ -520,12 +525,73 @@ public class PlayerMovement : MonoBehaviour
     private float cameraInputLagClock; //timer to help deal with lag and allow smooth camera motion
     private Vector2 cameraVelocity;
     private Vector2 cameraRotation; //house the camera rotation acrosss functions
+    private Camera secondCamera;
+    private bool turnCameraOn;
+    private bool changeCamera;
+    public void ChangeCamera()
+    {
+        changeCamera = true;
+    }
+
+    public void AddCamera(Camera newCamera)
+    {
+        if (newCamera != secondCamera)
+        {
+            if (!blackScreen.activeSelf)
+            {
+                blackScreen.SetActive(true);
+            }
+            turnCameraOn = true;
+
+            secondCamera = newCamera;
+
+            blackScreen.SetActive(true);
+            
+            mainAnimator.Play(blackScreenAnimationName);
+            
+
+        }
+    }
+
+    public void RemoveCamera(Camera newCamera)
+    {
+        if (newCamera == secondCamera)
+        {
+            if (!blackScreen.activeSelf)
+            {
+                blackScreen.SetActive(true);
+            }
+            turnCameraOn = false;
+
+            
+            
+            mainAnimator.Play(blackScreenAnimationName);
+            
+
+        }
+    }
 
 
 
 
     void CameraMovementCallication()
     {
+        if (changeCamera)
+        {
+            if (turnCameraOn && secondCamera != null)
+            {
+                secondCamera.enabled = true;
+                cameraSets = CameraSets.onlyHorizontal;
+            }
+            else if (!turnCameraOn && secondCamera != null)
+            {
+                secondCamera.enabled = false;
+                secondCamera = null;
+                cameraSets = CameraSets.forceFollow;
+            }
+            changeCamera = false;
+        }
+
         Vector2 cameraSpeed = GetMouseInput() * new Vector2(cameraSensitivity, cameraSensitivity);
 
         // Calculate new rotation and store it for future changes
@@ -541,6 +607,21 @@ public class PlayerMovement : MonoBehaviour
         //cameraCenter.localEulerAngles = new Vector3(0, cameraRotation.x, 0);
 
         cameraCenter.localEulerAngles = new Vector3(cameraRotation.y, cameraRotation.x, 0);
+
+        //playerBodyRotation
+        Vector3 newBodyRotation;
+
+        if (playerBody != null && cameraSets != CameraSets.standard || (rb.velocity.x != 0 || rb.velocity.y != 0))
+                {
+                    //playerBody.LookAt(cameraCenter.forward);
+                    newBodyTarget = cameraCenter.forward;
+                }
+
+                newBodyTarget.y = playerBody.forward.y;
+
+
+                newBodyRotation = Vector3.RotateTowards(playerBody.forward, newBodyTarget, bodyRotateSpeed * Time.deltaTime, 0);
+                playerBody.rotation = Quaternion.LookRotation(newBodyRotation);
         
     
 
@@ -572,6 +653,11 @@ public class PlayerMovement : MonoBehaviour
 
         float ClampCameraVerticalAngle(float angle)
         {
+            if (cameraSets == CameraSets.onlyHorizontal)
+            {
+                return Mathf.Clamp(angle, standardCameraClamp, standardCameraClamp);
+            }
+
             return Mathf.Clamp(angle, -cameraMaxVerticalAngleFromHorizon.x, cameraMaxVerticalAngleFromHorizon.y);
         }
 

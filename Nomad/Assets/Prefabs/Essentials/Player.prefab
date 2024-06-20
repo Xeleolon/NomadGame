@@ -727,7 +727,6 @@ GameObject:
   - component: {fileID: 2700543971393520738}
   - component: {fileID: 2700543971393520742}
   - component: {fileID: 2700543971393520748}
-  - component: {fileID: 4833731430719816780}
   - component: {fileID: 2700543971393520749}
   - component: {fileID: 2700543971393520741}
   - component: {fileID: 2700543972185850116}
@@ -839,31 +838,6 @@ MonoBehaviour:
   healthParent: {fileID: 2700543971507673954}
   toolanimation: {fileID: 0}
   gamePaused: 0
---- !u!114 &4833731430719816780
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2700543971393520750}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9a880072fc9e245428585a3662343418, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  weapon: {fileID: 11400000, guid: d6dc2a4b423f0f747b74ae5e862e7260, type: 2}
-  curTool: 0
-  toolObject: {fileID: 2423082053597288840}
-  torchLight: {fileID: 7153053426821582932}
-  torchPrefab: {fileID: 3260074229154982981, guid: 5a199d4a5236f3448b5955f5ce891c51,
-    type: 3}
-  playerBody: {fileID: 2700543971962854697}
-  weaponAnimator: {fileID: 0}
-  weaponActack: SpearActack
-  torchState: 1
-  interactPanel: {fileID: 8994432979050747129}
-  weaponObject: {fileID: 263149059895056208}
-  gamePaused: 0
 --- !u!114 &2700543971393520749
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -936,11 +910,18 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 128
   climbSpeed: 3
+  swingMultiplier: 1
+  extendRopeSpeed: 3
+  ropeTool: {fileID: 0}
+  lr: {fileID: 0}
   cameraControls:
+    cameraSets: 0
     cameraSensitivity: 1.5
     cameraAcceleration: 100
     cameraInputLagPeriod: 0.01
+    forceCameraConection: 0
     cameraMaxVerticalAngleFromHorizon: {x: -10, y: 10}
+    standardCameraClamp: 10
     cameraOffset: 10
   references:
     cameraCenter: {fileID: 2700543972091085099}
