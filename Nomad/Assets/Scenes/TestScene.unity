@@ -6092,7 +6092,7 @@ PrefabInstance:
     - target: {fileID: 2700543971962854697, guid: 76a33cc81d07ed9428316d2799ed7b1b,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: 0.9063079
       objectReference: {fileID: 0}
     - target: {fileID: 2700543971962854697, guid: 76a33cc81d07ed9428316d2799ed7b1b,
         type: 3}
@@ -6102,12 +6102,32 @@ PrefabInstance:
     - target: {fileID: 2700543971962854697, guid: 76a33cc81d07ed9428316d2799ed7b1b,
         type: 3}
       propertyPath: m_LocalRotation.y
+      value: -0.42261827
+      objectReference: {fileID: 0}
+    - target: {fileID: 2700543971962854697, guid: 76a33cc81d07ed9428316d2799ed7b1b,
+        type: 3}
+      propertyPath: m_LocalRotation.z
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2700543971962854697, guid: 76a33cc81d07ed9428316d2799ed7b1b,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
+      value: -50
+      objectReference: {fileID: 0}
+    - target: {fileID: 2700543972091085099, guid: 76a33cc81d07ed9428316d2799ed7b1b,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.86682034
+      objectReference: {fileID: 0}
+    - target: {fileID: 2700543972091085099, guid: 76a33cc81d07ed9428316d2799ed7b1b,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.4986206
+      objectReference: {fileID: 0}
+    - target: {fileID: 2700543972091085099, guid: 76a33cc81d07ed9428316d2799ed7b1b,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: -59.818
       objectReference: {fileID: 0}
     - target: {fileID: 2700543972185850116, guid: 76a33cc81d07ed9428316d2799ed7b1b,
         type: 3}
@@ -6142,13 +6162,18 @@ PrefabInstance:
     - target: {fileID: 2700543972185850116, guid: 76a33cc81d07ed9428316d2799ed7b1b,
         type: 3}
       propertyPath: cameraControls.cameraSets
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2700543972185850116, guid: 76a33cc81d07ed9428316d2799ed7b1b,
         type: 3}
       propertyPath: cameraControls.blackScreen
       value: 
       objectReference: {fileID: 1410680472}
+    - target: {fileID: 2700543972185850116, guid: 76a33cc81d07ed9428316d2799ed7b1b,
+        type: 3}
+      propertyPath: cameraControls.bodyRotationSpeed
+      value: 90
+      objectReference: {fileID: 0}
     - target: {fileID: 2700543972185850116, guid: 76a33cc81d07ed9428316d2799ed7b1b,
         type: 3}
       propertyPath: cameraControls.blackScreenAnimationName

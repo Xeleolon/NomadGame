@@ -106,7 +106,7 @@ public class PlayerMovement : MonoBehaviour
         public float cameraAcceleration = 100;
         [Tooltip("how long to check update around lag")]
         public float cameraInputLagPeriod = 0.01f;
-        public bool forceCameraConection;
+        public float bodyRotationSpeed = 30f;
         public Vector2 cameraMaxVerticalAngleFromHorizon = new Vector2(-10, 10);
         public float standardCameraClamp = 10;
         public float cameraOffset = 10;
@@ -121,7 +121,7 @@ public class PlayerMovement : MonoBehaviour
     private float cameraAcceleration {get {return cameraControls.cameraAcceleration;} set {cameraControls.cameraAcceleration = value;}}
     private float cameraInputLagPeriod {get {return cameraControls.cameraInputLagPeriod;} set {cameraControls.cameraInputLagPeriod = value;}}
     private Vector2 cameraMaxVerticalAngleFromHorizon {get {return cameraControls.cameraMaxVerticalAngleFromHorizon;} set {cameraControls.cameraMaxVerticalAngleFromHorizon = value;}}
-    private bool forceCameraConection {get {return cameraControls.forceCameraConection;} set {cameraControls.forceCameraConection = value;}}
+    private float bodyRotationSpeed {get {return cameraControls.bodyRotationSpeed;} set {cameraControls.bodyRotationSpeed = value;}}
 
     private float cameraOffset {get {return cameraControls.cameraOffset;} set {cameraControls.cameraOffset = value;}}
     private CameraSets cameraSets {get {return cameraControls.cameraSets;} set {cameraControls.cameraSets = value;}}
@@ -609,19 +609,26 @@ public class PlayerMovement : MonoBehaviour
         cameraCenter.localEulerAngles = new Vector3(cameraRotation.y, cameraRotation.x, 0);
 
         //playerBodyRotation
-        Vector3 newBodyRotation;
 
         if (playerBody != null && cameraSets != CameraSets.standard || (rb.velocity.x != 0 || rb.velocity.y != 0))
-                {
-                    //playerBody.LookAt(cameraCenter.forward);
-                    newBodyTarget = cameraCenter.forward;
-                }
+        {
+            //playerBody.LookAt(cameraCenter.forward);
+            //newBodyTarget = cameraCenter.right;
+            Vector3 bodyAngles = playerBody.localEulerAngles;
 
-                newBodyTarget.y = playerBody.forward.y;
+            
+
+            bodyAngles.y = GetBodyRotation();
+
+            playerBody.localEulerAngles = bodyAngles;
+        }
+
+        //newBodyTarget.y = playerBody.forward.y;
 
 
-                newBodyRotation = Vector3.RotateTowards(playerBody.forward, newBodyTarget, bodyRotateSpeed * Time.deltaTime, 0);
-                playerBody.rotation = Quaternion.LookRotation(newBodyRotation);
+        //Vector3 newBodyRotation = Vector3.RotateTowards(playerBody.forward, newBodyTarget, bodyRotateSpeed * Time.deltaTime, 0);
+        //playerBody.rotation = Quaternion.LookRotation(newBodyRotation);
+        
         
     
 
@@ -631,6 +638,53 @@ public class PlayerMovement : MonoBehaviour
         
         
         //take mouseinput inverts y and make sure it comes through without lag
+
+        float GetBodyRotation()
+        {
+            Vector3 cameraAngles = cameraCenter.localEulerAngles;
+
+            Vector3 bodyAngles = playerBody.localEulerAngles;
+            //additive up rotation
+            float clockWiseRotation = cameraAngles.y - bodyAngles.y;
+
+            if (clockWiseRotation < 0)
+            {
+                clockWiseRotation = 360 + clockWiseRotation;
+            }
+
+            //subtractive downroation
+            float antiClockWiseRotation = bodyAngles.y - cameraAngles.y;
+
+            if (antiClockWiseRotation < 0)
+            {
+                antiClockWiseRotation = 360 + antiClockWiseRotation;
+            }
+
+            if (clockWiseRotation == antiClockWiseRotation)
+            {
+                float randomSelector = Random.Range(0, 1);
+                if (randomSelector < 0.5)
+                {
+                    antiClockWiseRotation += 1;
+                }
+                else
+                {
+                    clockWiseRotation += 1;
+                }
+            }
+            float rotationFix;
+            Debug.Log("ClockWise " + clockWiseRotation + " AntiClockWise" + antiClockWiseRotation);
+            if (clockWiseRotation < antiClockWiseRotation) //rotote up the clock
+            {
+                rotationFix = Mathf.MoveTowards(0, clockWiseRotation, bodyRotationSpeed * Time.deltaTime);
+                return rotationFix;
+            }
+            
+                rotationFix = Mathf.MoveTowards(0, antiClockWiseRotation, bodyRotationSpeed * Time.deltaTime);
+                return -rotationFix;
+            
+        }
+
         Vector2 GetMouseInput()
         {
             cameraInputLagClock += Time.deltaTime;
