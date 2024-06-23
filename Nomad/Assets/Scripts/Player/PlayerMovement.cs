@@ -623,7 +623,7 @@ public class PlayerMovement : MonoBehaviour
                     newBodyTarget = cameraCenter.forward;
                 }
 
-                Debug.Log(playerBody.forward.y + " " + playerBody.position.y);
+                //Debug.Log(playerBody.forward.y + " " + playerBody.position.y);
 
                 newBodyTarget.y = 0;
 

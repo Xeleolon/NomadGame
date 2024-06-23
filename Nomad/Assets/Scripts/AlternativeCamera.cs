@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class AlternativeCamera : MonoBehaviour
 {
-    [SerializeField] private Camera camera;
+    public Camera alternativeCamera;
     private PlayerMovement playerMovement;
 
     void OnTriggerEnter(Collider other)
@@ -15,7 +15,7 @@ public class AlternativeCamera : MonoBehaviour
             {
                 playerMovement = PlayerMovement.instance;
             }
-            playerMovement.AddCamera(camera);
+            playerMovement.AddCamera(alternativeCamera);
         }
 
 
@@ -29,7 +29,7 @@ public class AlternativeCamera : MonoBehaviour
             {
                 playerMovement = PlayerMovement.instance;
             }
-            playerMovement.RemoveCamera(camera);
+            playerMovement.RemoveCamera(alternativeCamera);
         }
     }
 }

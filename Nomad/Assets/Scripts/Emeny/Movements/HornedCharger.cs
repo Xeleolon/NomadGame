@@ -20,7 +20,6 @@ public class HornedCharger : BaseEmenyMovement
     public int curMode; //this contains the mode which the Ai is directed by
     [SerializeField] private Vector2 actackPause = new Vector2(0.5f, 1);
     private float actackClock;
-    [SerializeField] float actackOverShoot = 3;
     private bool collided;
     private int collisionType;
     private bool hitPlayer;

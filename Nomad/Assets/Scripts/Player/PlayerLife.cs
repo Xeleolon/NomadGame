@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.InputSystem;
 
 public class PlayerLife : MonoBehaviour
@@ -10,6 +11,7 @@ public class ToolInfo
 {
     public bool locked;
     [SerializeField] GameObject heldRefernce;
+    public Sprite assignedIcon;
     public string interactAnimation;
     public string secondAnimation;
     public string idealAnimation;
@@ -77,7 +79,7 @@ public class ToolInfo
     }
     #endregion
 
-
+    #region Valaribles
     [Header("Health")]
     [SerializeField] bool freazeDecays;
     [SerializeField] float health;
@@ -85,6 +87,8 @@ public class ToolInfo
     [SerializeField] float hunger;
     float curHunger;
     [SerializeField] float hungerDecay;
+    
+    public enum CollectableItemType {coin, arrow}
     [Header("Inventory")]
     [SerializeField] int coins = 0;
 
@@ -122,10 +126,25 @@ public class ToolInfo
     [SerializeField] GameObject torchLight;
     [SerializeField] GameObject torchPrefab;
 
+    [System.Serializable]
+    public class UIVariables
+    {
+        public GameObject healthyUiPrefab;
+        public Transform healthParent;
+        public Animation toolanimation;
+        public Image toolSlotA;
+        public Image toolSlotB;
+        public Image toolSlotC;
+    }
+
     [Header("UI")]
-    [SerializeField] GameObject healthyUiPrefab;
-    [SerializeField] Transform healthParent;
-    [SerializeField] Animation toolanimation;
+    [SerializeField] UIVariables UI;
+    private GameObject healthyUiPrefab {get {return UI.healthyUiPrefab;} set {UI.healthyUiPrefab = value;}}
+    private Transform healthParent {get {return UI.healthParent;} set {UI.healthParent = value;}}
+    private Animation toolanimation {get {return UI.toolanimation;} set {UI.toolanimation = value;}}
+    private Image toolSlotA {get {return UI.toolSlotA;} set {UI.toolSlotA = value;}}
+    private Image toolSlotB {get {return UI.toolSlotB;} set {UI.toolSlotB = value;}}
+    private Image toolSlotC {get {return UI.toolSlotC;} set {UI.toolSlotC = value;}}
     private Vector3 spawnPoint;
 
 
@@ -133,6 +152,7 @@ public class ToolInfo
     [Header("Paused")]
     public bool gamePaused;
 
+    #endregion
 
     void Start()
     {
@@ -156,6 +176,37 @@ public class ToolInfo
         }
 
     }
+    #region Inventory
+    public void AddItem(CollectableItemType Item, int num)
+    {
+        switch (Item)
+        {
+            case CollectableItemType.coin:
+            
+                coins += num;
+                if (coins < 0)
+                {
+                    coins = 0;
+                }
+            
+            break;
+
+            case CollectableItemType.arrow:
+                arrows += arrows;
+                if (arrows < 0)
+                {
+                    arrows = 0;
+                }
+                else if (arrows > maxArrows)
+                {
+                    arrows = maxArrows;
+                }
+            break;
+            
+        }
+    }
+    #endregion
+
     #region Survial
 
     void SurvivalDecays()
@@ -334,6 +385,8 @@ public class ToolInfo
 
         }
 
+        UpdateToolIconUI();
+
         if (interactTrigger != null)
         { 
             interactTrigger.RequirementCheck();
@@ -470,6 +523,60 @@ public class ToolInfo
 
 
     #region UI
+
+    void UpdateToolIconUI()
+    {
+        ToolUILoop(toolSlotA, CollectSprite(toolA));
+        ToolUILoop(toolSlotB, CollectSprite(toolB));
+        ToolUILoop(toolSlotC, CollectSprite(toolC));
+
+        void ToolUILoop(Image givenSlot, Sprite iconSprite)
+        {
+            Debug.Log(iconSprite, givenSlot);
+            if (givenSlot == null)
+            {
+                Debug.Log("Tool Slot Image not assinged");
+                return;
+            }
+            if (iconSprite == null && givenSlot.gameObject.activeSelf)
+            {
+                givenSlot.gameObject.SetActive(false);
+            }
+            else if (iconSprite != null && !givenSlot.gameObject.activeSelf)
+            {
+                if (givenSlot.sprite != null)
+                {
+                    givenSlot.sprite = null;
+                }
+                givenSlot.sprite = iconSprite;
+                givenSlot.gameObject.SetActive(true);
+            }
+        }
+
+        Sprite CollectSprite (ToolType type)
+        {
+            switch (type)
+            {
+                case ToolType.rope:
+                Debug.Log("No Assignment of info variable for Rope");
+                return null;
+
+                case ToolType.bow:
+                return bowInfo.assignedIcon;
+
+                case ToolType.spear:
+                return spearInfo.assignedIcon;
+
+                case ToolType.torch:
+                return torchInfo.assignedIcon;
+
+                case ToolType.empty:
+                return null;
+            }
+            Debug.LogError("Type Not Listed for Sprite Assignment to Tool Slots");
+            return null;
+        }
+    }
 
     void UpdateHealthUI()
     {
