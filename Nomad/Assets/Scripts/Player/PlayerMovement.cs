@@ -472,7 +472,13 @@ public class PlayerMovement : MonoBehaviour
         curMovmenent = MovementType.swinging;
         
         swingPoint = swingAnchor;
-        Debug.Log(swingPoint);
+        //Debug.Log(swingPoint);
+
+        if (joint != null)
+        {
+            Destroy(joint);
+        }
+
         joint = gameObject.AddComponent<SpringJoint>();
         joint.autoConfigureConnectedAnchor = false;
         joint.connectedAnchor = swingPoint;
@@ -617,7 +623,9 @@ public class PlayerMovement : MonoBehaviour
                     newBodyTarget = cameraCenter.forward;
                 }
 
-                newBodyTarget.y = playerBody.forward.y;
+                Debug.Log(playerBody.forward.y + " " + playerBody.position.y);
+
+                newBodyTarget.y = 0;
 
 
                 newBodyRotation = Vector3.RotateTowards(playerBody.forward, newBodyTarget, bodyRotateSpeed * Time.deltaTime, 0);
