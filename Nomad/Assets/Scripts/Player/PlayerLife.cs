@@ -94,6 +94,7 @@ public class ToolInfo
 
     [SerializeField] int arrows = 10;
     [SerializeField] int maxArrows = 20;
+    [SerializeField] Transform mainCamera;
 
 
     public enum ToolType {empty, spear, torch, bow, rope}
@@ -101,10 +102,10 @@ public class ToolInfo
     [Header("ToolSelection")]
 
     [SerializeField] Transform playerBody;
-    [SerializeField] ToolType toolA = ToolType.empty;
-    [SerializeField] ToolType toolB = ToolType.empty;
+    [SerializeField] ToolType toolA;
+    [SerializeField] ToolType toolB;
 
-    [SerializeField] ToolType toolC = ToolType.empty;
+    [SerializeField] ToolType toolC;
     [SerializeField] public ToolType curTool = ToolType.empty;
     [SerializeField] Animator toolsAnimator;
     private InteractionTrigger interactTrigger;
@@ -116,8 +117,10 @@ public class ToolInfo
     bool canHarm = true;
 
     //Bow
-    [SerializeField] WeaponItem bow;
+    [SerializeField] RangedWeaponItem bow;
     [SerializeField] ToolInfo bowInfo;
+    [SerializeField] GameObject arrowPrefab;
+    private bool holdingFire;
     
     [Header("Tools")]
     //torch
@@ -160,7 +163,7 @@ public class ToolInfo
         curHealth = health;
         curHunger = hunger;
         UpdateHealthUI();
-        ToolChange();
+        ToolChange(curTool);
         interactTrigger = playerBody.GetComponent<InteractionTrigger>();
     }
 
@@ -172,6 +175,15 @@ public class ToolInfo
             if (!freazeDecays)
             {
                 SurvivalDecays();
+            }
+
+            if (curTool == ToolType.bow)
+            {
+                BowFire();
+            }
+            else
+            {
+                holdingFire = false;
             }
         }
 
@@ -255,9 +267,9 @@ public class ToolInfo
     
     #region InputInteract/Fire
 
-    void FireTool(InputAction.CallbackContext context)
+    void FireTool(InputAction.CallbackContext context) 
     {
-        //complete spefic function for the tool.
+        //complete spefic function for the tool with a click hold.
         switch (curTool)
         {
             case ToolType.empty: //No Tool
@@ -273,12 +285,7 @@ public class ToolInfo
 
             break;
 
-            case ToolType.bow: //Bow
-
-            break;
-
             case ToolType.rope: //Rope 
-
             break;
         }
     }
@@ -294,38 +301,18 @@ public class ToolInfo
     #endregion
     #region ToolSelection
 
-    void ToolASelect(InputAction.CallbackContext context)
-    {
-        ToolSelection(toolA);
-    }
+    void ToolASelect(InputAction.CallbackContext context) { ToolChange(toolA); }
 
-    void ToolBSelect(InputAction.CallbackContext context)
-    {
-        ToolSelection(toolB);
-    }
+    void ToolBSelect(InputAction.CallbackContext context) { ToolChange(toolB); }
 
-    void ToolCSelect(InputAction.CallbackContext context)
-    {
-        ToolSelection(toolC);
-    }
+    void ToolCSelect(InputAction.CallbackContext context) { ToolChange(toolC);}
 
-    void ToolSelection(ToolType heldTool)
+    void ToolChange(ToolType heldTool)
     {
-        if (heldTool == ToolType.empty)
-        {
-            curTool = heldTool;
-            ToolChange();
-            return;
-        }
-        else if (curTool != heldTool)
-        {
-            curTool = heldTool;
-            ToolChange();
-        }
-    }
+        if (curTool == heldTool) { return; }
+        Debug.Log("cur tool " + curTool + " new tool " + heldTool + " " + toolC);
+        curTool = heldTool;
 
-    void ToolChange()
-    {
         switch (curTool)
         {
             case ToolType.empty:
@@ -363,19 +350,12 @@ public class ToolInfo
 
             case ToolType.bow:
             //bow
-            if (bow != null)
-            { 
-                bowInfo.ActivateObject(true); 
-            }
-            else
-            {
-                bowInfo.ActivateObject(false);
-                Debug.Log("bow data missing");
-                curTool = ToolType.empty;
-            }
+            
+                bowInfo.ActivateObject(true);
 
-            spearInfo.ActivateObject(false);
-            torchInfo.ActivateObject(false);
+
+                spearInfo.ActivateObject(false);
+                torchInfo.ActivateObject(false);
             break;
 
             case ToolType.rope:
@@ -394,7 +374,7 @@ public class ToolInfo
     }
     #endregion
 
-    #region Spear
+    #region Weapons
     void SpearActack()
     {
         if (canHarm)
@@ -423,6 +403,48 @@ public class ToolInfo
             }
             Invoke(nameof(Reset), spear.actackSpeed);
         }
+    }
+
+    public float bowPower;
+    void BowFire()
+    {
+        if (bow != null)
+        {
+            float fireInput = strike.ReadValue<float>();
+            
+            if (fireInput >= 0 && holdingFire)
+            {
+                //release arrow
+                GameObject arrow = Instantiate(arrowPrefab, transform.position, Quaternion.identity);
+
+                arrow.GetComponent<Rigidbody>().AddForce(mainCamera.forward * bowPower);
+                bowPower = bow.minPower;
+                holdingFire = false;
+            }
+            else if (fireInput > 0.2f)
+            {
+                holdingFire = true;
+                if (bowPower > bow.maxPower)
+                {
+                    bowPower = bow.maxPower;
+                }
+                else if (bowPower < bow.maxPower)
+                {
+                    bowPower = Mathf.MoveTowards(bowPower, bow.maxPower, bow.drawSpeed * Time.deltaTime);
+                }
+                //pull back to max
+            }
+            return;
+        }
+
+        Debug.Log("No bow Info Added to player");
+
+        ToolChange(ToolType.empty);
+    }
+
+    public float ArrowHit()
+    {
+        return 0;
     }
     #endregion
 
@@ -478,8 +500,7 @@ public class ToolInfo
         if (torchState == 0)
         {
             torchState = 1;
-            curTool = ToolType.torch;
-            ToolChange();
+            ToolChange(ToolType.torch);
             changeTorch(torchData);
             
             return true;
