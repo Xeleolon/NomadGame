@@ -415,9 +415,14 @@ public class ToolInfo
             if (fireInput >= 0 && holdingFire)
             {
                 //release arrow
+                
                 GameObject arrow = Instantiate(arrowPrefab, transform.position, Quaternion.identity);
 
-                arrow.GetComponent<Rigidbody>().AddForce(mainCamera.forward * bowPower);
+                Vector3 newArrowRotation = Vector3.RotateTowards(arrow.transform.forward, mainCamera.forward, 200, 0);
+                arrow.transform.rotation = Quaternion.LookRotation(newArrowRotation);
+
+                arrow.GetComponent<Rigidbody>().AddForce(mainCamera.forward * bowPower * 10);
+
                 bowPower = bow.minPower;
                 holdingFire = false;
             }

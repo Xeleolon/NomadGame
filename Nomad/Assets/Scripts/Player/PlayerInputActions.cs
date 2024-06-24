@@ -47,12 +47,12 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": ""Fire"",
-                    ""type"": ""Button"",
+                    ""type"": ""Value"",
                     ""id"": ""b194573d-331f-41bb-b411-1561dbcc7aaa"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
+                    ""interactions"": ""Hold"",
+                    ""initialStateCheck"": true
                 },
                 {
                     ""name"": ""Sprint"",
