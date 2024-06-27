@@ -16,6 +16,7 @@ public class CameraTrigger : MonoBehaviour
     [SerializeField] private float offSet = 0.2f;
     [SerializeField] private float borderSpot;
     [SerializeField] private bool Test;
+    public bool bowCameraPosition;
     private float cameraDistance;
     private bool cameracolliding;
     float newDistance;
@@ -26,7 +27,7 @@ public class CameraTrigger : MonoBehaviour
     }
     void Update()
     {
-        if (collision)
+        if (bowCameraPosition || collision)
         {
             if (borderSpot < cameraDistance)
             {

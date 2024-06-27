@@ -94,7 +94,7 @@ public class PlayerMovement : MonoBehaviour
 
     [SerializeField] LineRenderer lr;
 
-    public enum CameraSets {standard, forceFollow, onlyHorizontal}
+    public enum CameraSets {standard, forceFollow, onlyHorizontal, reset}
 
     [System.Serializable]
     public class CameraControls
@@ -575,6 +575,15 @@ public class PlayerMovement : MonoBehaviour
             
 
         }
+    }
+
+    public void ChangeCameraType(CameraSets cameraType)
+    {
+        if (cameraType == CameraSets.reset)
+        {
+            cameraType = CameraSets.standard;
+        }
+        cameraSets = cameraType;
     }
 
 

@@ -12,6 +12,7 @@ public class CameraMovement : MonoBehaviour
     private float startPlace;
     bool collision;
     int collisionCount;
+    public bool bowCameraSetting;
     
     private float rateToPlace;
     void Start()
@@ -36,14 +37,19 @@ public class CameraMovement : MonoBehaviour
     void MoveCameraClear()
     {
         Vector3 cameraCurrent = transform.localPosition;
+        float cameraDistance = cameraCurSeat;
+        if (bowCameraSetting)
+        {
+            cameraDistance = cameraRange.y;
+        }
 
-        if (cameraCurSeat != cameraCurrent.z)
+        if (cameraDistance != cameraCurrent.z)
         {
             rateToPlace += speed * Time.deltaTime;
             rateToPlace = Mathf.Clamp(rateToPlace, 0, 1);
 
-            //float newPlacement = Mathf.SmoothStep(startPlace, cameraCurSeat, rateToPlace);
-            float newPlacement = Mathf.Lerp(startPlace, cameraCurSeat, rateToPlace);
+            //float newPlacement = Mathf.SmoothStep(startPlace, cameraDistance, rateToPlace);
+            float newPlacement = Mathf.Lerp(startPlace, cameraDistance, rateToPlace);
             newPlacement = Mathf.Clamp(newPlacement, cameraRange.x, cameraRange.y);
             cameraCurrent.z = newPlacement;
             transform.localPosition = cameraCurrent;

@@ -95,6 +95,7 @@ public class ToolInfo
     [SerializeField] int arrows = 10;
     [SerializeField] int maxArrows = 20;
     [SerializeField] Transform mainCamera;
+    [SerializeField] CameraMovement cameraMovementScript;
 
 
     public enum ToolType {empty, spear, torch, bow, rope}
@@ -412,7 +413,7 @@ public class ToolInfo
         {
             float fireInput = strike.ReadValue<float>();
             
-            if (fireInput >= 0 && holdingFire)
+            if (fireInput <= 0 && holdingFire)
             {
                 //release arrow
                 
@@ -425,8 +426,10 @@ public class ToolInfo
 
                 bowPower = bow.minPower;
                 holdingFire = false;
+                PlayerMovement.instance.ChangeCameraType(PlayerMovement.CameraSets.forceFollow);
+                cameraMovementScript.bowCameraSetting = true;
             }
-            else if (fireInput > 0.2f)
+            else if (fireInput > 0)
             {
                 holdingFire = true;
                 if (bowPower > bow.maxPower)
@@ -437,7 +440,15 @@ public class ToolInfo
                 {
                     bowPower = Mathf.MoveTowards(bowPower, bow.maxPower, bow.drawSpeed * Time.deltaTime);
                 }
+                PlayerMovement.instance.ChangeCameraType(PlayerMovement.CameraSets.forceFollow);
+                cameraMovementScript.bowCameraSetting = true;
                 //pull back to max
+            }
+            else
+            {
+                PlayerMovement.instance.ChangeCameraType(PlayerMovement.CameraSets.reset);
+                cameraMovementScript.bowCameraSetting = false;
+
             }
             return;
         }
