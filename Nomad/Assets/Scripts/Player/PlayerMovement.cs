@@ -94,7 +94,7 @@ public class PlayerMovement : MonoBehaviour
 
     [SerializeField] LineRenderer lr;
 
-    public enum CameraSets {standard, forceFollow, onlyHorizontal, reset}
+    public enum CameraSets {standard, forceFollow, onlyHorizontal, reset, detach}
 
     [System.Serializable]
     public class CameraControls
@@ -212,7 +212,7 @@ public class PlayerMovement : MonoBehaviour
 
                 lastInputs.y = inputVariables.y;
 
-                moveDirection = cameraCenter.up * inputVariables.y + playerBody.right * inputVariables.x/2;
+                moveDirection = playerBody.up * inputVariables.y + playerBody.right * inputVariables.x/2;
 
             break;
 
@@ -442,6 +442,7 @@ public class PlayerMovement : MonoBehaviour
                 //{
                     newBodyTarget = cameraCenter.TransformDirection(hopPosition);
                     lastInputs = Vector2.zero;
+                    cameraSets = CameraSets.detach;
                     Debug.Log("newBodyTarget");
                 //}
             break;
@@ -623,10 +624,11 @@ public class PlayerMovement : MonoBehaviour
 
         cameraCenter.localEulerAngles = new Vector3(cameraRotation.y, cameraRotation.x, 0);
 
-        //playerBodyRotation
-        Vector3 newBodyRotation;
+            if (cameraSets != CameraSets.detach)
+            {//playerBodyRotation
+            Vector3 newBodyRotation;
 
-        if (playerBody != null && cameraSets != CameraSets.standard || (rb.velocity.x != 0 || rb.velocity.y != 0))
+            if (playerBody != null && cameraSets != CameraSets.standard || (rb.velocity.x != 0 || rb.velocity.y != 0))
                 {
                     //playerBody.LookAt(cameraCenter.forward);
                     newBodyTarget = cameraCenter.forward;
@@ -639,7 +641,7 @@ public class PlayerMovement : MonoBehaviour
 
                 newBodyRotation = Vector3.RotateTowards(playerBody.forward, newBodyTarget, bodyRotateSpeed * Time.deltaTime, 0);
                 playerBody.rotation = Quaternion.LookRotation(newBodyRotation);
-        
+            }
     
 
         //mainCamera.RotateAround(cameraCenter.position, Vector3.up, cameraVelocity.x);
