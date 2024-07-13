@@ -82,7 +82,9 @@ public class PlayerMovement : MonoBehaviour
 
 
     [Header("climbing and swinging")]
-    [SerializeField] private float climbSpeed = 3;
+    [SerializeField] private Vector2 climbSpeed = new Vector2(1, 3);
+    [SerializeField] private float holdClimbSpeed = 0.2f;
+    [SerializeField] private Vector2 holdClimbLength = new Vector2(2, 4);
     //Swinging var
     //[SerializeField] private float maxSwingDistance = 25f;
     [SerializeField] float swingMultiplier = 1;
@@ -438,39 +440,86 @@ public class PlayerMovement : MonoBehaviour
     ClimbAnchorData rightDownClimbAnchor3; //1.2
     ClimbAnchorData rightDownClimbAnchor4; //1.8
 
-
+    Vector2 climbHoldVaribles;
     void ClimbingMovement(Vector2 inputVaribles)
     {
 
-        if (inputVaribles.x >= 0 && inputVaribles.y == 0) //right
+        if (inputVaribles.x > 0)
         {
-            StraightClimb(rightClimbAnchor1, rightClimbAnchor2, rightClimbAnchor3, rightUpClimbAnchor4, rightDownClimbAnchor3);
+            if (climbHoldVaribles.x < 0)
+            {
+                climbHoldVaribles == 0;
+            }
+            else
+            {
+                climbHoldVaribles.x += inputVaribles.x * holdClimbSpeed; 
+            }
         }
-        else if (inputVaribles.x >= 0 && inputVaribles.y == 0) //Left
+        else if (inputVaribles.x < 0)
         {
-            StraightClimb(leftClimbAnchor1, leftClimbAnchor2, leftClimbAnchor3, leftDownClimbAnchor4, leftUpClimbAnchor3);
+            if (climbHoldVaribles.x > 0)
+            {
+                climbHoldVaribles == 0;
+            }
+            else
+            {
+                climbHoldVaribles.x += inputVaribles.x * holdClimbSpeed; 
+            }
         }
-        else if (inputVaribles.x == 0 && inputVaribles.y >= 0) //up
+
+        if (inputVaribles.x > 0)
         {
-            StraightClimb(upClimbAnchor1, upClimbAnchor2, upClimbAnchor3, leftUpClimbAnchor4, rightUpClimbAnchor3);
+            if (climbHoldVaribles.x < 0)
+            {
+                climbHoldVaribles == 0;
+            }
+            else
+            {
+                climbHoldVaribles.x += inputVaribles.x * holdClimbSpeed; 
+            }
         }
-        else if (inputVaribles.x == 0 && inputVaribles.y <= 0) //down
+        else if (inputVaribles.y < 0)
         {
-            StraightClimb(downClimbAnchor1, downClimbAnchor2, downClimbAnchor3, rightDownClimbAnchor4, leftDownClimbAnchor3);
+            if (climbHoldVaribles.y > 0)
+            {
+                climbHoldVaribles == 0;
+            }
+            else
+            {
+                climbHoldVaribles.y += inputVaribles.y * holdClimbSpeed; 
+            }
         }
-        else if (inputVaribles.x >= 0 && inputVaribles.y >= 0) //up right
+
+
+        if (climbHoldVaribles.x > 0 && climbHoldVaribles.y == 0) //right
+        {
+            StraightClimb(climbHoldVaribles.x, rightClimbAnchor1, rightClimbAnchor2, rightClimbAnchor3, rightUpClimbAnchor4, rightDownClimbAnchor3);
+        }
+        else if (climbHoldVaribles.x > 0 && climbHoldVaribles.y == 0) //Left
+        {
+            StraightClimb(-climbHoldVaribles.x, leftClimbAnchor1, leftClimbAnchor2, leftClimbAnchor3, leftDownClimbAnchor4, leftUpClimbAnchor3);
+        }
+        else if (climbHoldVaribles.x == 0 && climbHoldVaribles.y > 0) //up
+        {
+            StraightClimb(climbHoldVaribles.y, upClimbAnchor1, upClimbAnchor2, upClimbAnchor3, leftUpClimbAnchor4, rightUpClimbAnchor3);
+        }
+        else if (climbHoldVaribles.x == 0 && climbHoldVaribles.y < 0) //down
+        {
+            StraightClimb(-climbHoldVaribles.y, downClimbAnchor1, downClimbAnchor2, downClimbAnchor3, rightDownClimbAnchor4, leftDownClimbAnchor3);
+        }
+        else if (climbHoldVaribles.x > 0 && climbHoldVaribles.y > 0) //up right
         {
             CornerClimb(rightUpClimbAnchor1, rightUpClimbAnchor2, rightUpClimbAnchor3, rightUpClimbAnchor4);
         }
-        else if (inputVaribles.x <= 0 && inputVaribles.y >= 0) //up left
+        else if (climbHoldVaribles.x < 0 && climbHoldVaribles.y > 0) //up left
         {
             CornerClimb(leftUpClimbAnchor1, leftUpClimbAnchor2, leftUpClimbAnchor3, leftUpClimbAnchor4);
         }
-        else if (inputVaribles.x >= 0 && inputVaribles.y <= 0) //down right
+        else if (climbHoldVaribles.x > 0 && climbHoldVaribles.y < 0) //down right
         {
             CornerClimb(rightDownClimbAnchor1, rightDownClimbAnchor2, rightDownClimbAnchor3, rightDownClimbAnchor4);
         }
-        else if (inputVaribles.x <= 0 && inputVaribles.y <= 0) //down left
+        else if (climbHoldVaribles.x < 0 && climbHoldVaribles.y < 0) //down left
         {
             CornerClimb(leftDownClimbAnchor1, leftDownClimbAnchor2, leftDownClimbAnchor3, leftDownClimbAnchor4);
         }
@@ -478,9 +527,51 @@ public class PlayerMovement : MonoBehaviour
 
     }
 
-    private void StraightClimb(ClimbAnchorData anchor1, ClimbAnchorData anchor2, ClimbAnchorData anchor3, ClimbAnchorData anchorDown, ClimbAnchorData anchorUp)
+    private void StraightClimb(float climbHolding, ClimbAnchorData anchor1, ClimbAnchorData anchor2, ClimbAnchorData anchor3, ClimbAnchorData anchorDown, ClimbAnchorData anchorUp)
     {
-
+        if (anchor1.transform != null && anchor2.transform != null) // full speed move towards direction with no hold
+        {
+            if (climbHolding > holdClimbLength.x)
+            {
+                //then activate climb
+            }
+            return;
+        }
+        else //move in direction holding button before moving
+        {
+            if (anchor3.transform != null) //move here
+            {
+                if (climbHolding > holdClimbLength.y)
+                {
+                    //then activate climb
+                }
+                return;
+            }
+            else if (anchor2.transform != null) //if no 3 here first
+            {
+                if (climbHolding > holdClimbLength.y)
+                {
+                    //then activate climb
+                }
+                return;
+            }
+            else if (anchorDown != null || anchorUp != null) //if no two then try one of these at random
+            {
+                if (climbHolding > holdClimbLength.y)
+                {
+                    //then activate climb
+                }
+                return;
+            }
+            else if (anchor1.transform != null) //if none of the other try this one last
+            {
+                if (climbHolding > holdClimbLength.y)
+                {
+                    //then activate climb
+                }
+                return;
+            }
+        }
     }
 
     private void CornerClimb(ClimbAnchorData anchor1, ClimbAnchorData anchor2, ClimbAnchorData anchorDown, ClimbAnchorData anchorUp)
