@@ -66,7 +66,7 @@ public class PlayerMovement : MonoBehaviour
     private Rigidbody rb;
     private Vector3 newBodyTarget;
 
-    public enum MovementType {walking, freefalling, slope, climbing, swinging}
+    public enum MovementType {walking, freefalling, slope, climbing, climbingMovement, swinging}
     [SerializeField] MovementType curMovmenent = MovementType.walking;
     [Header("Movement")]
     [SerializeField] bool freazeMovement;
@@ -188,6 +188,10 @@ public class PlayerMovement : MonoBehaviour
             case MovementType.climbing:
                 ClimbingMovement(inputVariables);
 
+            break;
+            
+            case MovementType.climbingMovement:
+                 Climbing();
             break;
 
             case MovementType.swinging:
@@ -400,8 +404,8 @@ public class PlayerMovement : MonoBehaviour
     #region Climbing Movement
     public class ClimbAnchorData
     {
-        Transform transform;
-        string animationName;
+        public Transform transform;
+        public string animationName;
     }
     //left
     ClimbAnchorData leftClimbAnchor1;
@@ -440,6 +444,10 @@ public class PlayerMovement : MonoBehaviour
     ClimbAnchorData rightDownClimbAnchor3; //1.2
     ClimbAnchorData rightDownClimbAnchor4; //1.8
 
+    private Vector3 lastClimbPoint;
+    private Vector3 climbPoint;
+    private float currentClimbSpeed;
+
     Vector2 climbHoldVaribles;
     void ClimbingMovement(Vector2 inputVaribles)
     {
@@ -448,7 +456,7 @@ public class PlayerMovement : MonoBehaviour
         {
             if (climbHoldVaribles.x < 0)
             {
-                climbHoldVaribles == 0;
+                climbHoldVaribles.x = 0;
             }
             else
             {
@@ -459,7 +467,7 @@ public class PlayerMovement : MonoBehaviour
         {
             if (climbHoldVaribles.x > 0)
             {
-                climbHoldVaribles == 0;
+                climbHoldVaribles.x = 0;
             }
             else
             {
@@ -467,22 +475,22 @@ public class PlayerMovement : MonoBehaviour
             }
         }
 
-        if (inputVaribles.x > 0)
+        if (inputVaribles.y > 0)
         {
-            if (climbHoldVaribles.x < 0)
+            if (climbHoldVaribles.y < 0)
             {
-                climbHoldVaribles == 0;
+                climbHoldVaribles.y = 0;
             }
             else
             {
-                climbHoldVaribles.x += inputVaribles.x * holdClimbSpeed; 
+                climbHoldVaribles.y += inputVaribles.y * holdClimbSpeed; 
             }
         }
         else if (inputVaribles.y < 0)
         {
             if (climbHoldVaribles.y > 0)
             {
-                climbHoldVaribles == 0;
+                climbHoldVaribles.y = 0;
             }
             else
             {
@@ -577,6 +585,18 @@ public class PlayerMovement : MonoBehaviour
     private void CornerClimb(ClimbAnchorData anchor1, ClimbAnchorData anchor2, ClimbAnchorData anchorDown, ClimbAnchorData anchorUp)
     {
 
+    }
+
+    private void Climbing()
+    {
+        if (transform.position != climbPoint)
+        {
+            transform.position = Vector3.MoveTowards(climbPoint, transform.position, currentClimbSpeed * Time.deltaTime);
+        }
+        else
+        {
+            curMovmenent = MovementType.climbing;
+        }
     }
 
 
