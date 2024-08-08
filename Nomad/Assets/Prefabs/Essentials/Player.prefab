@@ -997,9 +997,9 @@ GameObject:
   - component: {fileID: 2700543971393520738}
   - component: {fileID: 2700543971393520742}
   - component: {fileID: 2700543971393520748}
+  - component: {fileID: 2700543972185850116}
   - component: {fileID: 2700543971393520749}
   - component: {fileID: 2700543971393520741}
-  - component: {fileID: 2700543972185850116}
   - component: {fileID: 1906559610}
   - component: {fileID: 1906559619}
   m_Layer: 15
@@ -1024,7 +1024,7 @@ Transform:
   - {fileID: 2700543972091085099}
   - {fileID: 2700543971962854697}
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!136 &2700543971393520738
 CapsuleCollider:
@@ -1076,6 +1076,7 @@ MonoBehaviour:
   arrows: 10
   maxArrows: 20
   mainCamera: {fileID: 2700543972091085099}
+  cameraMovementScript: {fileID: 0}
   playerBody: {fileID: 2700543971962854697}
   toolA: 1
   toolB: 2
@@ -1121,6 +1122,52 @@ MonoBehaviour:
     toolSlotC: {fileID: 7636631504893378992}
   gamePaused: 0
   bowPower: 0
+--- !u!114 &2700543972185850116
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2700543971393520750}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c2116b73b2b2a1b43ac38f6c63713205, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  curMovmenent: 0
+  freazeMovement: 0
+  speed: 8
+  airMultiplier: 1
+  bodyRotateSpeed: 3
+  maxSlopeAngle: 45
+  groundDrag: 10
+  jumpForce: 3
+  jumpCooldown: 1
+  whatIsGround:
+    serializedVersion: 2
+    m_Bits: 128
+  climbSpeed: 3
+  forceToWall: 3
+  swingMultiplier: 1
+  extendRopeSpeed: 30
+  ropeTool: {fileID: 330480195}
+  lr: {fileID: 1906559610}
+  cameraControls:
+    cameraSets: 0
+    cameraSensitivity: 1.5
+    cameraAcceleration: 100
+    cameraInputLagPeriod: 0.01
+    forceCameraConection: 0
+    cameraMaxVerticalAngleFromHorizon: {x: 30, y: 30}
+    standardCameraClamp: 10
+    cameraOffset: 10
+    blackScreen: {fileID: 1410680472}
+    blackScreenAnimationName: FadeInBlackScreen
+  references:
+    cameraCenter: {fileID: 2700543972091085099}
+    mainCamera: {fileID: 2700543971506883138}
+    playerBody: {fileID: 2700543971962854697}
+    mainAnimator: {fileID: 1906559619}
 --- !u!114 &2700543971393520749
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1168,51 +1215,6 @@ NavMeshObstacle:
   m_CarveOnlyStationary: 1
   m_Center: {x: 0, y: 0, z: 0}
   m_TimeToStationary: 0.5
---- !u!114 &2700543972185850116
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2700543971393520750}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c2116b73b2b2a1b43ac38f6c63713205, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  curMovmenent: 0
-  freazeMovement: 0
-  speed: 8
-  airMultiplier: 1
-  bodyRotateSpeed: 3
-  maxSlopeAngle: 45
-  groundDrag: 10
-  jumpForce: 3
-  jumpCooldown: 1
-  whatIsGround:
-    serializedVersion: 2
-    m_Bits: 128
-  climbSpeed: 3
-  swingMultiplier: 1
-  extendRopeSpeed: 30
-  ropeTool: {fileID: 330480195}
-  lr: {fileID: 1906559610}
-  cameraControls:
-    cameraSets: 0
-    cameraSensitivity: 1.5
-    cameraAcceleration: 100
-    cameraInputLagPeriod: 0.01
-    forceCameraConection: 0
-    cameraMaxVerticalAngleFromHorizon: {x: 30, y: 30}
-    standardCameraClamp: 10
-    cameraOffset: 10
-    blackScreen: {fileID: 1410680472}
-    blackScreenAnimationName: FadeInBlackScreen
-  references:
-    cameraCenter: {fileID: 2700543972091085099}
-    mainCamera: {fileID: 2700543971506883138}
-    playerBody: {fileID: 2700543971962854697}
-    mainAnimator: {fileID: 1906559619}
 --- !u!120 &1906559610
 LineRenderer:
   serializedVersion: 2
@@ -1476,6 +1478,7 @@ MonoBehaviour:
   offSet: 0.2
   cameraRange: {x: -3, y: -0.8}
   speed: 2
+  bowCameraSetting: 0
 --- !u!136 &5670334706761347925
 CapsuleCollider:
   m_ObjectHideFlags: 0

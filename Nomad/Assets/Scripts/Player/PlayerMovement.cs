@@ -83,6 +83,7 @@ public class PlayerMovement : MonoBehaviour
 
     [Header("climbing and swinging")]
     [SerializeField] private float climbSpeed = 3;
+    [SerializeField] private float forceToWall = 3;
     //Swinging var
     //[SerializeField] private float maxSwingDistance = 25f;
     [SerializeField] float swingMultiplier = 1;
@@ -190,27 +191,7 @@ public class PlayerMovement : MonoBehaviour
                 newBodyRotation = Vector3.RotateTowards(playerBody.forward, newBodyTarget, bodyRotateSpeed * Time.deltaTime, 0);
                 playerBody.rotation = Quaternion.LookRotation(newBodyRotation);
 
-                if (!climbingRayCast())
-                {
-                    if (lastInputs.x < 0 && inputVariables.x <= 0)
-                    {
-                        inputVariables.x = 0;
-                        sideHit = true;
-                    }
-                    else if (lastInputs.x > 0 && inputVariables.x >= 0)
-                    {
-                        inputVariables.x = 0;
-                        sideHit = true;
-                    }
-                    Debug.Log("attemping to freaze variables" + lastInputs.x);
-                }
-                
-                if (!sideHit)
-                {
-                    lastInputs.x = inputVariables.x;
-                }
-
-                lastInputs.y = inputVariables.y;
+                //dectect wall to determine if exiting wall
 
                 moveDirection = playerBody.up * inputVariables.y + playerBody.right * inputVariables.x/2;
 
@@ -396,13 +377,19 @@ public class PlayerMovement : MonoBehaviour
         if (jumpInput.ReadValue<float>() > 0)
         {
             //Debug.Log("attemp Jump " + readyToJump + grounded);
-            if (readyToJump && (curMovmenent == MovementType.swinging || grounded))
+            if (readyToJump && (curMovmenent == MovementType.swinging|| curMovmenent == MovementType.climbing || grounded))
             {
                 //Debug.Log("Jump");
                 //exitingSlope = true;
                 if (curMovmenent == MovementType.swinging)
                 {
                     StopSwing();
+                }
+
+                if (curMovmenent == MovementType.climbing)
+                {
+                    curMovmenent = MovementType.freefalling;
+                    cameraSets = CameraSets.forceFollow;
                 }
                 readyToJump = false;
                 rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
@@ -444,6 +431,9 @@ public class PlayerMovement : MonoBehaviour
                     lastInputs = Vector2.zero;
                     cameraSets = CameraSets.detach;
                     Debug.Log("newBodyTarget");
+
+
+                rb.AddForce(playerBody.forward * forceToWall, ForceMode.Impulse);
                 //}
             break;
 
