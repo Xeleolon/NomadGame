@@ -84,6 +84,15 @@ public class PlayerMovement : MonoBehaviour
     [Header("climbing and swinging")]
     [SerializeField] private float climbSpeed = 3;
     [SerializeField] private float forceToWall = 3;
+
+    //Detection
+
+    [SerializeField] private float detectionLength;
+    [SerializeField] private float sphereCastRadius;
+    [SerializeField] private LayerMask whatIsWall;
+
+    private RaycastHit frontWallHit;
+
     //Swinging var
     //[SerializeField] private float maxSwingDistance = 25f;
     [SerializeField] float swingMultiplier = 1;
@@ -193,7 +202,19 @@ public class PlayerMovement : MonoBehaviour
 
                 //dectect wall to determine if exiting wall
 
-                moveDirection = playerBody.up * inputVariables.y + playerBody.right * inputVariables.x/2;
+                if (inputVariables.y < 0 && GroundCheck())
+                {
+                    ExitingClimbing();
+                    Debug.Log("testing ground exit");
+
+                }
+
+                if (inputVariables.y > 0 && !climbingRayCast())
+                {
+                    ExitingClimbing();
+                }
+
+                moveDirection = playerBody.up * inputVariables.y + playerBody.right * inputVariables.x/2 + playerBody.forward * 0.2f;
 
             break;
 
@@ -334,7 +355,7 @@ public class PlayerMovement : MonoBehaviour
 
         rb.useGravity = true;
 
-        if (GroundCheck())
+        if (!GroundCheck())
         {
             curMovmenent = MovementType.freefalling;
             return;
@@ -366,8 +387,12 @@ public class PlayerMovement : MonoBehaviour
             rb.drag = groundDrag;
             return true;
         }
-
+ 
         rb.drag = 0.2f;
+        if (curMovmenent == MovementType.climbing)
+        {
+            rb.drag = groundDrag;
+        }
         return false;
         
     }
@@ -376,8 +401,9 @@ public class PlayerMovement : MonoBehaviour
     {
         if (jumpInput.ReadValue<float>() > 0)
         {
-            //Debug.Log("attemp Jump " + readyToJump + grounded);
-            if (readyToJump && (curMovmenent == MovementType.swinging|| curMovmenent == MovementType.climbing || grounded))
+            
+            Debug.Log("attemp Jump " + readyToJump + GroundCheck());
+            if (readyToJump && (curMovmenent == MovementType.swinging || curMovmenent == MovementType.climbing || GroundCheck()))
             {
                 //Debug.Log("Jump");
                 //exitingSlope = true;
@@ -388,8 +414,7 @@ public class PlayerMovement : MonoBehaviour
 
                 if (curMovmenent == MovementType.climbing)
                 {
-                    curMovmenent = MovementType.freefalling;
-                    cameraSets = CameraSets.forceFollow;
+                    ExitingClimbing();
                 }
                 readyToJump = false;
                 rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
@@ -409,7 +434,8 @@ public class PlayerMovement : MonoBehaviour
         //exitingSlope = false;
     }
     #endregion 
-    #region Ladder Movement
+    #region Climbing Movement
+
     public bool CurMovmenentMatch(MovementType newMovement)
     {
         if (curMovmenent == newMovement)
@@ -446,14 +472,38 @@ public class PlayerMovement : MonoBehaviour
 
     private bool climbingRayCast()
     {
-        if (Physics.Raycast(transform.position, playerBody.forward, out climbHit, 1 * 0.5f + 2.0f))
+        /*if (Physics.Raycast(transform.position, playerBody.forward, out climbHit, 1 * 0.5f + 2.0f))
         {
             if (climbHit.collider.gameObject.GetComponent<Climb>() != null)
             {
                 return true;
             }
         }
+        return false;*/
+
+
+
+        if (Physics.SphereCast(transform.position, sphereCastRadius, playerBody.forward, out frontWallHit, detectionLength, whatIsWall))
+        {
+            return true;
+        }
         return false;
+
+
+    }
+
+    private void ExitingClimbing()
+    {
+        if (grounded)
+        {
+            curMovmenent = MovementType.walking;
+            cameraSets = CameraSets.standard;
+            return;
+        }
+
+
+        curMovmenent = MovementType.freefalling;
+        cameraSets = CameraSets.forceFollow;
     }
     #endregion
     #region Swinging
