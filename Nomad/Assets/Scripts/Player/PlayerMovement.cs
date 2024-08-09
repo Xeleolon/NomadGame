@@ -209,7 +209,7 @@ public class PlayerMovement : MonoBehaviour
                 if (inputVariables.y < 0 && GroundCheck())
                 {
                     ExitingClimbing();
-                    Debug.Log("testing ground exit");
+                    //Debug.Log("testing ground exit");
 
                 }
 
@@ -217,9 +217,11 @@ public class PlayerMovement : MonoBehaviour
 
                 if (inputVariables.y > 0 && !climbingRayCast())
                 {
+                    Debug.Log("exiting up out of Climbing");
                     if (!climbingUpBool)
                     {
                         climbingExitingVar = transform.position;
+                        climbingUpBool = true;
                     }
 
                     //forward variable
@@ -237,6 +239,7 @@ public class PlayerMovement : MonoBehaviour
                 }
 
                 moveDirection = playerBody.up * inputVariables.y + playerBody.right * inputVariables.x/2 + playerBody.forward * forwardInput;
+                //Debug.Log("Climbing variables " + moveDirection);
 
             break;
 
@@ -324,6 +327,7 @@ public class PlayerMovement : MonoBehaviour
 
             case MovementType.climbing: // climbing
                 //Debug.Log("Set to climbing");
+                Debug.Log("Climbing variables " + moveDirection);
                 rb.AddForce(moveDirection.normalized * climbSpeed * 10f, ForceMode.Force);
                 NormalizeAllMovement();
             break;

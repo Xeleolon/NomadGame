@@ -6033,7 +6033,7 @@ PrefabInstance:
     - target: {fileID: 2700543972185850116, guid: 76a33cc81d07ed9428316d2799ed7b1b,
         type: 3}
       propertyPath: sphereCastRadius
-      value: 0.25
+      value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: 2700543972185850116, guid: 76a33cc81d07ed9428316d2799ed7b1b,
         type: 3}
