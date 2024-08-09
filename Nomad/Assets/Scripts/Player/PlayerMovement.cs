@@ -1,4 +1,4 @@
-using System.Collections;
+ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -66,7 +66,7 @@ public class PlayerMovement : MonoBehaviour
     private Rigidbody rb;
     private Vector3 newBodyTarget;
 
-    public enum MovementType {walking, freefalling, slope, climbing, climbingMovement, swinging}
+    public enum MovementType {walking, freefalling, slope, climbing, swinging}
     [SerializeField] MovementType curMovmenent = MovementType.walking;
     [Header("Movement")]
     [SerializeField] bool freazeMovement;
@@ -82,9 +82,17 @@ public class PlayerMovement : MonoBehaviour
 
 
     [Header("climbing and swinging")]
-    [SerializeField] private Vector2 climbSpeed = new Vector2(1, 3);
-    [SerializeField] private float holdClimbSpeed = 0.2f;
-    [SerializeField] private Vector2 holdClimbLength = new Vector2(2, 4);
+    [SerializeField] private float climbSpeed = 3;
+    [SerializeField] private float forceToWall = 3;
+
+    //Detection
+
+    [SerializeField] private float detectionLength;
+    [SerializeField] private float sphereCastRadius;
+    [SerializeField] private LayerMask whatIsWall;
+
+    private RaycastHit frontWallHit;
+
     //Swinging var
     //[SerializeField] private float maxSwingDistance = 25f;
     [SerializeField] float swingMultiplier = 1;
@@ -175,6 +183,13 @@ public class PlayerMovement : MonoBehaviour
     RaycastHit climbHit;
     bool grounded;
     Vector2 lastInputs;
+
+    Vector3 climbingExitingVar;
+    bool climbingUpBool;
+    float climbVariable;
+    bool enteringClimb;
+    Transform climbingWall;
+
     void moveVelocity()
     {
         CheckMovmenentState(false);
@@ -183,15 +198,76 @@ public class PlayerMovement : MonoBehaviour
         Vector3 newBodyRotation;
         float ropeVariables = climbRopeInput.ReadValue<float>();
 
+
         switch (curMovmenent)
         {
             case MovementType.climbing:
-                ClimbingMovement(inputVariables);
+                newBodyTarget.y = playerBody.forward.y;
 
-            break;
-            
-            case MovementType.climbingMovement:
-                 Climbing();
+                newBodyRotation = Vector3.RotateTowards(playerBody.forward, newBodyTarget, bodyRotateSpeed * Time.deltaTime, 0);
+                playerBody.rotation = Quaternion.LookRotation(newBodyRotation);
+
+                //dectect wall to determine if exiting wall
+
+                if (inputVariables.y < 0 && GroundCheck())
+                {
+                    ExitingClimbing();
+                    //Debug.Log("testing ground exit");
+
+                }
+
+                float forwardInput = 0.2f;
+
+                if (!enteringClimb)
+                {
+                    if (inputVariables.y > 0 && !climbingRayCast())
+                    {
+                        //Debug.Log("exiting up out of Climbing");
+                        if (!climbingUpBool)
+                        {
+                            climbingExitingVar = transform.position;
+                            climbingUpBool = true;
+                        }
+
+                        //forward variable
+                        forwardInput = 0.8f;
+
+                        if (Vector3.Distance(transform.position, climbingExitingVar) > 1)
+                        {
+                            ExitingClimbing();
+                            climbingUpBool = false;
+                        }
+                    }
+                    else if (!climbingRayCast())
+                    {
+                        if (!climbingUpBool)
+                        {
+                            climbingExitingVar = transform.position;
+                            climbingUpBool = true;
+                        }
+
+
+                        if (Vector3.Distance(transform.position, climbingExitingVar) > 1)
+                        {
+                            ExitingClimbing();
+                            climbingUpBool = false;
+                        }
+                    }
+                    else if (climbingRayCast() && climbingUpBool)
+                    {
+                        climbingUpBool = false;
+                    } 
+                }
+                else if (enteringClimb && climbingRayCast())
+                {
+                    enteringClimb = false;
+                }
+
+
+                climbVariable = inputVariables.y * climbSpeed * Time.deltaTime;
+                moveDirection = /*playerBody.up * inputVariables.y +*/ climbingWall.right * inputVariables.x/2 + climbingWall.forward * forwardInput;
+                //Debug.Log("Climbing variables " + moveDirection);
+
             break;
 
             case MovementType.swinging:
@@ -277,9 +353,14 @@ public class PlayerMovement : MonoBehaviour
             break;
 
             case MovementType.climbing: // climbing
-                Debug.Log("Set to climbing");
-                rb.AddForce(moveDirection.normalized * climbSpeed * 10f, ForceMode.Force);
-                NormalizeAllMovement();
+                //Debug.Log("Set to climbing");
+                Debug.Log("Climbing variables " + moveDirection);
+                rb.AddForce(moveDirection.normalized * speed * 10f, ForceMode.Force);
+
+                Vector3 climbingUp = transform.position;
+                climbingUp.y += climbVariable;
+                transform.position = climbingUp;
+                //NormalizeAllMovement(climbSpeed);
             break;
 
 
@@ -331,7 +412,7 @@ public class PlayerMovement : MonoBehaviour
 
         rb.useGravity = true;
 
-        if (GroundCheck())
+        if (!GroundCheck())
         {
             curMovmenent = MovementType.freefalling;
             return;
@@ -363,8 +444,12 @@ public class PlayerMovement : MonoBehaviour
             rb.drag = groundDrag;
             return true;
         }
-
+ 
         rb.drag = 0.2f;
+        if (curMovmenent == MovementType.climbing)
+        {
+            rb.drag = groundDrag;
+        }
         return false;
         
     }
@@ -373,14 +458,20 @@ public class PlayerMovement : MonoBehaviour
     {
         if (jumpInput.ReadValue<float>() > 0)
         {
-            //Debug.Log("attemp Jump " + readyToJump + grounded);
-            if (readyToJump && (curMovmenent == MovementType.swinging || grounded))
+            
+            Debug.Log("attemp Jump " + readyToJump + GroundCheck());
+            if (readyToJump && (curMovmenent == MovementType.swinging || curMovmenent == MovementType.climbing || GroundCheck()))
             {
                 //Debug.Log("Jump");
                 //exitingSlope = true;
                 if (curMovmenent == MovementType.swinging)
                 {
                     StopSwing();
+                }
+
+                if (curMovmenent == MovementType.climbing)
+                {
+                    ExitingClimbing();
                 }
                 readyToJump = false;
                 rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
@@ -400,208 +491,8 @@ public class PlayerMovement : MonoBehaviour
         //exitingSlope = false;
     }
     #endregion 
-
     #region Climbing Movement
-    public class ClimbAnchorData
-    {
-        public Transform transform;
-        public string animationName;
-    }
-    //left
-    ClimbAnchorData leftClimbAnchor1;
-    ClimbAnchorData leftClimbAnchor2;
-    ClimbAnchorData leftClimbAnchor3;
-    //right
-    ClimbAnchorData rightClimbAnchor1;
-    ClimbAnchorData rightClimbAnchor2;
-    ClimbAnchorData rightClimbAnchor3;
-    //up
-    ClimbAnchorData upClimbAnchor1;
-    ClimbAnchorData upClimbAnchor2;
-    ClimbAnchorData upClimbAnchor3;
-    //down
-    ClimbAnchorData downClimbAnchor1;
-    ClimbAnchorData downClimbAnchor2;
-    ClimbAnchorData downClimbAnchor3;
-    //left Up
-    ClimbAnchorData leftUpClimbAnchor1;
-    ClimbAnchorData leftUpClimbAnchor2;
-    ClimbAnchorData leftUpClimbAnchor3; //1.2
-    ClimbAnchorData leftUpClimbAnchor4; //1.8
-    //right Up
-    ClimbAnchorData rightUpClimbAnchor1;
-    ClimbAnchorData rightUpClimbAnchor2;
-    ClimbAnchorData rightUpClimbAnchor3; //1.2
-    ClimbAnchorData rightUpClimbAnchor4; //1.8
-    //left Down
-    ClimbAnchorData leftDownClimbAnchor1;
-    ClimbAnchorData leftDownClimbAnchor2;
-    ClimbAnchorData leftDownClimbAnchor3; //1.2
-    ClimbAnchorData leftDownClimbAnchor4; //1.8
-    //right Down
-    ClimbAnchorData rightDownClimbAnchor1;
-    ClimbAnchorData rightDownClimbAnchor2;
-    ClimbAnchorData rightDownClimbAnchor3; //1.2
-    ClimbAnchorData rightDownClimbAnchor4; //1.8
 
-    private Vector3 lastClimbPoint;
-    private Vector3 climbPoint;
-    private float currentClimbSpeed;
-
-    Vector2 climbHoldVaribles;
-    void ClimbingMovement(Vector2 inputVaribles)
-    {
-
-        if (inputVaribles.x > 0)
-        {
-            if (climbHoldVaribles.x < 0)
-            {
-                climbHoldVaribles.x = 0;
-            }
-            else
-            {
-                climbHoldVaribles.x += inputVaribles.x * holdClimbSpeed; 
-            }
-        }
-        else if (inputVaribles.x < 0)
-        {
-            if (climbHoldVaribles.x > 0)
-            {
-                climbHoldVaribles.x = 0;
-            }
-            else
-            {
-                climbHoldVaribles.x += inputVaribles.x * holdClimbSpeed; 
-            }
-        }
-
-        if (inputVaribles.y > 0)
-        {
-            if (climbHoldVaribles.y < 0)
-            {
-                climbHoldVaribles.y = 0;
-            }
-            else
-            {
-                climbHoldVaribles.y += inputVaribles.y * holdClimbSpeed; 
-            }
-        }
-        else if (inputVaribles.y < 0)
-        {
-            if (climbHoldVaribles.y > 0)
-            {
-                climbHoldVaribles.y = 0;
-            }
-            else
-            {
-                climbHoldVaribles.y += inputVaribles.y * holdClimbSpeed; 
-            }
-        }
-
-
-        if (climbHoldVaribles.x > 0 && climbHoldVaribles.y == 0) //right
-        {
-            StraightClimb(climbHoldVaribles.x, rightClimbAnchor1, rightClimbAnchor2, rightClimbAnchor3, rightUpClimbAnchor4, rightDownClimbAnchor3);
-        }
-        else if (climbHoldVaribles.x > 0 && climbHoldVaribles.y == 0) //Left
-        {
-            StraightClimb(-climbHoldVaribles.x, leftClimbAnchor1, leftClimbAnchor2, leftClimbAnchor3, leftDownClimbAnchor4, leftUpClimbAnchor3);
-        }
-        else if (climbHoldVaribles.x == 0 && climbHoldVaribles.y > 0) //up
-        {
-            StraightClimb(climbHoldVaribles.y, upClimbAnchor1, upClimbAnchor2, upClimbAnchor3, leftUpClimbAnchor4, rightUpClimbAnchor3);
-        }
-        else if (climbHoldVaribles.x == 0 && climbHoldVaribles.y < 0) //down
-        {
-            StraightClimb(-climbHoldVaribles.y, downClimbAnchor1, downClimbAnchor2, downClimbAnchor3, rightDownClimbAnchor4, leftDownClimbAnchor3);
-        }
-        else if (climbHoldVaribles.x > 0 && climbHoldVaribles.y > 0) //up right
-        {
-            CornerClimb(rightUpClimbAnchor1, rightUpClimbAnchor2, rightUpClimbAnchor3, rightUpClimbAnchor4);
-        }
-        else if (climbHoldVaribles.x < 0 && climbHoldVaribles.y > 0) //up left
-        {
-            CornerClimb(leftUpClimbAnchor1, leftUpClimbAnchor2, leftUpClimbAnchor3, leftUpClimbAnchor4);
-        }
-        else if (climbHoldVaribles.x > 0 && climbHoldVaribles.y < 0) //down right
-        {
-            CornerClimb(rightDownClimbAnchor1, rightDownClimbAnchor2, rightDownClimbAnchor3, rightDownClimbAnchor4);
-        }
-        else if (climbHoldVaribles.x < 0 && climbHoldVaribles.y < 0) //down left
-        {
-            CornerClimb(leftDownClimbAnchor1, leftDownClimbAnchor2, leftDownClimbAnchor3, leftDownClimbAnchor4);
-        }
-        
-
-    }
-
-    private void StraightClimb(float climbHolding, ClimbAnchorData anchor1, ClimbAnchorData anchor2, ClimbAnchorData anchor3, ClimbAnchorData anchorDown, ClimbAnchorData anchorUp)
-    {
-        if (anchor1.transform != null && anchor2.transform != null) // full speed move towards direction with no hold
-        {
-            if (climbHolding > holdClimbLength.x)
-            {
-                //then activate climb
-            }
-            return;
-        }
-        else //move in direction holding button before moving
-        {
-            if (anchor3.transform != null) //move here
-            {
-                if (climbHolding > holdClimbLength.y)
-                {
-                    //then activate climb
-                }
-                return;
-            }
-            else if (anchor2.transform != null) //if no 3 here first
-            {
-                if (climbHolding > holdClimbLength.y)
-                {
-                    //then activate climb
-                }
-                return;
-            }
-            else if (anchorDown != null || anchorUp != null) //if no two then try one of these at random
-            {
-                if (climbHolding > holdClimbLength.y)
-                {
-                    //then activate climb
-                }
-                return;
-            }
-            else if (anchor1.transform != null) //if none of the other try this one last
-            {
-                if (climbHolding > holdClimbLength.y)
-                {
-                    //then activate climb
-                }
-                return;
-            }
-        }
-    }
-
-    private void CornerClimb(ClimbAnchorData anchor1, ClimbAnchorData anchor2, ClimbAnchorData anchorDown, ClimbAnchorData anchorUp)
-    {
-
-    }
-
-    private void Climbing()
-    {
-        if (transform.position != climbPoint)
-        {
-            transform.position = Vector3.MoveTowards(climbPoint, transform.position, currentClimbSpeed * Time.deltaTime);
-        }
-        else
-        {
-            curMovmenent = MovementType.climbing;
-        }
-    }
-
-
-
-    //old climbing
     public bool CurMovmenentMatch(MovementType newMovement)
     {
         if (curMovmenent == newMovement)
@@ -611,7 +502,7 @@ public class PlayerMovement : MonoBehaviour
         
         return false;
     }
-    public void ChangeMovement(MovementType newMovement, Vector3 hopPosition)
+    public void ChangeMovement(MovementType newMovement, Vector3 hopPosition, Transform wall)
     {
 
         switch (newMovement)
@@ -620,13 +511,58 @@ public class PlayerMovement : MonoBehaviour
                 //if (playerBody != null)
                 //{
                     newBodyTarget = cameraCenter.TransformDirection(hopPosition);
+                    climbingWall = wall;
                     lastInputs = Vector2.zero;
                     cameraSets = CameraSets.detach;
                     Debug.Log("newBodyTarget");
+                    enteringClimb = true;
+
+
+                    rb.AddForce(playerBody.forward * forceToWall, ForceMode.Impulse);
                 //}
+            break;
+
+            case MovementType.swinging:
+
             break;
         }
         curMovmenent = newMovement;
+    }
+
+    private bool climbingRayCast()
+    {
+        /*if (Physics.Raycast(transform.position, playerBody.forward, out climbHit, 1 * 0.5f + 2.0f))
+        {
+            if (climbHit.collider.gameObject.GetComponent<Climb>() != null)
+            {
+                return true;
+            }
+        }
+        return false;*/
+
+        Debug.Log("testing raycast Climbing");
+
+        if (Physics.SphereCast(transform.position, sphereCastRadius, playerBody.forward, out frontWallHit, detectionLength, whatIsWall))
+        {
+            return true;
+        }
+        return false;
+
+
+    }
+
+    private void ExitingClimbing()
+    {
+        if (grounded)
+        {
+            curMovmenent = MovementType.walking;
+            cameraSets = CameraSets.standard;
+            return;
+        }
+
+
+        curMovmenent = MovementType.freefalling;
+        cameraSets = CameraSets.forceFollow;
     }
     #endregion
     #region Swinging
