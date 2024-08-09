@@ -183,6 +183,10 @@ public class PlayerMovement : MonoBehaviour
     RaycastHit climbHit;
     bool grounded;
     Vector2 lastInputs;
+
+    Vector3 climbingExitingVar;
+    bool climbingUpBool;
+
     void moveVelocity()
     {
         CheckMovmenentState(false);
@@ -191,10 +195,10 @@ public class PlayerMovement : MonoBehaviour
         Vector3 newBodyRotation;
         float ropeVariables = climbRopeInput.ReadValue<float>();
 
+
         switch (curMovmenent)
         {
             case MovementType.climbing:
-                bool sideHit = false;
                 newBodyTarget.y = playerBody.forward.y;
 
                 newBodyRotation = Vector3.RotateTowards(playerBody.forward, newBodyTarget, bodyRotateSpeed * Time.deltaTime, 0);
@@ -209,12 +213,30 @@ public class PlayerMovement : MonoBehaviour
 
                 }
 
+                float forwardInput = 0.2f;
+
                 if (inputVariables.y > 0 && !climbingRayCast())
                 {
-                    ExitingClimbing();
+                    if (!climbingUpBool)
+                    {
+                        climbingExitingVar = transform.position;
+                    }
+
+                    //forward variable
+                    forwardInput = 1;
+
+                    if (transform.position.y > climbingExitingVar.y + 0.6 )
+                    {
+                        ExitingClimbing();
+                        climbingUpBool = false;
+                    }
+                }
+                else if (climbingUpBool)
+                {
+                    climbingUpBool = false;
                 }
 
-                moveDirection = playerBody.up * inputVariables.y + playerBody.right * inputVariables.x/2 + playerBody.forward * 0.2f;
+                moveDirection = playerBody.up * inputVariables.y + playerBody.right * inputVariables.x/2 + playerBody.forward * forwardInput;
 
             break;
 
@@ -301,7 +323,7 @@ public class PlayerMovement : MonoBehaviour
             break;
 
             case MovementType.climbing: // climbing
-                Debug.Log("Set to climbing");
+                //Debug.Log("Set to climbing");
                 rb.AddForce(moveDirection.normalized * climbSpeed * 10f, ForceMode.Force);
                 NormalizeAllMovement();
             break;
@@ -481,7 +503,7 @@ public class PlayerMovement : MonoBehaviour
         }
         return false;*/
 
-
+        Debug.Log("testing raycast Climbing");
 
         if (Physics.SphereCast(transform.position, sphereCastRadius, playerBody.forward, out frontWallHit, detectionLength, whatIsWall))
         {
