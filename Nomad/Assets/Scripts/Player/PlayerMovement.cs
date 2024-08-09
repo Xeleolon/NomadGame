@@ -186,6 +186,8 @@ public class PlayerMovement : MonoBehaviour
 
     Vector3 climbingExitingVar;
     bool climbingUpBool;
+    float climbVariable;
+    bool enteringClimb;
 
     void moveVelocity()
     {
@@ -215,30 +217,54 @@ public class PlayerMovement : MonoBehaviour
 
                 float forwardInput = 0.2f;
 
-                if (inputVariables.y > 0 && !climbingRayCast())
+                if (!enteringClimb)
                 {
-                    Debug.Log("exiting up out of Climbing");
-                    if (!climbingUpBool)
+                    if (inputVariables.y > 0 && !climbingRayCast())
                     {
-                        climbingExitingVar = transform.position;
-                        climbingUpBool = true;
+                        //Debug.Log("exiting up out of Climbing");
+                        if (!climbingUpBool)
+                        {
+                            climbingExitingVar = transform.position;
+                            climbingUpBool = true;
+                        }
+
+                        //forward variable
+                        forwardInput = 0.8f;
+
+                        if (Vector3.Distance(transform.position, climbingExitingVar) > 1)
+                        {
+                            ExitingClimbing();
+                            climbingUpBool = false;
+                        }
                     }
-
-                    //forward variable
-                    forwardInput = 1;
-
-                    if (transform.position.y > climbingExitingVar.y + 0.6 )
+                    else if (!climbingRayCast())
                     {
-                        ExitingClimbing();
+                        if (!climbingUpBool)
+                        {
+                            climbingExitingVar = transform.position;
+                            climbingUpBool = true;
+                        }
+
+
+                        if (Vector3.Distance(transform.position, climbingExitingVar) > 1)
+                        {
+                            ExitingClimbing();
+                            climbingUpBool = false;
+                        }
+                    }
+                    else if (climbingRayCast() && climbingUpBool)
+                    {
                         climbingUpBool = false;
-                    }
+                    } 
                 }
-                else if (climbingUpBool)
+                else if (enteringClimb && climbingRayCast())
                 {
-                    climbingUpBool = false;
+                    enteringClimb = false;
                 }
 
-                moveDirection = playerBody.up * inputVariables.y + playerBody.right * inputVariables.x/2 + playerBody.forward * forwardInput;
+
+                climbVariable = inputVariables.y * climbSpeed * Time.deltaTime;
+                moveDirection = /*playerBody.up * inputVariables.y +*/ playerBody.right * inputVariables.x/2 + playerBody.forward * forwardInput;
                 //Debug.Log("Climbing variables " + moveDirection);
 
             break;
@@ -328,8 +354,12 @@ public class PlayerMovement : MonoBehaviour
             case MovementType.climbing: // climbing
                 //Debug.Log("Set to climbing");
                 Debug.Log("Climbing variables " + moveDirection);
-                rb.AddForce(moveDirection.normalized * climbSpeed * 10f, ForceMode.Force);
-                NormalizeAllMovement();
+                rb.AddForce(moveDirection.normalized * speed * 10f, ForceMode.Force);
+
+                Vector3 climbingUp = transform.position;
+                climbingUp.y += climbVariable;
+                transform.position = climbingUp;
+                //NormalizeAllMovement(climbSpeed);
             break;
 
 
@@ -483,9 +513,10 @@ public class PlayerMovement : MonoBehaviour
                     lastInputs = Vector2.zero;
                     cameraSets = CameraSets.detach;
                     Debug.Log("newBodyTarget");
+                    enteringClimb = true;
 
 
-                rb.AddForce(playerBody.forward * forceToWall, ForceMode.Impulse);
+                    rb.AddForce(playerBody.forward * forceToWall, ForceMode.Impulse);
                 //}
             break;
 
