@@ -21,7 +21,7 @@ public class Climb : InteractBase
     {
         if (!player.CurMovmenentMatch(PlayerMovement.MovementType.climbing))
         {
-            player.ChangeMovement(PlayerMovement.MovementType.climbing, offSetPosition);
+            player.ChangeMovement(PlayerMovement.MovementType.climbing, offSetPosition, transform);
         }
     }
 

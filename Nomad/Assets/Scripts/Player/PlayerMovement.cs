@@ -1,4 +1,4 @@
-using System.Collections;
+ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -188,6 +188,7 @@ public class PlayerMovement : MonoBehaviour
     bool climbingUpBool;
     float climbVariable;
     bool enteringClimb;
+    Transform climbingWall;
 
     void moveVelocity()
     {
@@ -264,7 +265,7 @@ public class PlayerMovement : MonoBehaviour
 
 
                 climbVariable = inputVariables.y * climbSpeed * Time.deltaTime;
-                moveDirection = /*playerBody.up * inputVariables.y +*/ playerBody.right * inputVariables.x/2 + playerBody.forward * forwardInput;
+                moveDirection = /*playerBody.up * inputVariables.y +*/ climbingWall.right * inputVariables.x/2 + climbingWall.forward * forwardInput;
                 //Debug.Log("Climbing variables " + moveDirection);
 
             break;
@@ -501,7 +502,7 @@ public class PlayerMovement : MonoBehaviour
         
         return false;
     }
-    public void ChangeMovement(MovementType newMovement, Vector3 hopPosition)
+    public void ChangeMovement(MovementType newMovement, Vector3 hopPosition, Transform wall)
     {
 
         switch (newMovement)
@@ -510,6 +511,7 @@ public class PlayerMovement : MonoBehaviour
                 //if (playerBody != null)
                 //{
                     newBodyTarget = cameraCenter.TransformDirection(hopPosition);
+                    climbingWall = wall;
                     lastInputs = Vector2.zero;
                     cameraSets = CameraSets.detach;
                     Debug.Log("newBodyTarget");
