@@ -1959,18 +1959,6 @@ Transform:
   m_Father: {fileID: 489885652}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &703487126 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5782873441937746002, guid: 76a33cc81d07ed9428316d2799ed7b1b,
-    type: 3}
-  m_PrefabInstance: {fileID: 2700543971619205547}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f88708151e30419498dcc22863576284, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &719983185
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6292,6 +6280,10 @@ PrefabInstance:
     serializedVersion: 2
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 854572644, guid: 76a33cc81d07ed9428316d2799ed7b1b, type: 3}
+      propertyPath: activeDebug
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 736059841063716120, guid: 76a33cc81d07ed9428316d2799ed7b1b,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -6409,38 +6401,13 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2700543971393520748, guid: 76a33cc81d07ed9428316d2799ed7b1b,
         type: 3}
-      propertyPath: cameraMovementScript
-      value: 
-      objectReference: {fileID: 703487126}
+      propertyPath: curTool
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2700543971393520750, guid: 76a33cc81d07ed9428316d2799ed7b1b,
         type: 3}
       propertyPath: m_Name
       value: Player
-      objectReference: {fileID: 0}
-    - target: {fileID: 2700543972185850116, guid: 76a33cc81d07ed9428316d2799ed7b1b,
-        type: 3}
-      propertyPath: jumpForce
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 2700543972185850116, guid: 76a33cc81d07ed9428316d2799ed7b1b,
-        type: 3}
-      propertyPath: forceToWall
-      value: 9
-      objectReference: {fileID: 0}
-    - target: {fileID: 2700543972185850116, guid: 76a33cc81d07ed9428316d2799ed7b1b,
-        type: 3}
-      propertyPath: detectionLength
-      value: 0.7
-      objectReference: {fileID: 0}
-    - target: {fileID: 2700543972185850116, guid: 76a33cc81d07ed9428316d2799ed7b1b,
-        type: 3}
-      propertyPath: sphereCastRadius
-      value: 0.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2700543972185850116, guid: 76a33cc81d07ed9428316d2799ed7b1b,
-        type: 3}
-      propertyPath: whatIsWall.m_Bits
-      value: 256
       objectReference: {fileID: 0}
     - target: {fileID: 2700543972815329159, guid: 76a33cc81d07ed9428316d2799ed7b1b,
         type: 3}
@@ -6471,11 +6438,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5782873441937746002, guid: 76a33cc81d07ed9428316d2799ed7b1b,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_AddedGameObjects: []
