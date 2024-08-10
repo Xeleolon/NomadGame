@@ -1024,7 +1024,7 @@ Transform:
   - {fileID: 2700543972091085099}
   - {fileID: 2700543971962854697}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!136 &2700543971393520738
 CapsuleCollider:
@@ -1076,7 +1076,7 @@ MonoBehaviour:
   arrows: 10
   maxArrows: 20
   mainCamera: {fileID: 2700543972091085099}
-  cameraMovementScript: {fileID: 0}
+  cameraMovementScript: {fileID: 5782873441937746002}
   playerBody: {fileID: 2700543971962854697}
   toolA: 1
   toolB: 2
@@ -1147,7 +1147,12 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 128
   climbSpeed: 3
-  forceToWall: 3
+  forceToWall: 9
+  detectionLength: 0.7
+  sphereCastRadius: 0.1
+  whatIsWall:
+    serializedVersion: 2
+    m_Bits: 256
   swingMultiplier: 1
   extendRopeSpeed: 30
   ropeTool: {fileID: 330480195}

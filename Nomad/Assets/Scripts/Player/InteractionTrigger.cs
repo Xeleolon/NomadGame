@@ -42,6 +42,7 @@ public class InteractionTrigger : MonoBehaviour
     [Header("UI")]
     [SerializeField] TMP_Text functionName;
     [SerializeField] GameObject interactPopup;
+    [SerializeField] bool activeDebug;
     
     void Start()
     {
@@ -61,7 +62,6 @@ public class InteractionTrigger : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        Debug.Log("testing " + other.name);
         InteractCheck(other.gameObject);        
     }
 
@@ -72,10 +72,9 @@ public class InteractionTrigger : MonoBehaviour
         newInteractBase = other.GetComponent<InteractBase>();
         if (newInteractBase == null)
         {
-            Debug.Log(other.name + " no interactbase decected");
+            DebugActivation(new string(other.name + " no interactbase decected"));
             return;
         }
-        Debug.Log(" test working");
         lastObjectRef = gameObject;
         interactBase = newInteractBase;
 
@@ -143,12 +142,18 @@ public class InteractionTrigger : MonoBehaviour
         {
             return;
         }
-        Debug.Log("Exiting " + gameObject);
+        DebugActivation(new string("Exiting " + gameObject));
         interactBase = null;
 
         if (interactPopup != null && interactPopup.activeSelf)
         {
             interactPopup.SetActive(false);
         }
+    }
+
+    void DebugActivation(string debugText)
+    {
+        if (activeDebug)
+        { Debug.Log(debugText); }
     }
 }

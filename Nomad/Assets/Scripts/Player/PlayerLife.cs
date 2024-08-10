@@ -54,7 +54,6 @@ public class ToolInfo
     {
         strike = playerControls.Player.Fire;
         strike.Enable();
-        strike.performed += FireTool;
 
         inputToolA = playerControls.Player.ToolA;
         inputToolA.Enable();
@@ -184,6 +183,11 @@ public class ToolInfo
             }
             else
             {
+                float fireInput = strike.ReadValue<float>();
+                if (fireInput > 0)
+                {
+                    FireTool();
+                }
                 holdingFire = false;
             }
         }
@@ -268,9 +272,10 @@ public class ToolInfo
     
     #region InputInteract/Fire
 
-    void FireTool(InputAction.CallbackContext context) 
+    void FireTool() 
     {
         //complete spefic function for the tool with a click hold.
+        Debug.Log("Logging input from fire input");
         switch (curTool)
         {
             case ToolType.empty: //No Tool
@@ -278,12 +283,13 @@ public class ToolInfo
             break;
 
             case ToolType.spear: //Spear
+                Debug.Log("spear Actack input working");
             SpearActack();
 
             break;
 
             case ToolType.torch: //Torch
-
+                changeTorch(2);
             break;
 
             case ToolType.rope: //Rope 
@@ -478,7 +484,7 @@ public class ToolInfo
 
                 case 1:
                 torchState = 1;
-                Debug.Log("offcourse");
+                //Debug.Log("offcourse");
                 if (torchLight != null && torchLight.activeSelf)
                 {
                     torchLight.SetActive(false);
@@ -569,7 +575,7 @@ public class ToolInfo
 
         void ToolUILoop(Image givenSlot, Sprite iconSprite)
         {
-            Debug.Log(iconSprite, givenSlot);
+            //Debug.Log(iconSprite, givenSlot);
             if (givenSlot == null)
             {
                 Debug.Log("Tool Slot Image not assinged");
