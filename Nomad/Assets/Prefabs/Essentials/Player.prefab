@@ -18,7 +18,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &11698748
 Transform:
   m_ObjectHideFlags: 0
@@ -115,7 +115,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &330480195
 Transform:
   m_ObjectHideFlags: 0
@@ -532,9 +532,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3980752035292612915}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Skirt
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -829,9 +829,9 @@ GameObject:
   - component: {fileID: 1359789699514027142}
   - component: {fileID: 7531063579155868957}
   - component: {fileID: 4961019921164563732}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Knot
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1024,7 +1024,7 @@ Transform:
   - {fileID: 2700543972091085099}
   - {fileID: 2700543971962854697}
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!136 &2700543971393520738
 CapsuleCollider:
@@ -1081,7 +1081,7 @@ MonoBehaviour:
   toolA: 1
   toolB: 2
   toolC: 3
-  curTool: 0
+  curTool: 1
   toolsAnimator: {fileID: 1603491645}
   spear: {fileID: 11400000, guid: d6dc2a4b423f0f747b74ae5e862e7260, type: 2}
   spearInfo:
@@ -1108,7 +1108,7 @@ MonoBehaviour:
     interactAnimation: 
     secondAnimation: 
     idealAnimation: 
-  torchState: 0
+  torchState: 1
   torchLight: {fileID: 7153053426821582932}
   torchPrefab: {fileID: 3260074229154982981, guid: 5a199d4a5236f3448b5955f5ce891c51,
     type: 3}
@@ -1616,7 +1616,7 @@ GameObject:
   - component: {fileID: 854572644}
   m_Layer: 15
   m_Name: BodyRotation
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1688,6 +1688,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   functionName: {fileID: 2067958257}
   interactPopup: {fileID: 8994432979050747129}
+  activeDebug: 0
 --- !u!1 &2700543972091085268
 GameObject:
   m_ObjectHideFlags: 0
@@ -1830,9 +1831,9 @@ GameObject:
   - component: {fileID: 8128065906182316126}
   - component: {fileID: 4333263957188500738}
   - component: {fileID: 6906746793024555969}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Hairs
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1913,9 +1914,9 @@ GameObject:
   - component: {fileID: 5086599234990459358}
   - component: {fileID: 8282475824611028670}
   - component: {fileID: 458469396782157259}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: BagBelt
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2072,9 +2073,9 @@ GameObject:
   - component: {fileID: 3998548709271297437}
   - component: {fileID: 8845836518369105896}
   - component: {fileID: 5190052642513969333}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Cloak
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2231,9 +2232,9 @@ GameObject:
   - component: {fileID: 8726592150405656920}
   - component: {fileID: 8234054598619357969}
   - component: {fileID: 7488347796148266808}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Belt1
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2314,7 +2315,7 @@ GameObject:
   - component: {fileID: 5567476312996755907}
   - component: {fileID: 8857592694312908390}
   - component: {fileID: 6703760782289355436}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: SpearModel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2437,7 +2438,7 @@ GameObject:
   - component: {fileID: 4746336771635846850}
   m_Layer: 15
   m_Name: CharacterModelV1
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2549,9 +2550,9 @@ GameObject:
   - component: {fileID: 2799413631837041628}
   - component: {fileID: 5466227820809771727}
   - component: {fileID: 405100879084212780}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Skirt1
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2708,9 +2709,9 @@ GameObject:
   - component: {fileID: 9187904648740631315}
   - component: {fileID: 1632569388781082315}
   - component: {fileID: 7347653837600067087}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Body
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2791,9 +2792,9 @@ GameObject:
   - component: {fileID: 8759780067945135416}
   - component: {fileID: 2482588895524079554}
   - component: {fileID: 1506693420301545521}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Head
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2872,9 +2873,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1910307592753326520}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: GameObject
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2983,9 +2984,9 @@ GameObject:
   - component: {fileID: 3591196516199539072}
   - component: {fileID: 3927401188461800444}
   - component: {fileID: 1915016104870776435}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Eyes
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3064,9 +3065,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 19142808765279171}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: FaceGroup
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3138,9 +3139,9 @@ GameObject:
   - component: {fileID: 4928947864192408351}
   - component: {fileID: 3906170101025637563}
   - component: {fileID: 7334774654061488747}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: BackPack
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3488,9 +3489,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2982492128546004427}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Eyes
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3523,9 +3524,9 @@ GameObject:
   - component: {fileID: 5757528520085641716}
   - component: {fileID: 6068141744938293543}
   - component: {fileID: 4077617010006067406}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Eyes2
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3756,9 +3757,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 904611811486565249}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: BackPack
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3789,9 +3790,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5864655035889673959}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: transform1
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

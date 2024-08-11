@@ -387,6 +387,7 @@ public class ToolInfo
         if (canHarm)
         {
             Debug.Log("spear Actacked");
+            canHarm = false;
             if (spearInfo.interactAnimation != null)
             {
                 toolsAnimator.Play(spearInfo.interactAnimation);
@@ -396,13 +397,13 @@ public class ToolInfo
     
             RaycastHit hit;
     
-            int layerMask = 1 << 10;
+            int layerMask = 1 << 15;
             layerMask = ~layerMask;
     
             if (Physics.Raycast(ray, out hit, spear.range, layerMask))
             {
-                Debug.Log("Hit object");
                 EmenyHealth emeny = hit.collider.gameObject.GetComponent<EmenyHealth>();
+                Debug.Log("Hit object " + emeny + " type " + hit.collider.gameObject.name);
                 if (emeny != null)
                 {
                     emeny.Damage(spear.damage);
