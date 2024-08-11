@@ -401,6 +401,7 @@ public class ToolInfo
     
             if (Physics.Raycast(ray, out hit, spear.range, layerMask))
             {
+                Debug.Log("Hit object");
                 EmenyHealth emeny = hit.collider.gameObject.GetComponent<EmenyHealth>();
                 if (emeny != null)
                 {

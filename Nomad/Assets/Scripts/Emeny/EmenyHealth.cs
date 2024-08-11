@@ -43,7 +43,7 @@ public class EmenyHealth : MonoBehaviour
         Destroy(gameObject);
     }
 
-    public void Damage(float damage)
+    public virtual void Damage(float damage)
     {
         if (health > 0)
         {
