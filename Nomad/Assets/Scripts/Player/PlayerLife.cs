@@ -10,7 +10,7 @@ public class PlayerLife : MonoBehaviour
 public class ToolInfo
 {
     public bool locked;
-    [SerializeField] GameObject heldRefernce;
+    public GameObject heldRefernce;
     public Sprite assignedIcon;
     public string interactAnimation;
     public string secondAnimation;
@@ -37,6 +37,7 @@ public class ToolInfo
     public static PlayerLife instance;
     private PlayerInputActions playerControls;
     private InputAction strike;
+    private InputAction holdStrike;
     private InputAction inputToolA;
     private InputAction inputToolB;
     private InputAction inputToolC;
@@ -55,6 +56,9 @@ public class ToolInfo
         strike = playerControls.Player.Fire;
         strike.Enable();
 
+        holdStrike = playerControls.Player.Fire2;
+        holdStrike.Enable();
+
         inputToolA = playerControls.Player.ToolA;
         inputToolA.Enable();
         inputToolA.performed += ToolASelect;
@@ -72,6 +76,7 @@ public class ToolInfo
     void OnDisable()
     {
         strike.Disable();
+        holdStrike.Disable();
         inputToolA.Disable();
         inputToolB.Disable();
         inputToolC.Disable();
@@ -125,7 +130,19 @@ public class ToolInfo
     [Header("Tools")]
     //torch
     [SerializeField] public ToolInfo torchInfo;
-    [SerializeField] public int torchState = 0; //0 = no torch, 2 = lit torch, 3 = drenched torch.
+
+    public enum TorchStates {empty, unlit, lit, drenched}
+    [SerializeField] public TorchStates torchState = TorchStates.empty; //0 = no torch, 2 = lit torch, 3 = drenched torch.
+
+
+    //throwing torch varables
+    [SerializeField] float throwHold = 1.5f;
+    [SerializeField] float throwPower = 3;
+    [SerializeField] float throwUpwardForce = 1.5f;
+
+    [SerializeField] bool infinteThrow;
+
+    //
     [SerializeField] GameObject torchLight;
     [SerializeField] GameObject torchPrefab;
 
@@ -183,10 +200,14 @@ public class ToolInfo
             }
             else
             {
-                float fireInput = strike.ReadValue<float>();
+                float fireInput = strike.ReadValue<float>(); 
                 if (fireInput > 0)
                 {
                     FireTool();
+                }
+                else
+                {
+                    HoldStrike();
                 }
                 holdingFire = false;
             }
@@ -289,7 +310,7 @@ public class ToolInfo
             break;
 
             case ToolType.torch: //Torch
-                changeTorch(2);
+                changeTorch(TorchStates.lit);
             break;
 
             case ToolType.rope: //Rope 
@@ -297,11 +318,27 @@ public class ToolInfo
         }
     }
 
-    void Reset()
+    void HoldStrike()
     {
-        if (!canHarm)
+        //Debug.Log("")
+        float strikeInput = holdStrike.ReadValue<float>();
+        switch (curTool)
         {
-            canHarm = true;
+            case ToolType.empty: //No Tool
+                 //Debug.Log("strike with no tool 0");
+            break;
+
+            case ToolType.spear: //Spear
+                
+
+            break;
+
+            case ToolType.torch: //Torch
+                ThrowTorch(strikeInput);
+            break;
+
+            case ToolType.rope: //Rope 
+            break;
         }
     }
 
@@ -414,16 +451,25 @@ public class ToolInfo
         }
     }
 
+    void Reset()
+    {
+        if (!canHarm)
+        {
+            canHarm = true;
+        }
+    }
+
     public float bowPower;
     void BowFire()
     {
-        if (bow != null)
+        if (bow != null && arrows > 0)
         {
             float fireInput = strike.ReadValue<float>();
             
             if (fireInput <= 0 && holdingFire)
             {
                 //release arrow
+                arrows -= 1;
                 
                 GameObject arrow = Instantiate(arrowPrefab, transform.position, Quaternion.identity);
 
@@ -437,7 +483,7 @@ public class ToolInfo
                 PlayerMovement.instance.ChangeCameraType(PlayerMovement.CameraSets.forceFollow);
                 cameraMovementScript.bowCameraSetting = true;
             }
-            else if (fireInput > 0)
+            else if (fireInput > 0 )
             {
                 holdingFire = true;
                 if (bowPower > bow.maxPower)
@@ -473,19 +519,19 @@ public class ToolInfo
     #endregion
 
     #region Torch
-    public void changeTorch(int tempTorchState)
+    public void changeTorch(TorchStates tempTorchState)
     {
-        if (torchState != 0 && curTool == ToolType.torch && torchState != tempTorchState)
+        if (torchState != TorchStates.empty && curTool == ToolType.torch && torchState != tempTorchState)
         {
             switch (tempTorchState)
             {
-                case 0:
-                torchState = 0;
+                case TorchStates.empty:
+                torchState = TorchStates.empty;
                 torchInfo.ActivateObject(false);
                 break;
 
-                case 1:
-                torchState = 1;
+                case TorchStates.unlit:
+                torchState = TorchStates.unlit;
                 //Debug.Log("offcourse");
                 if (torchLight != null && torchLight.activeSelf)
                 {
@@ -493,12 +539,12 @@ public class ToolInfo
                 }
                 break;
 
-                case 2:
+                case TorchStates.lit:
                 //Debug.Log("Made to stage 2");
-                if (torchState != 3)
+                if (torchState != TorchStates.drenched)
                 {
                     //Debug.Log("Made to stage 3");
-                    torchState = 2;
+                    torchState = TorchStates.lit;
                     //turn light on
                     if (torchLight != null && !torchLight.activeSelf)
                     {
@@ -508,8 +554,8 @@ public class ToolInfo
                 }
                 break;
 
-                case 3:
-                torchState = 3;
+                case TorchStates.drenched:
+                torchState = TorchStates.drenched;
                 if (torchLight != null && torchLight.activeSelf) // turn light off
                 {
                     torchLight.SetActive(false);
@@ -519,11 +565,11 @@ public class ToolInfo
         }
     }
 
-    public bool AddTorch(int torchData)
+    public bool AddTorch(TorchStates torchData)
     {
-        if (torchState == 0)
+        if (torchState == TorchStates.empty)
         {
-            torchState = 1;
+            torchState = TorchStates.unlit;
             ToolChange(ToolType.torch);
             changeTorch(torchData);
             
@@ -531,11 +577,14 @@ public class ToolInfo
         }
         return false;
     }
+
+    private float throwHoldClock;
     void DropTorch()
     {
         //spawn Torch and drop it to the ground,
-        if (torchState != 0)
+        if (torchState != TorchStates.empty && throwHoldClock <= 0)
         {
+            
             
             torchInfo.ActivateObject(false);
             if (torchPrefab != null)
@@ -544,9 +593,49 @@ public class ToolInfo
                 tempObject.GetComponent<PickUpTorch>().ChangeState(torchState);
             }
 
-            torchState = 0;
+            torchState = TorchStates.empty;
         }
 
+    }
+    void ThrowTorch(float strikeInput)
+    {
+        if (strikeInput > 0 && (infinteThrow || torchState != TorchStates.empty))
+        {
+            if (infinteThrow)
+            {
+                torchInfo.ActivateObject(true);
+            }
+
+            if (throwHoldClock < throwHold)
+            {
+                throwHoldClock += 1 * Time.deltaTime;
+                return;
+            }
+        }
+        else if (throwHoldClock > 0)
+        {
+            if (throwHoldClock >= throwHold && (infinteThrow || torchState != TorchStates.empty))
+            {
+                Debug.Log("Throwing Torch");
+                ThrowTorchLaunch();
+            }
+            throwHoldClock = 0;
+        }
+
+    }
+
+    void ThrowTorchLaunch() //keep separate if wanting activated for animation
+    {
+        torchInfo.ActivateObject(false);
+        torchState = TorchStates.empty;
+
+        if (torchPrefab != null)
+        {
+            GameObject tempObject = Instantiate(torchPrefab, torchInfo.heldRefernce.transform.position, Quaternion.Euler(1, 0, 1));
+            tempObject.GetComponent<PickUpTorch>().ChangeState(torchState);
+            tempObject.GetComponent<Rigidbody>().mass = 0.1f;
+            tempObject.GetComponent<Rigidbody>().AddForce(mainCamera.forward * throwPower * 10 + transform.up * throwUpwardForce * 10);
+        }
     }
 
     public void DrenchTorch(bool drench)
@@ -555,12 +644,12 @@ public class ToolInfo
         {
             if (drench)
             {
-                torchState = 3;
+                torchState = TorchStates.drenched;
                 //torch become unlit
             }
-            else if (torchState == 3)
+            else if (torchState == TorchStates.drenched)
             {
-                torchState = 1;
+                torchState = TorchStates.lit;
             }
         }
     }

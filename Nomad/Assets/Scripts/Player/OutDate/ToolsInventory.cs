@@ -341,7 +341,7 @@ public class ToolsInventory : MonoBehaviour
             if (torchPrefab != null)
             {
                 GameObject tempObject = Instantiate(torchPrefab, toolObject.transform.position, Quaternion.Euler(Random.Range(-1.0f, 1.0f), 0 , Random.Range(-1.0f, 1.0f)));
-                tempObject.GetComponent<PickUpTorch>().ChangeState(torchState);
+                //tempObject.GetComponent<PickUpTorch>().ChangeState(torchState);
             }
 
             torchState = 0;

@@ -125,6 +125,15 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Fire2"",
+                    ""type"": ""Button"",
+                    ""id"": ""609ed885-1a60-4e71-860c-b232bed8a4c5"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -523,6 +532,28 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                     ""action"": ""ClimbRope"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9341fb04-2f8e-4e25-8f99-383a805ce32f"",
+                    ""path"": ""<Gamepad>/leftTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Fire2"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9aeaf1d3-0d7e-4b60-b5ec-5eb857f83b0d"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""Fire2"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -1119,6 +1150,7 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
         m_Player_ToolB = m_Player.FindAction("ToolB", throwIfNotFound: true);
         m_Player_ToolC = m_Player.FindAction("ToolC", throwIfNotFound: true);
         m_Player_ClimbRope = m_Player.FindAction("ClimbRope", throwIfNotFound: true);
+        m_Player_Fire2 = m_Player.FindAction("Fire2", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1201,6 +1233,7 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_ToolB;
     private readonly InputAction m_Player_ToolC;
     private readonly InputAction m_Player_ClimbRope;
+    private readonly InputAction m_Player_Fire2;
     public struct PlayerActions
     {
         private @PlayerInputActions m_Wrapper;
@@ -1216,6 +1249,7 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
         public InputAction @ToolB => m_Wrapper.m_Player_ToolB;
         public InputAction @ToolC => m_Wrapper.m_Player_ToolC;
         public InputAction @ClimbRope => m_Wrapper.m_Player_ClimbRope;
+        public InputAction @Fire2 => m_Wrapper.m_Player_Fire2;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1258,6 +1292,9 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                 @ClimbRope.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnClimbRope;
                 @ClimbRope.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnClimbRope;
                 @ClimbRope.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnClimbRope;
+                @Fire2.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnFire2;
+                @Fire2.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnFire2;
+                @Fire2.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnFire2;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -1295,6 +1332,9 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                 @ClimbRope.started += instance.OnClimbRope;
                 @ClimbRope.performed += instance.OnClimbRope;
                 @ClimbRope.canceled += instance.OnClimbRope;
+                @Fire2.started += instance.OnFire2;
+                @Fire2.performed += instance.OnFire2;
+                @Fire2.canceled += instance.OnFire2;
             }
         }
     }
@@ -1462,6 +1502,7 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
         void OnToolB(InputAction.CallbackContext context);
         void OnToolC(InputAction.CallbackContext context);
         void OnClimbRope(InputAction.CallbackContext context);
+        void OnFire2(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

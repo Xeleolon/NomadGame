@@ -6,14 +6,15 @@ public class PickUpTorch : InteractBase
 {
     [Header("Pick Up Torch")]
     [Tooltip("0 = no torch, 2 = lit torch, 3 = drenched torch.")]
-    [Range(1, 3)]
-    [SerializeField] private int startState = 1;
+    
+    [SerializeField] private PlayerLife.TorchStates startState = PlayerLife.TorchStates.unlit;
     [SerializeField] private bool Unpickable;
     [SerializeField] private GameObject lightSource;
     [SerializeField] private string pickUpStatement;
     [SerializeField] private string lightStatement;
     [SerializeField] private string unDrenchStatement;
-    private int lightState;
+
+    private PlayerLife.TorchStates lightState;
     private bool skipStartLight;
     private PlayerLife playerLife;
     void Start()
@@ -41,11 +42,11 @@ public class PickUpTorch : InteractBase
     public override bool Requirements()
     {
         PlayerLife.ToolType curTool = playerLife.curTool;
-        int torchState = playerLife.torchState;
+        PlayerLife.TorchStates torchState = playerLife.torchState;
 
         if (curTool != PlayerLife.ToolType.torch)
         {
-            if (playerLife.torchInfo.locked || torchState == 0)
+            if (playerLife.torchInfo.locked || torchState == PlayerLife.TorchStates.empty)
             {
                 //torch no they
                 displayInstructions = pickUpStatement;
@@ -54,19 +55,19 @@ public class PickUpTorch : InteractBase
 
             return false;
         }
-        if (torchState == 2 && (startState == 1 || startState == 3))
+        if (torchState == PlayerLife.TorchStates.lit && (startState == PlayerLife.TorchStates.unlit || startState == PlayerLife.TorchStates.drenched))
         {
             //this torch unlit
             displayInstructions = lightStatement;
             return true;
         }
-        else if (torchState == 1 && startState == 2)
+        else if (torchState == PlayerLife.TorchStates.unlit && startState == PlayerLife.TorchStates.lit)
         {
             //player torch unlit
             displayInstructions = lightStatement;
             return true;
         }
-        else if (torchState == 3 && startState == 2)
+        else if (torchState == PlayerLife.TorchStates.drenched && startState == PlayerLife.TorchStates.lit)
         {
             //torch undrenched
             displayInstructions = unDrenchStatement;
@@ -82,36 +83,36 @@ public class PickUpTorch : InteractBase
          {
             switch (playerLife.torchState)
             {
-                case 1:
-                if (lightState == 2)
+                case PlayerLife.TorchStates.unlit:
+                if (lightState == PlayerLife.TorchStates.lit)
                 {
                     playerLife.changeTorch(lightState);
                 }
                 break;
-                case 2:
-                if (lightState == 1)
+                case PlayerLife.TorchStates.lit:
+                if (lightState == PlayerLife.TorchStates.unlit)
                 {
                     //Debug.Log("Changing to light");
-                    ChangeState(2);
+                    ChangeState(PlayerLife.TorchStates.lit);
                     OpenDoor();
                 }
-                else if (lightState == 3)
+                else if (lightState == PlayerLife.TorchStates.drenched)
                 {
                     //Debug.Log("Changing to off");
-                    ChangeState(1);
+                    ChangeState(PlayerLife.TorchStates.unlit);
                 }
                 break;
-                case 3:
-                if (lightState == 2)
+                case PlayerLife.TorchStates.drenched:
+                if (lightState == PlayerLife.TorchStates.lit)
                 {
-                    playerLife.changeTorch(1);
+                    playerLife.changeTorch(PlayerLife.TorchStates.unlit);
                 }
                 break;
             }
          }
     }
 
-    public void ChangeState(int newState)
+    public void ChangeState(PlayerLife.TorchStates newState)
     {
         skipStartLight = true;
         //Debug.Log("made to stage 1 : " + newState);
@@ -119,12 +120,12 @@ public class PickUpTorch : InteractBase
         {
             switch (newState)
             {
-                case 0:
-                lightState = 1;
+                case PlayerLife.TorchStates.empty:
+                lightState = PlayerLife.TorchStates.unlit;
                 break;
 
-                case 1:
-                lightState = 1;
+                case PlayerLife.TorchStates.unlit:
+                lightState = PlayerLife.TorchStates.unlit;
                 //Debug.Log("offcourse");
                 if (lightSource != null && lightSource.activeSelf)
                 {
@@ -132,12 +133,12 @@ public class PickUpTorch : InteractBase
                 }
                 break;
 
-                case 2:
+                case PlayerLife.TorchStates.lit:
                 //Debug.Log("Made to stage 2");
-                if (lightState != 3)
+                if (lightState != PlayerLife.TorchStates.drenched)
                 {
                     //Debug.Log("Made to stage 3");
-                    lightState = 2;
+                    lightState = PlayerLife.TorchStates.lit;
                     //turn light on
                     if (lightSource != null && !lightSource.activeSelf)
                     {
@@ -147,8 +148,8 @@ public class PickUpTorch : InteractBase
                 }
                 break;
 
-                case 3:
-                lightState = 3;
+                case PlayerLife.TorchStates.drenched:
+                lightState = PlayerLife.TorchStates.drenched;
                 if (lightSource != null && lightSource.activeSelf) // turn light off
                 {
                     lightSource.SetActive(false);
