@@ -131,7 +131,7 @@ public class ToolInfo
     //torch
     [SerializeField] public ToolInfo torchInfo;
 
-    public enum TorchStates {empty, unlit, lit, drenched}
+    public enum TorchStates {empty, unlit, lit, drenched, attachingTorch}
     [SerializeField] public TorchStates torchState = TorchStates.empty; //0 = no torch, 2 = lit torch, 3 = drenched torch.
 
 
@@ -521,7 +521,8 @@ public class ToolInfo
     #region Torch
     public void changeTorch(TorchStates tempTorchState)
     {
-        if (torchState != TorchStates.empty && curTool == ToolType.torch && torchState != tempTorchState)
+        Debug.Log("changing torch " + tempTorchState + " " +  torchState);
+        if (torchState != TorchStates.empty /*&& curTool == ToolType.torch*/ && torchState != tempTorchState)
         {
             switch (tempTorchState)
             {
@@ -567,9 +568,10 @@ public class ToolInfo
 
     public bool AddTorch(TorchStates torchData)
     {
+        //Debug.Log("tring to add torch");
         if (torchState == TorchStates.empty)
         {
-            torchState = TorchStates.unlit;
+            torchState = TorchStates.attachingTorch;
             ToolChange(ToolType.torch);
             changeTorch(torchData);
             
@@ -626,7 +628,7 @@ public class ToolInfo
 
     void ThrowTorchLaunch() //keep separate if wanting activated for animation
     {
-        torchInfo.ActivateObject(false);
+        ToolChange(ToolType.empty);
         torchState = TorchStates.empty;
 
         if (torchPrefab != null)

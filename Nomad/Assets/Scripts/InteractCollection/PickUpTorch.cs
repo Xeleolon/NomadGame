@@ -14,7 +14,7 @@ public class PickUpTorch : InteractBase
     [SerializeField] private string lightStatement;
     [SerializeField] private string unDrenchStatement;
 
-    private PlayerLife.TorchStates lightState;
+    private PlayerLife.TorchStates lightState = PlayerLife.TorchStates.unlit;
     private bool skipStartLight;
     private PlayerLife playerLife;
     void Start()
