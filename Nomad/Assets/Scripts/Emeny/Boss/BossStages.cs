@@ -4,99 +4,86 @@ using UnityEngine;
 
 public class BossStages : MonoBehaviour
 {
-    [SerializeField] private GameObject projectilePrefab;
+    [SerializeField] private GameObject fireBallPrefab;
+    [SerializeField] private GameObject metalBallPrefab;
+
+    private GameObject player;
 
     private int stage = 1;
-    [SerializeField] private string firingAnimation1;
-    [SerializeField] private string mouthOpening;
-    [SerializeField] private Animator animator;
+    [SerializeField] private string stage2Start;
+    [SerializeField] private string stage3Start;
+    [SerializeField] private string destruction;
+    [SerializeField] private string disbleBody;
+    
+    
+    private Animator animator;
 
-    private enum StageProgress { inactive, actack1, actack2, actack3, exposed }
-    StageProgress stageProgress = StageProgress.inactive;
+    public enum ProjectileTypes {fireBall, metalBall}
 
     void Start()
     {
-        stageProgress = StageProgress.actack1;
+        animator = GetComponent<Animator>();
+        player = GameObject.FindWithTag("Player");
     }
 
 
-    void Update()
+    public void FireProjectile(ProjectileTypes projectileType)
     {
-        switch (stage)
+        Debug.Log("Boss Firing Projecile");
+        Vector3 targetDesitatin = player.transform.position;
+
+        switch (projectileType)
+        {
+            case ProjectileTypes.fireBall:
+                //cast fireball
+                break;
+
+            case ProjectileTypes.metalBall:
+
+                break;
+
+        }
+
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.GetComponent<PickUpTorch>() != null)
+        {
+            Debug.Log("Disabling Body " + other.name);
+            animator.Play(disbleBody);
+        }
+    }
+
+    public void StageDefeated()
+    {
+        switch(stage)
         {
             case 1:
-                StageOne();
+                stage = 2;
+                Debug.Log("Play stage 2 animations");
+                if (stage2Start != null)
+                {
+                    animator.Play(stage2Start);
+                }
             break;
 
             case 2:
-                StageTwo();
+                stage = 3;
+                Debug.Log("Play stage 3 animations");
+                if (stage3Start != null)
+                {
+                    animator.Play(stage3Start);
+                }
             break;
 
             case 3:
-                StageThree();
+                Debug.Log("Play stage destruction animations");
+                if (destruction != null)
+                {
+                    animator.Play(destruction);
+                }
             break;
         }
-    }
-
-    void StageOne()
-    {
-        switch (stageProgress)
-        {
-            case StageProgress.actack1:
-                //play animation for projectile
-                animator.Play(firingAnimation1);
-                stageProgress = StageProgress.inactive;
-
-                break;
-
-            case StageProgress.exposed:
-                //player animation for exposing weakness
-                animator.Play(mouthOpening);
-                stageProgress = StageProgress.inactive;
-
-                break;
-        }
-    }
-
-    void StageTwo()
-    {
-        switch (stageProgress)
-        {
-            case StageProgress.actack1:
-                //play animation for projectile
-                stageProgress = StageProgress.inactive;
-
-                break;
-
-            case StageProgress.exposed:
-                //player animation for exposing weakness
-                stageProgress = StageProgress.inactive;
-
-                break;
-        }
-    }
-
-    void StageThree()
-    {
-        switch (stageProgress)
-        {
-            case StageProgress.actack1:
-                //play animation for projectile
-                stageProgress = StageProgress.inactive;
-
-                break;
-
-            case StageProgress.exposed:
-                //player animation for exposing weakness
-                stageProgress = StageProgress.inactive;
-
-                break;
-        }
-    }
-
-    public void FireProjectile()
-    {
-        Debug.Log("Boss Firing Projecile");
-
     }
 }

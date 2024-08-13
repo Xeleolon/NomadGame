@@ -408,7 +408,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh30658
+  m_Name: pb_Mesh29152
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -688,7 +688,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh30552
+  m_Name: pb_Mesh29040
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -951,7 +951,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh30520
+  m_Name: pb_Mesh29008
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -9841,6 +9841,7 @@ GameObject:
   - component: {fileID: 517367485}
   - component: {fileID: 517367486}
   - component: {fileID: 517367487}
+  - component: {fileID: 517367488}
   m_Layer: 0
   m_Name: Monster
   m_TagString: Untagged
@@ -9877,10 +9878,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9fea70b80a87f644f9bc46458e6ef021, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  projectilePrefab: {fileID: 0}
-  firingAnimation1: BossFiring1
-  mouthOpening: MouthOpening
-  animator: {fileID: 517367487}
+  fireBallPrefab: {fileID: 0}
+  metalBallPrefab: {fileID: 0}
+  stage2Start: 
+  stage3Start: 
+  destruction: 
+  disbleBody: BodyDisabled
 --- !u!95 &517367487
 Animator:
   serializedVersion: 4
@@ -9901,6 +9904,19 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!65 &517367488
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 517367484}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 2.04, y: 2.04, z: 1.43}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &553748904
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -10106,7 +10122,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh30576
+  m_Name: pb_Mesh29064
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -10390,7 +10406,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh30492
+  m_Name: pb_Mesh28974
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -20453,7 +20469,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh30690
+  m_Name: pb_Mesh29184
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -20651,7 +20667,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh30626
+  m_Name: pb_Mesh29120
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -36779,7 +36795,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh30670
+  m_Name: pb_Mesh29164
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -38087,7 +38103,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh30454
+  m_Name: pb_Mesh28934
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
