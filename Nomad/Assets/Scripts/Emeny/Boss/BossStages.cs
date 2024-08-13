@@ -7,6 +7,9 @@ public class BossStages : MonoBehaviour
     [SerializeField] private GameObject projectilePrefab;
 
     private int stage = 1;
+    [SerializeField] private string firingAnimation1;
+    [SerializeField] private string mouthOpening;
+    [SerializeField] private Animator animator;
 
     private enum StageProgress { inactive, actack1, actack2, actack3, exposed }
     StageProgress stageProgress = StageProgress.inactive;
@@ -41,12 +44,14 @@ public class BossStages : MonoBehaviour
         {
             case StageProgress.actack1:
                 //play animation for projectile
+                animator.Play(firingAnimation1);
                 stageProgress = StageProgress.inactive;
 
                 break;
 
             case StageProgress.exposed:
                 //player animation for exposing weakness
+                animator.Play(mouthOpening);
                 stageProgress = StageProgress.inactive;
 
                 break;
@@ -91,7 +96,7 @@ public class BossStages : MonoBehaviour
 
     public void FireProjectile()
     {
-        
+        Debug.Log("Boss Firing Projecile");
 
     }
 }
