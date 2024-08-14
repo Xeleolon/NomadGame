@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.17311937, g: 0.21637285, b: 0.29838613, a: 1}
+  m_IndirectSpecularColor: {r: 0.17311954, g: 0.21637323, b: 0.29838666, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -9925,19 +9925,6 @@ PrefabInstance:
     serializedVersion: 2
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 11698747, guid: 76a33cc81d07ed9428316d2799ed7b1b, type: 3}
-      propertyPath: m_TagString
-      value: Player
-      objectReference: {fileID: 0}
-    - target: {fileID: 330480194, guid: 76a33cc81d07ed9428316d2799ed7b1b, type: 3}
-      propertyPath: m_TagString
-      value: Player
-      objectReference: {fileID: 0}
-    - target: {fileID: 263149059895056208, guid: 76a33cc81d07ed9428316d2799ed7b1b,
-        type: 3}
-      propertyPath: m_TagString
-      value: Player
-      objectReference: {fileID: 0}
     - target: {fileID: 736059841063716120, guid: 76a33cc81d07ed9428316d2799ed7b1b,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -9997,11 +9984,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2423082053597288840, guid: 76a33cc81d07ed9428316d2799ed7b1b,
-        type: 3}
-      propertyPath: m_TagString
-      value: Player
       objectReference: {fileID: 0}
     - target: {fileID: 2700543971393520743, guid: 76a33cc81d07ed9428316d2799ed7b1b,
         type: 3}
@@ -10058,21 +10040,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 2700543971393520748, guid: 76a33cc81d07ed9428316d2799ed7b1b,
-        type: 3}
-      propertyPath: throwHold
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2700543971393520748, guid: 76a33cc81d07ed9428316d2799ed7b1b,
-        type: 3}
-      propertyPath: throwPower
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 2700543971393520748, guid: 76a33cc81d07ed9428316d2799ed7b1b,
-        type: 3}
-      propertyPath: throwUpwardForce
-      value: 2.5
-      objectReference: {fileID: 0}
     - target: {fileID: 2700543971393520750, guid: 76a33cc81d07ed9428316d2799ed7b1b,
         type: 3}
       propertyPath: m_Name
@@ -10107,11 +10074,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5374395833113035896, guid: 76a33cc81d07ed9428316d2799ed7b1b,
-        type: 3}
-      propertyPath: m_TagString
-      value: Player
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_AddedGameObjects: []
