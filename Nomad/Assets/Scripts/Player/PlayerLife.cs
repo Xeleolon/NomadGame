@@ -41,6 +41,7 @@ public class ToolInfo
     private InputAction inputToolA;
     private InputAction inputToolB;
     private InputAction inputToolC;
+    private InputAction openMenu;
     void Awake()
     {
         if (instance != null)
@@ -71,6 +72,10 @@ public class ToolInfo
         inputToolC.Enable();
         inputToolC.performed += ToolCSelect;
 
+        openMenu = playerControls.Player.OpenMenu;
+        openMenu.Enable();
+        openMenu.performed += MenuInput;
+
     }
 
     void OnDisable()
@@ -80,6 +85,7 @@ public class ToolInfo
         inputToolA.Disable();
         inputToolB.Disable();
         inputToolC.Disable();
+        openMenu.Disable();
     }
     #endregion
 
@@ -159,6 +165,7 @@ public class ToolInfo
 
     [Header("UI")]
     [SerializeField] UIVariables UI;
+    [SerializeField] private GameObject menuUi;
     private GameObject healthyUiPrefab {get {return UI.healthyUiPrefab;} set {UI.healthyUiPrefab = value;}}
     private Transform healthParent {get {return UI.healthParent;} set {UI.healthParent = value;}}
     private Animation toolanimation {get {return UI.toolanimation;} set {UI.toolanimation = value;}}
@@ -277,10 +284,17 @@ public class ToolInfo
         UpdateHealthUI();
 
     }
-    void Respawn()
+    public void Respawn()
     {
         curHealth = health;
         transform.position = spawnPoint;
+
+        if (menuUi.activeSelf)
+        {
+            menuUi.SetActive(false);
+            //gamePaused = true;
+        }
+
     }
 
     public void RestRestore(Vector3 newPosition)
@@ -657,6 +671,28 @@ public class ToolInfo
     }
     #endregion
 
+    #region Menu
+
+    void MenuInput(InputAction.CallbackContext context)
+    {
+        OpenMenu();
+    }
+
+    void OpenMenu()
+    {
+        if (menuUi.activeSelf)
+        {
+            menuUi.SetActive(false);
+            //gamePaused = true;
+        }
+        else
+        {
+            menuUi.SetActive(true);
+            //gamePaused = false;
+        }
+    }
+
+    #endregion
 
     #region UI
 

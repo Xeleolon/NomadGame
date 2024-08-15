@@ -75,6 +75,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] float bodyRotateSpeed = 60;
     [SerializeField] float maxSlopeAngle = 45;
     [SerializeField] float groundDrag = 10f;
+    [SerializeField] float airDrag = 0.2f;
     [SerializeField] private float jumpForce = 3;
     [SerializeField] private float jumpCooldown = 1;
     private bool readyToJump;
@@ -84,6 +85,9 @@ public class PlayerMovement : MonoBehaviour
     [Header("climbing and swinging")]
     [SerializeField] private float climbSpeed = 3;
     [SerializeField] private float forceToWall = 3;
+    [SerializeField] private float distanceCheck = 1;
+    [SerializeField] private float maxClimbEnterCloc = 1;
+    [SerializeField] private Vector2 forwardForce = new Vector2(0.2f, 0.8f);
 
     //Detection
 
@@ -189,6 +193,7 @@ public class PlayerMovement : MonoBehaviour
     float climbVariable;
     bool enteringClimb;
     Transform climbingWall;
+    private float climbEnterClock;
 
     void moveVelocity()
     {
@@ -202,8 +207,8 @@ public class PlayerMovement : MonoBehaviour
         switch (curMovmenent)
         {
             case MovementType.climbing:
+                newBodyTarget = climbingWall.forward;
                 newBodyTarget.y = playerBody.forward.y;
-
                 newBodyRotation = Vector3.RotateTowards(playerBody.forward, newBodyTarget, bodyRotateSpeed * Time.deltaTime, 0);
                 playerBody.rotation = Quaternion.LookRotation(newBodyRotation);
 
@@ -216,10 +221,11 @@ public class PlayerMovement : MonoBehaviour
 
                 }
 
-                float forwardInput = 0.2f;
+                float forwardInput = forwardForce.x;
 
                 if (!enteringClimb)
                 {
+
                     if (inputVariables.y > 0 && !climbingRayCast())
                     {
                         //Debug.Log("exiting up out of Climbing");
@@ -230,9 +236,9 @@ public class PlayerMovement : MonoBehaviour
                         }
 
                         //forward variable
-                        forwardInput = 0.8f;
+                        forwardInput = forwardForce.y;
 
-                        if (Vector3.Distance(transform.position, climbingExitingVar) > 1)
+                        if (Vector3.Distance(transform.position, climbingExitingVar) >= distanceCheck)
                         {
                             ExitingClimbing();
                             climbingUpBool = false;
@@ -247,7 +253,7 @@ public class PlayerMovement : MonoBehaviour
                         }
 
 
-                        if (Vector3.Distance(transform.position, climbingExitingVar) > 1)
+                        if (Vector3.Distance(transform.position, climbingExitingVar) >= distanceCheck)
                         {
                             ExitingClimbing();
                             climbingUpBool = false;
@@ -258,14 +264,22 @@ public class PlayerMovement : MonoBehaviour
                         climbingUpBool = false;
                     } 
                 }
-                else if (enteringClimb && climbingRayCast())
+                else if (enteringClimb)
                 {
-                    enteringClimb = false;
+                    if (climbingRayCast() || climbEnterClock > maxClimbEnterCloc)
+                    {
+                        enteringClimb = false;
+                        climbEnterClock = 0;
+                    }
+                    else
+                    {
+                        climbEnterClock += 1 * Time.deltaTime;
+                    }
                 }
 
 
                 climbVariable = inputVariables.y * climbSpeed * Time.deltaTime;
-                moveDirection = /*playerBody.up * inputVariables.y +*/ climbingWall.right * inputVariables.x/2 + climbingWall.forward * forwardInput;
+                moveDirection = /*playerBody.up * inputVariables.y +*/ climbingWall.right * inputVariables.x/2 + climbingWall.forward * forwardInput * Time.deltaTime;
                 //Debug.Log("Climbing variables " + moveDirection);
 
             break;
@@ -445,7 +459,7 @@ public class PlayerMovement : MonoBehaviour
             return true;
         }
  
-        rb.drag = 0.2f;
+        rb.drag = airDrag;
         if (curMovmenent == MovementType.climbing)
         {
             rb.drag = groundDrag;
@@ -516,9 +530,10 @@ public class PlayerMovement : MonoBehaviour
                     cameraSets = CameraSets.detach;
                     Debug.Log("newBodyTarget");
                     enteringClimb = true;
+                    climbEnterClock = 0;
 
 
-                    rb.AddForce(playerBody.forward * forceToWall, ForceMode.Impulse);
+                rb.AddForce(playerBody.forward * forceToWall, ForceMode.Impulse);
                 //}
             break;
 
@@ -553,8 +568,9 @@ public class PlayerMovement : MonoBehaviour
 
     private void ExitingClimbing()
     {
-        if (grounded)
+        if (GroundCheck())
         {
+            climbEnterClock = 0;
             curMovmenent = MovementType.walking;
             cameraSets = CameraSets.standard;
             return;
