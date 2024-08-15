@@ -10,16 +10,23 @@ public class BossHealth : EmenyHealth
 
     [SerializeField] BossStages bossStages;
 
+    private Animator animator;
+
+    [SerializeField] private string heartDamage;
+
+
     int stage = 1;
 
     private float healthBoss;
     private void Start()
     {
+        animator = GetComponent<Animator>();
         healthBoss = healthStage1 + healthStage2 + healthStage3;
     }
     public override void Damage(float damage)
     {
         Debug.Log("Taking Hit");
+        animator.Play(heartDamage);
         switch(stage)
         {
             case 1:
@@ -29,6 +36,7 @@ public class BossHealth : EmenyHealth
                     healthBoss = healthStage2 + healthStage3;
                     Debug.Log("Stage 2");
                     //call next stage.
+                    bossStages.StageDefeated();
                     stage = 2;
                 }
 
@@ -40,6 +48,7 @@ public class BossHealth : EmenyHealth
                     healthBoss = healthStage3;
                     //call next stage.
                     Debug.Log("Stage 3");
+                    bossStages.StageDefeated();
                     stage = 3;
                 }
 
@@ -49,6 +58,7 @@ public class BossHealth : EmenyHealth
                 if (healthBoss <= 0)
                 {
                     healthBoss = 0;
+                    bossStages.StageDefeated();
                     //call death result
                     Debug.Log("Killed Boss");
                 }

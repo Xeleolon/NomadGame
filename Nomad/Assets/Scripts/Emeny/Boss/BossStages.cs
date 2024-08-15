@@ -20,10 +20,13 @@ public class BossStages : MonoBehaviour
 
     public enum ProjectileTypes {fireBall, metalBall}
 
+    private bool torchTrigger;
+
     void Start()
     {
         animator = GetComponent<Animator>();
         player = GameObject.FindWithTag("Player");
+        torchTrigger = false;
     }
 
 
@@ -36,6 +39,9 @@ public class BossStages : MonoBehaviour
         {
             case ProjectileTypes.fireBall:
                 //cast fireball
+                Quaternion rotation = Quaternion.LookRotation(player.transform.position + Vector3.up * 0.5f, Vector3.up);
+
+                Instantiate(fireBallPrefab, transform.position, rotation);
                 break;
 
             case ProjectileTypes.metalBall:
@@ -48,11 +54,23 @@ public class BossStages : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.GetComponent<PickUpTorch>() != null)
+        if (other.GetComponent<PickUpTorch>() != null && torchTrigger)
         {
             Debug.Log("Disabling Body " + other.name);
             animator.Play(disbleBody);
+
+            torchTrigger = false;
         }
+    }
+
+    public void EnableTorchTrigger()
+    {
+        torchTrigger = true;
+    }
+
+    public void DisableTorchTrigger()
+    {
+        torchTrigger = false;
     }
 
     public void StageDefeated()
