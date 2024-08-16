@@ -74,10 +74,16 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] float airMultiplier = 1;
     [SerializeField] float bodyRotateSpeed = 60;
     [SerializeField] float maxSlopeAngle = 45;
+
+    //air controls
     [SerializeField] float groundDrag = 10f;
     [SerializeField] float airDrag = 0.2f;
     [SerializeField] private float jumpForce = 3;
     [SerializeField] private float jumpCooldown = 1;
+
+    [SerializeField] private float airGlideLength = 1;
+    [SerializeField] private float gravityGlide = 2;
+    private float glideClock;
     private bool readyToJump;
     [SerializeField] LayerMask whatIsGround;
 
@@ -362,7 +368,17 @@ public class PlayerMovement : MonoBehaviour
             break;
 
             case MovementType.freefalling: //FreeFalling
-                rb.AddForce(moveDirection.normalized * speed * airMultiplier * 10f, ForceMode.Force);
+                if (glideClock < airGlideLength)
+                {
+                    rb.AddForce(moveDirection.normalized * speed * airMultiplier * 10f, ForceMode.Force);
+                    glideClock += 1 * Time.deltaTime;
+                }
+                else if (rb.mass != gravityGlide)
+                {
+                    rb.mass = gravityGlide;
+                }
+
+                //rb.AddForce(moveDirection.normalized * speed * airMultiplier * 10f, ForceMode.Force);
                 NormalizeAllMovement();
             break;
 
@@ -380,7 +396,9 @@ public class PlayerMovement : MonoBehaviour
 
             case MovementType.swinging: // swining
                 //Debug.Log("Set to swinging");
-                rb.AddForce(moveDirection.normalized * speed * swingMultiplier * 10f, ForceMode.Force);
+                
+                 rb.AddForce(moveDirection.normalized * speed * swingMultiplier * 10f, ForceMode.Force);
+                    
                 NormalizeAllMovement();
             break;
         }
@@ -428,7 +446,7 @@ public class PlayerMovement : MonoBehaviour
 
         if (!GroundCheck())
         {
-            curMovmenent = MovementType.freefalling;
+            EnteringFreeFalling();
             return;
         }
         
@@ -436,6 +454,16 @@ public class PlayerMovement : MonoBehaviour
         return;
     }
 
+    void EnteringFreeFalling()
+    {
+        if (curMovmenent == MovementType.freefalling)
+        {
+            return;
+        }
+        curMovmenent = MovementType.freefalling;
+        glideClock = 0;
+
+    }
     #endregion
 
     #region Slope And Jump Movement;
@@ -456,6 +484,7 @@ public class PlayerMovement : MonoBehaviour
         if (grounded)
         {
             rb.drag = groundDrag;
+            rb.mass = 1;
             return true;
         }
  
@@ -524,7 +553,8 @@ public class PlayerMovement : MonoBehaviour
             case MovementType.climbing:
                 //if (playerBody != null)
                 //{
-                    newBodyTarget = cameraCenter.TransformDirection(hopPosition);
+                rb.mass = 1;
+                newBodyTarget = cameraCenter.TransformDirection(hopPosition);
                     climbingWall = wall;
                     lastInputs = Vector2.zero;
                     cameraSets = CameraSets.detach;
@@ -578,7 +608,7 @@ public class PlayerMovement : MonoBehaviour
         }
 
 
-        curMovmenent = MovementType.freefalling;
+        EnteringFreeFalling();
         cameraSets = CameraSets.forceFollow;
     }
     #endregion
@@ -587,7 +617,7 @@ public class PlayerMovement : MonoBehaviour
     public void StartSwing(Vector3 swingAnchor)
     {
         curMovmenent = MovementType.swinging;
-        
+        rb.mass = 1;
         swingPoint = swingAnchor;
         //Debug.Log(swingPoint);
 
@@ -619,7 +649,7 @@ public class PlayerMovement : MonoBehaviour
 
     void StopSwing()
     {
-        curMovmenent = MovementType.freefalling;
+        EnteringFreeFalling();
         lr.positionCount = 0;
         Destroy(joint);
     }
