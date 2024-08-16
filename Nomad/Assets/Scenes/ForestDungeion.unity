@@ -15,12 +15,12 @@ RenderSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 9
   m_Fog: 0
-  m_FogColor: {r: 0.41509432, g: 0.41509432, b: 0.41509432, a: 1}
+  m_FogColor: {r: 0.9330474, g: 0.87715846, b: 0.6758912, a: 1}
   m_FogMode: 3
   m_FogDensity: 0.01
   m_LinearFogStart: 0
   m_LinearFogEnd: 300
-  m_AmbientSkyColor: {r: 0.19607845, g: 0.74509805, b: 0.85098046, a: 1}
+  m_AmbientSkyColor: {r: 0.962252, g: 0.97842973, b: 0.62611526, a: 1}
   m_AmbientEquatorColor: {r: 0.114, g: 0.125, b: 0.133, a: 1}
   m_AmbientGroundColor: {r: 0.047, g: 0.043, b: 0.035, a: 1}
   m_AmbientIntensity: 1
@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.17681348, g: 0.2213286, b: 0.30362085, a: 1}
+  m_IndirectSpecularColor: {r: 0.18309186, g: 0.22876433, b: 0.3066568, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -2210,7 +2210,7 @@ Light:
   serializedVersion: 10
   m_Type: 1
   m_Shape: 0
-  m_Color: {r: 0.43529415, g: 0.43529415, b: 0.43529415, a: 1}
+  m_Color: {r: 0.842089, g: 0.842089, b: 0.842089, a: 1}
   m_Intensity: 1
   m_Range: 10
   m_SpotAngle: 30
@@ -2268,7 +2268,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 203844586}
-  m_LocalRotation: {x: -0.061628457, y: -0.70441604, z: -0.70441604, w: 0.061628457}
+  m_LocalRotation: {x: 0.028015314, y: -0.94332683, z: 0.32021627, w: 0.08253046}
   m_LocalPosition: {x: 0, y: 3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -26079,6 +26079,22 @@ PrefabInstance:
     serializedVersion: 2
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1906559610, guid: 76a33cc81d07ed9428316d2799ed7b1b, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1906559610, guid: 76a33cc81d07ed9428316d2799ed7b1b, type: 3}
+      propertyPath: m_LightProbeUsage
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1906559610, guid: 76a33cc81d07ed9428316d2799ed7b1b, type: 3}
+      propertyPath: m_Parameters.alignment
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1906559610, guid: 76a33cc81d07ed9428316d2799ed7b1b, type: 3}
+      propertyPath: m_ApplyActiveColorSpace
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 736059841063716120, guid: 76a33cc81d07ed9428316d2799ed7b1b,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -26246,7 +26262,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 930167106, guid: fec997c1dee0d4c449e2bc30e6e34f67, type: 3}
       propertyPath: dayCycle
-      value: 0
+      value: 8.5
       objectReference: {fileID: 0}
     - target: {fileID: 930167106, guid: fec997c1dee0d4c449e2bc30e6e34f67, type: 3}
       propertyPath: cycleSpeed
@@ -26259,6 +26275,14 @@ PrefabInstance:
     - target: {fileID: 930167107, guid: fec997c1dee0d4c449e2bc30e6e34f67, type: 3}
       propertyPath: premiter
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 930167107, guid: fec997c1dee0d4c449e2bc30e6e34f67, type: 3}
+      propertyPath: daySpawnPoints.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 930167107, guid: fec997c1dee0d4c449e2bc30e6e34f67, type: 3}
+      propertyPath: nightSpawnPoints.Array.size
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 930167107, guid: fec997c1dee0d4c449e2bc30e6e34f67, type: 3}
       propertyPath: daySpawnPoints.Array.data[0]

@@ -65,6 +65,11 @@ public class InteractionTrigger : MonoBehaviour
         InteractCheck(other.gameObject);        
     }
 
+    void OnTriggerStay(Collider other)
+    {
+        InteractCheck(other.gameObject);
+    }
+
     public void InteractCheck(GameObject other)
     {
         InteractBase newInteractBase;
