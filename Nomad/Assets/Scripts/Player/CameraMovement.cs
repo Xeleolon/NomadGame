@@ -7,12 +7,16 @@ public class CameraMovement : MonoBehaviour
     [SerializeField] private string[] avoidingTags;
     [SerializeField] private float offSet = 0.2f;
     [SerializeField] private Vector2 cameraRange = new Vector2(-3, 0.5f);
+
     private float cameraCurSeat; //float for the target of the camera position;
     [SerializeField] private float speed = 2;
     private float startPlace;
     bool collision;
     int collisionCount;
     public bool bowCameraSetting;
+
+
+    [SerializeField] private float minDistance = 0.2f;
     
     private float rateToPlace;
     void Start()
@@ -98,22 +102,47 @@ public class CameraMovement : MonoBehaviour
         //newDistance = transform.TransformDirection(newDistance);
         float newCameraSeat = newDistance.z - offSet;
 
-        if (newCameraSeat >= cameraRange.y)
-        {
-            newCameraSeat = cameraRange.y;
-        }
-        else if (newCameraSeat <= cameraRange.x)
-        {
-            newCameraSeat = cameraRange.x;
-        }
 
-        if (newCameraSeat != cameraCurSeat) //check if the location is not already in use
+        //delay input changes that occur in reverse direction
+        Debug.Log(newCameraSeat + " " + cameraCurSeat);
+
+
+        if (CheckDelay())
         {
-            rateToPlace = 0;
-            startPlace = transform.localPosition.z;
-            cameraCurSeat = newCameraSeat;
+            if (newCameraSeat >= cameraRange.y)
+            {
+                newCameraSeat = cameraRange.y;
+            }
+            else if (newCameraSeat <= cameraRange.x)
+            {
+                newCameraSeat = cameraRange.x;
+            }
+
+            if (newCameraSeat != cameraCurSeat) //check if the location is not already in use
+            {
+                rateToPlace = 0;
+                startPlace = transform.localPosition.z;
+                cameraCurSeat = newCameraSeat;
+            } 
         }
         
+        bool CheckDelay()
+        {
+            if (newCameraSeat == cameraCurSeat)
+            {
+                return false;
+            }
+
+            float smallestSeat = Mathf.Min(cameraCurSeat, newCameraSeat);
+            float largestSeat = Mathf.Max(cameraCurSeat, newCameraSeat);
+
+            if (largestSeat - smallestSeat <= cameraCurSeat)
+            {
+                return false;
+            }
+
+            return true;
+        }
         
     }
     bool CheckCollisionType(GameObject other)
