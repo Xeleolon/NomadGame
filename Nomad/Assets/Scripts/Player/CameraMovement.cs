@@ -16,23 +16,36 @@ public class CameraMovement : MonoBehaviour
     public bool bowCameraSetting;
 
 
-    [SerializeField] private float minDistance = 0.2f;
-    
+    [SerializeField] private float alterMinCoolDown = 0.2f;
+
+    private float alterClock;
+
+    private enum CameraDirection {forward, backwards, changingForward, changingBackwards, neutral}
+    CameraDirection cameraDirection = CameraDirection.neutral;
     private float rateToPlace;
     void Start()
     {
         startPlace = transform.localPosition.z;
         cameraCurSeat = cameraRange.x;
     }
-    
+
     void Update()
     {
-        if (!collision && cameraCurSeat != cameraRange.x)
+        if (!collision && cameraCurSeat != cameraRange.x) //set place to distance rest
         {
-            Debug.Log("active");
-            rateToPlace = 0;
-            startPlace = transform.localPosition.z;
-            cameraCurSeat = cameraRange.x;
+            //Debug.Log("active");
+            if (cameraDirection == CameraDirection.backwards || cameraDirection == CameraDirection.changingForward || cameraDirection == CameraDirection.neutral)
+            {
+                cameraDirection = CameraDirection.backwards;
+                rateToPlace = 0;
+                startPlace = transform.localPosition.z;
+                cameraCurSeat = cameraRange.x;
+            }
+            else if (cameraDirection == CameraDirection.forward)
+            {
+                cameraDirection = CameraDirection.changingBackwards;
+                alterClock = 0;
+            }
         }
         MoveCameraClear();
 
@@ -40,23 +53,48 @@ public class CameraMovement : MonoBehaviour
 
     void MoveCameraClear()
     {
-        Vector3 cameraCurrent = transform.localPosition;
-        float cameraDistance = cameraCurSeat;
-        if (bowCameraSetting)
+        if (cameraDirection == CameraDirection.changingForward || cameraDirection == CameraDirection.changingBackwards)
         {
-            cameraDistance = cameraRange.y;
+            Debug.Log("camera changing Direction " + cameraDirection + " " + alterClock);
+            if (alterClock >= alterMinCoolDown)
+            {
+                alterClock = 0;
+                if (cameraDirection == CameraDirection.changingForward)
+                {
+                    cameraDirection = CameraDirection.forward;
+                    return;
+                }
+                else if (cameraDirection == CameraDirection.changingBackwards)
+                {
+                    cameraDirection = CameraDirection.backwards;
+                    return;
+                }
+            }
+            else
+            {
+                alterClock += 1 * Time.deltaTime;
+            }
         }
-
-        if (cameraDistance != cameraCurrent.z)
+        else
         {
-            rateToPlace += speed * Time.deltaTime;
-            rateToPlace = Mathf.Clamp(rateToPlace, 0, 1);
+            Vector3 cameraCurrent = transform.localPosition;
+            float cameraDistance = cameraCurSeat;
+            if (bowCameraSetting)
+            {
+                cameraDistance = cameraRange.y;
+            }
 
-            //float newPlacement = Mathf.SmoothStep(startPlace, cameraDistance, rateToPlace);
-            float newPlacement = Mathf.Lerp(startPlace, cameraDistance, rateToPlace);
-            newPlacement = Mathf.Clamp(newPlacement, cameraRange.x, cameraRange.y);
-            cameraCurrent.z = newPlacement;
-            transform.localPosition = cameraCurrent;
+            if (cameraDistance != cameraCurrent.z)
+            {
+                rateToPlace += speed * Time.deltaTime;
+                rateToPlace = Mathf.Clamp(rateToPlace, 0, 1);
+
+                //float newPlacement = Mathf.SmoothStep(startPlace, cameraDistance, rateToPlace);
+                float newPlacement = Mathf.Lerp(startPlace, cameraDistance, rateToPlace);
+                newPlacement = Mathf.Clamp(newPlacement, cameraRange.x, cameraRange.y);
+                cameraCurrent.z = newPlacement;
+                transform.localPosition = cameraCurrent;
+            }
         }
     }
 
@@ -104,11 +142,7 @@ public class CameraMovement : MonoBehaviour
 
 
         //delay input changes that occur in reverse direction
-        Debug.Log(newCameraSeat + " " + cameraCurSeat);
 
-
-        if (CheckDelay())
-        {
             if (newCameraSeat >= cameraRange.y)
             {
                 newCameraSeat = cameraRange.y;
@@ -120,29 +154,54 @@ public class CameraMovement : MonoBehaviour
 
             if (newCameraSeat != cameraCurSeat) //check if the location is not already in use
             {
+                CameraDirectionChecker();
+                Debug.Log(newCameraSeat + " " + cameraCurSeat + " " + cameraDirection + " collision dectection " + collision );
                 rateToPlace = 0;
                 startPlace = transform.localPosition.z;
                 cameraCurSeat = newCameraSeat;
             } 
+
+        void CameraDirectionChecker()
+        {
+            if (newCameraSeat < cameraCurSeat) //check if camera is going to move forward
+            {
+
+                switch (cameraDirection)
+                {
+                    case CameraDirection.neutral:
+                        cameraDirection = CameraDirection.forward;
+                        break;
+
+                    case CameraDirection.backwards:
+                        alterClock = 0;
+                        cameraDirection = CameraDirection.changingForward;
+                        break;
+
+                    case CameraDirection.changingForward:
+                        cameraDirection = CameraDirection.forward;
+                        break;
+                }
+            }
+            else if (newCameraSeat > cameraCurSeat) //check if camera is going to move backwards 
+            {
+                switch (cameraDirection)
+                {
+                    case CameraDirection.neutral:
+                        cameraDirection = CameraDirection.forward;
+                        break;
+
+                    case CameraDirection.forward:
+                        alterClock = 0;
+                        cameraDirection = CameraDirection.changingBackwards;
+                        break;
+
+                    case CameraDirection.changingBackwards:
+                        cameraDirection = CameraDirection.forward;
+                        break;
+                }
+            }
         }
         
-        bool CheckDelay()
-        {
-            if (newCameraSeat == cameraCurSeat)
-            {
-                return false;
-            }
-
-            float smallestSeat = Mathf.Min(cameraCurSeat, newCameraSeat);
-            float largestSeat = Mathf.Max(cameraCurSeat, newCameraSeat);
-
-            if (largestSeat - smallestSeat <= cameraCurSeat)
-            {
-                return false;
-            }
-
-            return true;
-        }
         
     }
     bool CheckCollisionType(GameObject other)
