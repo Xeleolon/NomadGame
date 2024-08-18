@@ -153,11 +153,11 @@ public class CameraMovement : MonoBehaviour
         }
     }
 
-    int checker;
+    //int checker;
 
     void SetTargetDistance(Vector3 newDistance)
     {
-        checker += 1;
+        //checker += 1;
 
         //newDistance = transform.TransformDirection(newDistance);
         float newCameraSeat = -Vector3.Distance(newDistance, player.position) - offSet;
@@ -168,7 +168,7 @@ public class CameraMovement : MonoBehaviour
         //float newCameraSeat = newDistance.z - offSet;
 
         //delay input changes that occur in reverse direction\\
-        Debug.Log(checker + " First checkPoint checking status of distatnce" + newCameraSeat + " seat without offSet " + (newCameraSeat + offSet) + " " +  " + distance  " + newDistance);
+        //Debug.Log(checker + " First checkPoint checking status of distatnce" + newCameraSeat + " seat without offSet " + (newCameraSeat + offSet) + " " +  " + distance  " + newDistance);
 
 
         if (newCameraSeat >= cameraRange.y)
@@ -183,12 +183,12 @@ public class CameraMovement : MonoBehaviour
         if (newCameraSeat != cameraCurSeat) //check if the location is not already in use
         {
             CameraDirectionChecker();
-            Debug.Log(newCameraSeat + " " + cameraCurSeat + " " + cameraDirection + " collision dectection " + collision );
+            //Debug.Log(newCameraSeat + " " + cameraCurSeat + " " + cameraDirection + " collision dectection " + collision );
             rateToPlace = 0;
             startPlace = transform.localPosition.z;
             cameraCurSeat = newCameraSeat;
         }
-        Debug.Log(checker + " Second checkPoint checking status of distatnce" + newCameraSeat);
+        //Debug.Log(checker + " Second checkPoint checking status of distatnce" + newCameraSeat);
 
         void CameraDirectionChecker()
         {

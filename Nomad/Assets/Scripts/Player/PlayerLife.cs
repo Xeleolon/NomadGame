@@ -289,12 +289,7 @@ public class ToolInfo
         curHealth = health;
         transform.position = spawnPoint;
 
-        if (menuUi.activeSelf)
-        {
-            menuUi.SetActive(false);
-            //gamePaused = true;
-        }
-
+        OpenMenu();
     }
 
     public void RestRestore(Vector3 newPosition)
@@ -310,7 +305,7 @@ public class ToolInfo
     void FireTool() 
     {
         //complete spefic function for the tool with a click hold.
-        Debug.Log("Logging input from fire input");
+        //Debug.Log("Logging input from fire input");
         switch (curTool)
         {
             case ToolType.empty: //No Tool
@@ -318,7 +313,7 @@ public class ToolInfo
             break;
 
             case ToolType.spear: //Spear
-                Debug.Log("spear Actack input working");
+                //Debug.Log("spear Actack input working");
             SpearActack();
 
             break;
@@ -437,7 +432,7 @@ public class ToolInfo
     {
         if (canHarm)
         {
-            Debug.Log("spear Actacked");
+            //Debug.Log("spear Actacked");
             canHarm = false;
             if (spearInfo.interactAnimation != null)
             {

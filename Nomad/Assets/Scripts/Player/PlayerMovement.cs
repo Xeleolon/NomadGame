@@ -384,7 +384,7 @@ public class PlayerMovement : MonoBehaviour
 
             case MovementType.climbing: // climbing
                 //Debug.Log("Set to climbing");
-                Debug.Log("Climbing variables " + moveDirection);
+                //Debug.Log("Climbing variables " + moveDirection);
                 rb.AddForce(moveDirection.normalized * speed * 10f, ForceMode.Force);
 
                 Vector3 climbingUp = transform.position;
@@ -502,7 +502,7 @@ public class PlayerMovement : MonoBehaviour
         if (jumpInput.ReadValue<float>() > 0)
         {
             
-            Debug.Log("attemp Jump " + readyToJump + GroundCheck());
+            //Debug.Log("attemp Jump " + readyToJump + GroundCheck());
             if (readyToJump && (curMovmenent == MovementType.swinging || curMovmenent == MovementType.climbing || GroundCheck()))
             {
                 //Debug.Log("Jump");
@@ -585,12 +585,14 @@ public class PlayerMovement : MonoBehaviour
         }
         return false;*/
 
-        Debug.Log("testing raycast Climbing");
+        //Debug.Log("testing raycast Climbing");
 
         if (Physics.SphereCast(transform.position, sphereCastRadius, playerBody.forward, out frontWallHit, detectionLength, whatIsWall))
         {
+            //Debug.Log("rayCast Decting Wall");
             return true;
         }
+        //Debug.Log("rayCast not decting Wall");
         return false;
 
 

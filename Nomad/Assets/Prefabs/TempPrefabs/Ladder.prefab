@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5550168134457009856}
   - component: {fileID: 7644222010972819061}
   - component: {fileID: 8142434797636956983}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Struts
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -94,7 +94,7 @@ GameObject:
   - component: {fileID: 2292200907697190865}
   - component: {fileID: 1293572836876541165}
   - component: {fileID: 6554558738976222210}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Struts
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -177,7 +177,7 @@ GameObject:
   - component: {fileID: 2929000294814171609}
   - component: {fileID: 5193062548227859192}
   - component: {fileID: 2635235430883940075}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Runs (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -260,7 +260,7 @@ GameObject:
   - component: {fileID: 4216574392383639423}
   - component: {fileID: 2379044420523961348}
   - component: {fileID: 3380160509911838278}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Runs
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -343,7 +343,7 @@ GameObject:
   - component: {fileID: 142616662886704161}
   - component: {fileID: 4681399022014798945}
   - component: {fileID: 3119698202763646296}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Runs (5)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -426,7 +426,7 @@ GameObject:
   - component: {fileID: 6100689966736965374}
   - component: {fileID: 7732553882771377933}
   - component: {fileID: 1837721548573223235}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Runs (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -509,7 +509,7 @@ GameObject:
   - component: {fileID: 5687635992744754782}
   - component: {fileID: 1142982405921699465}
   - component: {fileID: 8897323450452214198}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Runs (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -592,7 +592,7 @@ GameObject:
   - component: {fileID: 7821396195948346046}
   - component: {fileID: 4897440064479594958}
   - component: {fileID: 5611309988601651707}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Runs (7)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -676,7 +676,7 @@ GameObject:
   - component: {fileID: 8302927066108368541}
   - component: {fileID: 7156159363046176571}
   - component: {fileID: 4807264378292321598}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Ladder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -706,7 +706,7 @@ Transform:
   - {fileID: 1193889886212790233}
   - {fileID: 7821396195948346046}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &8302927066108368541
 BoxCollider:
@@ -761,7 +761,7 @@ GameObject:
   - component: {fileID: 6143627399218492380}
   - component: {fileID: 3964093958354478508}
   - component: {fileID: 1304527968664245322}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Runs (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -844,7 +844,7 @@ GameObject:
   - component: {fileID: 1193889886212790233}
   - component: {fileID: 6612881866200775682}
   - component: {fileID: 5543296896165372595}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Runs (6)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
