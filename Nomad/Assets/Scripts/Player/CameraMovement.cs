@@ -14,6 +14,7 @@ public class CameraMovement : MonoBehaviour
     bool collision;
     int collisionCount;
     public bool bowCameraSetting;
+    Transform player;
 
 
     [SerializeField] private float alterMinCoolDown = 0.2f;
@@ -27,6 +28,8 @@ public class CameraMovement : MonoBehaviour
     {
         startPlace = transform.localPosition.z;
         cameraCurSeat = cameraRange.x;
+        
+        player = GameObject.FindWithTag("Player").transform;
     }
 
     void Update()
@@ -39,7 +42,8 @@ public class CameraMovement : MonoBehaviour
                 cameraDirection = CameraDirection.backwards;
                 rateToPlace = 0;
                 startPlace = transform.localPosition.z;
-                cameraCurSeat = cameraRange.x;
+                cameraCurSeat = LeftCollisionRayCast();
+                Debug.Log("reset to origin " + cameraCurSeat);
             }
             else if (cameraDirection == CameraDirection.forward)
             {
@@ -51,11 +55,26 @@ public class CameraMovement : MonoBehaviour
 
     }
 
+    float LeftCollisionRayCast()
+    {
+        RaycastHit hit;
+        float range = cameraRange.x + transform.position.x;
+        int layerMask = 1 << 14;
+        layerMask = ~layerMask;
+        if (Physics.Raycast(transform.position, transform.TransformDirection(-Vector3.forward), out hit, range, layerMask))
+        {
+            Debug.DrawRay(transform.position, transform.TransformDirection(-Vector3.forward) * hit.distance, Color.yellow);
+            return -hit.distance + offSet;
+        }
+
+        return cameraRange.x;
+    }
+
     void MoveCameraClear()
     {
         if (cameraDirection == CameraDirection.changingForward || cameraDirection == CameraDirection.changingBackwards)
         {
-            Debug.Log("camera changing Direction " + cameraDirection + " " + alterClock);
+            //Debug.Log("camera changing Direction " + cameraDirection + " " + cameraCurSeat);
             if (alterClock >= alterMinCoolDown)
             {
                 alterClock = 0;
@@ -134,36 +153,47 @@ public class CameraMovement : MonoBehaviour
         }
     }
 
+    int checker;
+
     void SetTargetDistance(Vector3 newDistance)
     {
-        newDistance = new Vector3(0, 0, newDistance.z);
+        checker += 1;
+
         //newDistance = transform.TransformDirection(newDistance);
-        float newCameraSeat = newDistance.z - offSet;
+        float newCameraSeat = -Vector3.Distance(newDistance, player.position) - offSet;
+
+        //Debug.Log(checker + " zero checkPoint checking status of distatnce " + newDistance);
+
+        //newDistance = new Vector3(0, 0, newDistance.z);
+        //float newCameraSeat = newDistance.z - offSet;
+
+        //delay input changes that occur in reverse direction\\
+        Debug.Log(checker + " First checkPoint checking status of distatnce" + newCameraSeat + " seat without offSet " + (newCameraSeat + offSet) + " " +  " + distance  " + newDistance);
 
 
-        //delay input changes that occur in reverse direction
+        if (newCameraSeat >= cameraRange.y)
+        {
+            newCameraSeat = cameraRange.y;
+        }
+        else if (newCameraSeat <= cameraRange.x)
+        {
+            newCameraSeat = cameraRange.x;
+        }
 
-            if (newCameraSeat >= cameraRange.y)
-            {
-                newCameraSeat = cameraRange.y;
-            }
-            else if (newCameraSeat <= cameraRange.x)
-            {
-                newCameraSeat = cameraRange.x;
-            }
-
-            if (newCameraSeat != cameraCurSeat) //check if the location is not already in use
-            {
-                CameraDirectionChecker();
-                Debug.Log(newCameraSeat + " " + cameraCurSeat + " " + cameraDirection + " collision dectection " + collision );
-                rateToPlace = 0;
-                startPlace = transform.localPosition.z;
-                cameraCurSeat = newCameraSeat;
-            } 
+        if (newCameraSeat != cameraCurSeat) //check if the location is not already in use
+        {
+            CameraDirectionChecker();
+            Debug.Log(newCameraSeat + " " + cameraCurSeat + " " + cameraDirection + " collision dectection " + collision );
+            rateToPlace = 0;
+            startPlace = transform.localPosition.z;
+            cameraCurSeat = newCameraSeat;
+        }
+        Debug.Log(checker + " Second checkPoint checking status of distatnce" + newCameraSeat);
 
         void CameraDirectionChecker()
         {
-            if (newCameraSeat < cameraCurSeat) //check if camera is going to move forward
+            startPlace = transform.localPosition.z;
+            if (newCameraSeat > startPlace)
             {
 
                 switch (cameraDirection)
@@ -182,7 +212,7 @@ public class CameraMovement : MonoBehaviour
                         break;
                 }
             }
-            else if (newCameraSeat > cameraCurSeat) //check if camera is going to move backwards 
+            else if (newCameraSeat < startPlace) //check if camera is going to move backwards 
             {
                 switch (cameraDirection)
                 {

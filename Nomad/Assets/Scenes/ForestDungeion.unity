@@ -26444,6 +26444,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 2700543972162142916, guid: 76a33cc81d07ed9428316d2799ed7b1b,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2700543972185850116, guid: 76a33cc81d07ed9428316d2799ed7b1b,
         type: 3}
       propertyPath: jumpCooldown
@@ -26481,8 +26486,13 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5782873441937746002, guid: 76a33cc81d07ed9428316d2799ed7b1b,
         type: 3}
+      propertyPath: offSet
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5782873441937746002, guid: 76a33cc81d07ed9428316d2799ed7b1b,
+        type: 3}
       propertyPath: alterMinCoolDown
-      value: 2
+      value: 0.2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_AddedGameObjects: []

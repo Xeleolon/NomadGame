@@ -683,6 +683,7 @@ public class ToolInfo
         if (menuUi.activeSelf)
         {
             menuUi.SetActive(false);
+            Time.timeScale = 1;
             Cursor.lockState = CursorLockMode.Confined;
             Cursor.visible = false;
             //gamePaused = true;
@@ -690,6 +691,7 @@ public class ToolInfo
         else
         {
             menuUi.SetActive(true);
+            Time.timeScale = 0;
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
 
