@@ -12,6 +12,6 @@ EditorBuildSettings:
     path: Assets/Scenes/ForestDungeion.unity
     guid: 1075f83caf433ed4a80fca8a536f929a
   - enabled: 1
-    path: Assets/Scenes/FirstDungeonBossTesting.unity
+    path: Assets/Scenes/DungeonBoss1.unity
     guid: bef045c3c29140649a10f7a7eead8333
   m_configObjects: {}
