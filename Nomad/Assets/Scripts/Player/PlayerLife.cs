@@ -12,9 +12,7 @@ public class ToolInfo
     public bool locked;
     public GameObject heldRefernce;
     public Sprite assignedIcon;
-    public string interactAnimation;
-    public string secondAnimation;
-    public string idealAnimation;
+    public string[] animtionNames;
 
     public void ActivateObject(bool activate)
     {
@@ -137,12 +135,12 @@ public class ToolInfo
     //torch
     [SerializeField] public ToolInfo torchInfo;
 
-    public enum TorchStates {empty, unlit, lit, drenched, attachingTorch}
+    public enum TorchStates {empty, unlit, lit, drenched, attachingTorch, throwingTorch}
     [SerializeField] public TorchStates torchState = TorchStates.empty; //0 = no torch, 2 = lit torch, 3 = drenched torch.
 
 
     //throwing torch varables
-    [SerializeField] float throwHold = 1.5f;
+    bool throwHold;
     [SerializeField] float throwPower = 3;
     [SerializeField] float throwUpwardForce = 1.5f;
 
@@ -302,6 +300,7 @@ public class ToolInfo
     
     #region InputInteract/Fire
 
+    bool enteringThroughFire = false;
     void FireTool() 
     {
         //complete spefic function for the tool with a click hold.
@@ -320,10 +319,32 @@ public class ToolInfo
 
             case ToolType.torch: //Torch
                 changeTorch(TorchStates.lit);
+                if (torchLight != null && !torchLight.activeSelf)
+                {
+                    //Debug.Log("Made to stage 4");
+                    enteringThroughFire = true;
+                    changeTorch(TorchStates.lit);
+                }
+                else
+                {
+
+                    //actack with torch
+                    if (toolanimation != null && toolanimation.IsPlaying(torchInfo.animtionNames[0]))
+                    {
+                        PlayAnimation(torchInfo.animtionNames[2]);
+                    }
+                }
             break;
 
             case ToolType.rope: //Rope 
             break;
+        }
+    }
+    void PlayAnimation(string name)
+    {
+        if (name != null && toolsAnimator != null)
+        {
+            toolsAnimator.Play(name);
         }
     }
 
@@ -395,7 +416,13 @@ public class ToolInfo
 
             case ToolType.torch:
             //torch
-            torchInfo.ActivateObject(true);
+            if (torchState != TorchStates.empty)
+            {torchInfo.ActivateObject(true);}
+            else
+            {
+                torchInfo.ActivateObject(false);
+                curTool = ToolType.empty;
+            }
 
             spearInfo.ActivateObject(false);
             bowInfo.ActivateObject(false);
@@ -425,6 +452,16 @@ public class ToolInfo
             interactTrigger.RequirementCheck();
         }
     }
+
+    public void AnimationRecieveCall(int state)
+    {
+        switch (curTool)
+        {
+            case ToolType.torch:
+                TorchAnimation(state);
+            return;
+        }
+    }
     #endregion
 
     #region Weapons
@@ -434,10 +471,7 @@ public class ToolInfo
         {
             //Debug.Log("spear Actacked");
             canHarm = false;
-            if (spearInfo.interactAnimation != null)
-            {
-                toolsAnimator.Play(spearInfo.interactAnimation);
-            }
+            PlayAnimation(spearInfo.animtionNames[1]);
             Ray ray;
             ray = new Ray(transform.position, playerBody.forward);
     
@@ -555,12 +589,16 @@ public class ToolInfo
                 {
                     //Debug.Log("Made to stage 3");
                     torchState = TorchStates.lit;
-                    //turn light on
-                    if (torchLight != null && !torchLight.activeSelf)
+                    //turn light on through animation
+                    if (enteringThroughFire)
                     {
-                        //Debug.Log("Made to stage 4");
+                        PlayAnimation(torchInfo.animtionNames[1]);
+                    }
+                    else if (torchLight != null && !torchLight.activeSelf)
+                    {
                         torchLight.SetActive(true);
                     }
+                    
                 }
                 break;
 
@@ -589,11 +627,11 @@ public class ToolInfo
         return false;
     }
 
-    private float throwHoldClock;
+    bool throwingTorch = false;
     void DropTorch()
     {
         //spawn Torch and drop it to the ground,
-        if (torchState != TorchStates.empty && throwHoldClock <= 0)
+        if (torchState != TorchStates.empty && !throwingTorch)
         {
             
             
@@ -617,20 +655,34 @@ public class ToolInfo
                 torchInfo.ActivateObject(true);
             }
 
-            if (throwHoldClock < throwHold)
+            if (!throwingTorch)
             {
-                throwHoldClock += 1 * Time.deltaTime;
+                throwingTorch = true;
+                throwHold = false;
+                //play torchState Animation;
+                PlayAnimation(torchInfo.animtionNames[3]);
+                return;
+            }
+            else if (!throwHold)
+            {
                 return;
             }
         }
-        else if (throwHoldClock > 0)
+        else if (strikeInput <= 0 && throwingTorch)
         {
-            if (throwHoldClock >= throwHold && (infinteThrow || torchState != TorchStates.empty))
+            if (throwHold && (infinteThrow || torchState != TorchStates.empty))
             {
+                throwHold = false;
                 Debug.Log("Throwing Torch");
-                ThrowTorchLaunch();
+                //play throw Animation to active torch launch;
+                PlayAnimation(torchInfo.animtionNames[4]);
             }
-            throwHoldClock = 0;
+            else if (!throwHold)
+            {
+                PlayAnimation(torchInfo.animtionNames[5]);
+            }
+            throwingTorch = false;
+
         }
 
     }
@@ -638,7 +690,6 @@ public class ToolInfo
     void ThrowTorchLaunch() //keep separate if wanting activated for animation
     {
         ToolChange(ToolType.empty);
-        torchState = TorchStates.empty;
 
         if (torchPrefab != null)
         {
@@ -646,7 +697,10 @@ public class ToolInfo
             tempObject.GetComponent<PickUpTorch>().ChangeState(torchState);
             tempObject.GetComponent<Rigidbody>().mass = 0.1f;
             tempObject.GetComponent<Rigidbody>().AddForce(mainCamera.forward * throwPower * 10 + transform.up * throwUpwardForce * 10);
+            
         }
+
+        torchState = TorchStates.empty;
     }
 
     public void DrenchTorch(bool drench)
@@ -662,6 +716,31 @@ public class ToolInfo
             {
                 torchState = TorchStates.lit;
             }
+        }
+    }
+
+    void TorchAnimation(int State)
+    {
+        switch (State)
+        {
+            case 1: //can throw torch
+            if (throwingTorch)
+            {
+                throwHold = true;
+            }
+            break;
+
+            case 2: //release torch from throw
+                ThrowTorchLaunch();
+            break;
+
+            case 3: //light torch
+                if (torchLight != null && !torchLight.activeSelf)
+                {
+                    //Debug.Log("Made to stage 4");
+                    torchLight.SetActive(true);
+                }
+            break;
         }
     }
     #endregion

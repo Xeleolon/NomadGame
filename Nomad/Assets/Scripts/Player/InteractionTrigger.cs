@@ -44,6 +44,7 @@ public class InteractionTrigger : MonoBehaviour
     [SerializeField] GameObject interactPopup;
     [SerializeField] bool activeDebug;
     
+    
     void Start()
     {
         if (interactBase == null && interactPopup.activeSelf)
@@ -68,6 +69,11 @@ public class InteractionTrigger : MonoBehaviour
     void OnTriggerStay(Collider other)
     {
         InteractCheck(other.gameObject);
+    }
+
+    public void AnimationPassThrough(int state)
+    {
+        PlayerLife.instance.AnimationRecieveCall(state);
     }
 
     public void InteractCheck(GameObject other)
