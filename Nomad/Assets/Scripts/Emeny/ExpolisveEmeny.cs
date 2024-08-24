@@ -35,7 +35,7 @@ public class ExpolisveEmeny : MonoBehaviour
 
     void Update()
     {
-        if (player != null && (explosionState != ExpolisveState.neurtal || explosionState != ExpolisveState.exploded))
+        if (player != null && explosionState != ExpolisveState.neurtal && explosionState != ExpolisveState.exploded)
         {
             float distance = Vector3.Distance(player.transform.position, headExplosive.transform.position);
 
@@ -61,9 +61,9 @@ public class ExpolisveEmeny : MonoBehaviour
             {
                 //count down clock with distance from source increasing speed
                 //if clock = 0 explode
-                if (explosionClock > clockHoldPosition)
+                if (explosionClock > 0)
                 {
-                    explosionClock += explosionRate.y * Time.deltaTime;
+                    explosionClock -= explosionRate.y * Time.deltaTime;
                 }
                 else
                 {
@@ -72,12 +72,12 @@ public class ExpolisveEmeny : MonoBehaviour
 
                 return;
             }
-            else if (distance <= dectectRange + 0.5f)
+            else if (distance <= dectectRange)
             {
                 //count down clock till hold position only
                 if (explosionClock > clockHoldPosition)
                 {
-                    explosionClock += explosionRate.x * Time.deltaTime;
+                    explosionClock -= explosionRate.x * Time.deltaTime;
                 }
                 else
                 {
@@ -99,6 +99,12 @@ public class ExpolisveEmeny : MonoBehaviour
     void Explode(float distance)
     {
         explosionState = ExpolisveState.exploded;
+        ParticleSystem particleSystem = gameObject.GetComponent<ParticleSystem>();
+
+        if (headExplosive.activeSelf)
+        {
+            headExplosive.SetActive(false);
+        }
 
         if (playerLife.torchState == PlayerLife.TorchStates.lit)
         {
@@ -120,15 +126,19 @@ public class ExpolisveEmeny : MonoBehaviour
                 playerLife.AlterHealth(-damage);
             }
         }
+
+        particleSystem.Play();
     }
-    void OnCollisionEnter(Collision other) 
+    void OnTriggerEnter(Collider other) 
     {
+        Debug.Log("Dectecting clossion with " + other.gameObject);
         if (other.gameObject.tag == "Player" && explosionState == ExpolisveState.neurtal)
         {
             if (!headExplosive.activeSelf)
             {
                 headExplosive.SetActive(true);
             }
+            explosionClock = clockStartPosition;
             explosionState = ExpolisveState.charging;
             player = other.gameObject;
             playerLife = PlayerLife.instance;

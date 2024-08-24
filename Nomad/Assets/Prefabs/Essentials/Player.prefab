@@ -1700,7 +1700,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &7771939465882092393
 Transform:
   m_ObjectHideFlags: 0
@@ -2045,7 +2045,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1578352614867739815
 Transform:
   m_ObjectHideFlags: 0
@@ -2216,28 +2216,29 @@ MonoBehaviour:
     locked: 0
     heldRefernce: {fileID: 263149059895056208}
     assignedIcon: {fileID: -1885935925, guid: 19a4a83fcbc2cd5498a4b777bb23ef04, type: 3}
-    interactAnimation: SpearActack
-    secondAnimation: 
-    idealAnimation: SpearStatic
+    animtionNames:
+    - SpearStatic
+    - SpearActack
   bow: {fileID: 11400000, guid: c6f1a7e7464c62c498ccefb3b325ba79, type: 2}
   bowInfo:
     locked: 0
     heldRefernce: {fileID: 11698747}
     assignedIcon: {fileID: 0}
-    interactAnimation: 
-    secondAnimation: 
-    idealAnimation: 
+    animtionNames: []
   arrowPrefab: {fileID: 5617378017821151706, guid: 65629a5c0f427d54a9694e99bd55d84d,
     type: 3}
   torchInfo:
     locked: 0
     heldRefernce: {fileID: 2423082053597288840}
     assignedIcon: {fileID: 1725398036, guid: 19a4a83fcbc2cd5498a4b777bb23ef04, type: 3}
-    interactAnimation: 
-    secondAnimation: 
-    idealAnimation: 
+    animtionNames:
+    - TorchIdeal
+    - TorchLight
+    - TorchActack
+    - TorchHoldThrow
+    - TorchThrow
+    - TorchReleaseThrow
   torchState: 1
-  throwHold: 1
   throwPower: 3
   throwUpwardForce: 2.5
   infinteThrow: 0
@@ -2284,7 +2285,7 @@ MonoBehaviour:
     m_Bits: 128
   climbSpeed: 5
   forceToWall: 9
-  distanceCheck: 2
+  distanceCheck: 1.1
   maxClimbEnterCloc: 1
   forwardForce: {x: 0.2, y: 0.2}
   detectionLength: 0.8
