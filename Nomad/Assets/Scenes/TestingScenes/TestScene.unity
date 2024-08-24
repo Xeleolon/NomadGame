@@ -1663,7 +1663,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh29258
+  m_Name: pb_Mesh29266
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -3172,6 +3172,8 @@ MonoBehaviour:
   damage: 1
   fireDamage: 2
   explosionRate: {x: 2, y: 10}
+  clockStartPosition: 10
+  clockHoldPosition: 5
   minDistance: 0.5
   headSize: {x: 0.5, y: 1}
   headExplosive: {fileID: 2008839139}

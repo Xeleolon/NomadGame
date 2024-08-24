@@ -13,33 +13,92 @@ public class ExpolisveEmeny : MonoBehaviour
 
     [Tooltip("Rate at wich explosion charge up")]
     [SerializeField] Vector2 explosionRate;
+    [SerializeField] float clockStartPosition;
+    [SerializeField] float clockHoldPosition;
+    float explosionClock;
     [SerializeField] float minDistance;
 
-    [Tooltip("size of obect head")]
+    [Tooltip("size of obect head, x for finished valued, y for start value")]
     [SerializeField] Vector2 headSize;
     private float currentHeadSize;
     [SerializeField] GameObject headExplosive;
-    float explosionClock;
 
     GameObject player;
     PlayerLife playerLife;
 
-    enum ExpolisveState {neurtal, warning,charging, releasing, exploded}
+    enum ExpolisveState {neurtal, charging, exploded}
     ExpolisveState explosionState = ExpolisveState.neurtal;
+    void Start()
+    {
+        headExplosive.transform.localScale = new Vector3(headSize.y, headSize.y, headSize.y);
+    }
 
     void Update()
     {
-        if (explosionState != ExpolisveState.neurtal || explosionState != ExpolisveState.exploded)
+        if (player != null && (explosionState != ExpolisveState.neurtal || explosionState != ExpolisveState.exploded))
         {
+            float distance = Vector3.Distance(player.transform.position, headExplosive.transform.position);
+
+            float measurementClockToSize = explosionClock / clockStartPosition;
+            if (measurementClockToSize <= 0)
+            {
+                measurementClockToSize = 0;
+            }
+            float sizeToScale = Mathf.Lerp(headSize.x, headSize.y, measurementClockToSize);
+            headExplosive.transform.localScale = new Vector3(sizeToScale, sizeToScale, sizeToScale);
+
+
+
+
             //check player distance alter timer and alter head size hold if out side explosion range
+            if (distance <= minDistance)
+            {
+                Debug.Log("Activating explosion as player triggered min distance check at " + distance + " player position is beening seen at " + player.transform.position);
+                Explode(distance);
+                return;
+            }
+            else if (distance <= explosionRange)
+            {
+                //count down clock with distance from source increasing speed
+                //if clock = 0 explode
+                if (explosionClock > clockHoldPosition)
+                {
+                    explosionClock += explosionRate.y * Time.deltaTime;
+                }
+                else
+                {
+                    Explode(distance);
+                }
+
+                return;
+            }
+            else if (distance <= dectectRange + 0.5f)
+            {
+                //count down clock till hold position only
+                if (explosionClock > clockHoldPosition)
+                {
+                    explosionClock += explosionRate.x * Time.deltaTime;
+                }
+                else
+                {
+                    explosionClock = clockHoldPosition;
+                }
+
+                return;
+            }
+            else
+            {
+                Debug.Log("releasing explosive hold with player at " + distance);
+                explosionClock = clockStartPosition;
+                explosionState = ExpolisveState.neurtal;
+                headExplosive.transform.localScale = new Vector3(headSize.y, headSize.y, headSize.y);
+            }
         }
     }
 
-    void Explode()
+    void Explode(float distance)
     {
         explosionState = ExpolisveState.exploded;
-
-        float distance = Vector3.Distance(player.transform.position, headExplosive.transform.position);
 
         if (playerLife.torchState == PlayerLife.TorchStates.lit)
         {
@@ -64,12 +123,13 @@ public class ExpolisveEmeny : MonoBehaviour
     }
     void OnCollisionEnter(Collision other) 
     {
-        if (other.gameObject.tag == "Player" && (explosionState == ExpolisveState.neurtal || explosionState == ExpolisveState.releasing))
+        if (other.gameObject.tag == "Player" && explosionState == ExpolisveState.neurtal)
         {
             if (!headExplosive.activeSelf)
             {
                 headExplosive.SetActive(true);
             }
+            explosionState = ExpolisveState.charging;
             player = other.gameObject;
             playerLife = PlayerLife.instance;
         }
