@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Spear
   m_EditorClassIdentifier: 
   name: Spear
-  icon: {fileID: 0}
+  icon: {fileID: 514707589, guid: c6ee2ca114be33e44ba6dab93836e3d1, type: 3}
   damage: 1
   type: 1
   range: 3

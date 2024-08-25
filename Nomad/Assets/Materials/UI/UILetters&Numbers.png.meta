@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 19a4a83fcbc2cd5498a4b777bb23ef04
+guid: a241f1a92044f2940acb67e5b5ae7905
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -34,7 +34,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -68,7 +68,7 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 2048
+    maxTextureSize: 1024
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 0
@@ -102,98 +102,74 @@ TextureImporter:
     overridden: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 3
-    buildTarget: Android
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 3
-    buildTarget: iPhone
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Concept26Finalising_0
+      name: UILetters&Numbers_0
       rect:
         serializedVersion: 2
-        x: 7
-        y: 147
-        width: 55
-        height: 55
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 70fd7566c6050494d9372a2c5ac81bfa
-      internalID: -892019461
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Concept26Finalising_1
-      rect:
-        serializedVersion: 2
-        x: 70
-        y: 140
+        x: 0
+        y: 210
         width: 70
         height: 70
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 447a2237320b4bb41b9b88f3bb3b8e18
-      internalID: -1386229463
+      spriteID: 146cb9e21c8197245b41e8ab4aad6dec
+      internalID: -1227307727
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Concept26Finalising_2
+      name: UILetters&Numbers_1
       rect:
         serializedVersion: 2
-        x: 148
-        y: 148
-        width: 55
-        height: 55
+        x: 70
+        y: 210
+        width: 70
+        height: 70
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 0b510da4e81e6154b8bab2a8bfc0d90f
-      internalID: -1233847438
+      spriteID: 016cf7d3a6311f241b36eac03d4a3bf6
+      internalID: -1263723340
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Concept26Finalising_3
+      name: UILetters&Numbers_2
+      rect:
+        serializedVersion: 2
+        x: 140
+        y: 210
+        width: 70
+        height: 70
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fd6c20ff789421d4aa6470ae7ec459d2
+      internalID: -254854159
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UILetters&Numbers_3
       rect:
         serializedVersion: 2
         x: 0
@@ -201,41 +177,20 @@ TextureImporter:
         width: 70
         height: 70
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: f19c923f6287fdd4d885015e74cf1800
-      internalID: -1885935925
+      spriteID: a9cc2d67ab3ae654191b423bed2f7ab7
+      internalID: -628713125
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Concept26Finalising_4
-      rect:
-        serializedVersion: 2
-        x: 70
-        y: 70
-        width: 70
-        height: 70
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 37ab907f01f86bb42b0f43e3469af38b
-      internalID: 228370033
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Concept26Finalising_5
+      name: UILetters&Numbers_4
       rect:
         serializedVersion: 2
         x: 140
@@ -243,77 +198,14 @@ TextureImporter:
         width: 70
         height: 70
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 423fd60b87a9de5419d6bf94dd03d7b4
-      internalID: 1725398036
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Concept26Finalising_6
-      rect:
-        serializedVersion: 2
-        x: 0
-        y: 0
-        width: 70
-        height: 70
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: c2b4daef7e5b1d649b2ec73b93503650
-      internalID: 1301415127
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Concept26Finalising_7
-      rect:
-        serializedVersion: 2
-        x: 70
-        y: 0
-        width: 70
-        height: 70
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 98cc54c73777ab14ab232985b99542d9
-      internalID: 775406079
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Concept26Finalising_8
-      rect:
-        serializedVersion: 2
-        x: 140
-        y: 0
-        width: 70
-        height: 70
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 81afd42b9513a23499b9a089bc824e4c
-      internalID: 1189373359
+      spriteID: 8c90ec52076148e4b9a40a3d69542319
+      internalID: -72283503
       vertices: []
       indices: 
       edges: []
@@ -321,7 +213,7 @@ TextureImporter:
     outline: []
     physicsShape: []
     bones: []
-    spriteID: 0b0b813dd714d8b44ba6fa2c5ea74c53
+    spriteID: 110e67629a87b5842a5ae82fec231279
     internalID: 0
     vertices: []
     indices: 
@@ -329,15 +221,11 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Concept26Finalising_7: 775406079
-      Concept26Finalising_4: 228370033
-      Concept26Finalising_3: -1885935925
-      Concept26Finalising_5: 1725398036
-      Concept26Finalising_1: -1386229463
-      Concept26Finalising_8: 1189373359
-      Concept26Finalising_0: -892019461
-      Concept26Finalising_6: 1301415127
-      Concept26Finalising_2: -1233847438
+      UILetters&Numbers_4: -72283503
+      UILetters&Numbers_0: -1227307727
+      UILetters&Numbers_1: -1263723340
+      UILetters&Numbers_3: -628713125
+      UILetters&Numbers_2: -254854159
   spritePackingTag: 
   pSDRemoveMatte: 0
   userData: 
