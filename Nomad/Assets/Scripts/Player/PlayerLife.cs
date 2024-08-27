@@ -383,7 +383,7 @@ public class ToolInfo
 
     void ToolChange(ToolType heldTool)
     {
-        if (curTool == heldTool) { return; }
+        if (curTool == heldTool) {UpdateToolIconUI(); return; }
         Debug.Log("cur tool " + curTool + " new tool " + heldTool + " " + toolC);
         curTool = heldTool;
 
