@@ -5,6 +5,7 @@ using UnityEngine;
 public class SwingAnchor : InteractBase
 {
     private PlayerMovement player;
+    [SerializeField] private GameObject ropeObject;
     private Vector3 swingPostion {get {return swingAnchor + transform.position;} set {swingAnchor = value - transform.position;}}
     //{get{return new Vector3(maxWidth.x, maxHieght, maxWidth.y) + transform.position;}
     //set{Vector3 offSet = value - transform.position; maxWidth = new Vector2(offSet.x, offSet.y); maxHieght = offSet.y;}}
@@ -18,7 +19,24 @@ public class SwingAnchor : InteractBase
     public override void Interact()
     {
         //Debug.Log(swingPostion + " | " + transform.position);
-        player.StartSwing(swingPostion);
+        player.StartSwing(swingPostion, gameObject);
+    }
+
+    public void HideRope(bool hideRope)
+    {
+        if (hideRope == null)
+        {
+            return;
+        }
+
+        if (hideRope && ropeObject.activeSelf)
+        {
+            ropeObject.SetActive(false);
+        }
+        else if (!hideRope && !ropeObject.activeSelf)
+        {
+            ropeObject.SetActive(true);
+        }
     }
 
     public void OnDrawGizmosSelected()

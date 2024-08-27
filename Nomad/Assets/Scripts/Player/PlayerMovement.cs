@@ -615,8 +615,9 @@ public class PlayerMovement : MonoBehaviour
     }
     #endregion
     #region Swinging
+    SwingAnchor swingScript;
 
-    public void StartSwing(Vector3 swingAnchor)
+    public void StartSwing(Vector3 swingAnchor, GameObject anchorObject)
     {
         curMovmenent = MovementType.swinging;
         rb.mass = 1;
@@ -626,6 +627,20 @@ public class PlayerMovement : MonoBehaviour
         if (joint != null)
         {
             Destroy(joint);
+            
+        }
+
+        if (swingScript != null)
+        {
+            swingScript.HideRope(false);
+            swingScript = null;
+        }
+
+        swingScript = anchorObject.GetComponent<SwingAnchor>();
+
+        if (swingScript != null)
+        {
+            swingScript.HideRope(true);
         }
 
         joint = gameObject.AddComponent<SpringJoint>();
@@ -651,6 +666,11 @@ public class PlayerMovement : MonoBehaviour
 
     void StopSwing()
     {
+        if (swingScript != null)
+        {
+            swingScript.HideRope(false);
+            swingScript = null;
+        }
         EnteringFreeFalling();
         lr.positionCount = 0;
         Destroy(joint);

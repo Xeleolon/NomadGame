@@ -34,7 +34,7 @@ Transform:
   m_Children:
   - {fileID: 8552140132042046185}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &3847172823457442803
 MeshFilter:
@@ -97,8 +97,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 4, y: 8.07, z: 4.72}
-  m_Center: {x: 0, y: -5.55, z: 0}
+  m_Size: {x: 4, y: 6.34, z: 4.72}
+  m_Center: {x: 0, y: -6.57, z: 0}
 --- !u!114 &3847172823457442806
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -114,6 +114,7 @@ MonoBehaviour:
   displayInstructions: Actach Rope
   door: {fileID: 0}
   doorOpeningState: 0
+  ropeObject: {fileID: 5704089633532161893}
   swingAnchor: {x: 0, y: 0, z: 0}
 --- !u!1 &5704089633532161893
 GameObject:
@@ -176,7 +177,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: fef94d78624f4d84195a3eb8afd36d47, type: 2}
+  - {fileID: 2100000, guid: b556b23cfc499374b93e391c91a75897, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
