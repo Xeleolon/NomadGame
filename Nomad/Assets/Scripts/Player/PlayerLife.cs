@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
+using TMPro;
 
 public class PlayerLife : MonoBehaviour
 {
@@ -96,12 +97,13 @@ public class ToolInfo
     float curHunger;
     [SerializeField] float hungerDecay;
     
-    public enum CollectableItemType {coin, arrow}
+    public enum CollectableItemType {coin, arrow, fobiddenCoin}
     [Header("Inventory")]
     [SerializeField] int coins = 0;
 
     [SerializeField] int arrows = 10;
     [SerializeField] int maxArrows = 20;
+    [SerializeField] int fobiddenCoin = 0;
     [SerializeField] Transform mainCamera;
     [SerializeField] CameraMovement cameraMovementScript;
 
@@ -159,6 +161,9 @@ public class ToolInfo
         public Image toolSlotA;
         public Image toolSlotB;
         public Image toolSlotC;
+        public TMP_Text coinText;
+        public TMP_Text fobiddenCoinText;
+        public TMP_Text arrowsText; 
     }
 
     [Header("UI")]
@@ -170,6 +175,9 @@ public class ToolInfo
     private Image toolSlotA {get {return UI.toolSlotA;} set {UI.toolSlotA = value;}}
     private Image toolSlotB {get {return UI.toolSlotB;} set {UI.toolSlotB = value;}}
     private Image toolSlotC {get {return UI.toolSlotC;} set {UI.toolSlotC = value;}}
+    private TMP_Text coinText {get {return UI.coinText;} set {UI.coinText = value;}}
+    private TMP_Text fobiddenCoinText {get {return UI.fobiddenCoinText;} set {UI.fobiddenCoinText = value;}}
+    private TMP_Text arrowsText {get {return UI.arrowsText;} set {UI.arrowsText = value;}}
     private Vector3 spawnPoint;
 
 
@@ -231,11 +239,17 @@ public class ToolInfo
                 {
                     coins = 0;
                 }
+                
+                if (coinText != null)
+                {
+                    coinText.SetText(coins.ToString());
+                }
+
             
             break;
 
             case CollectableItemType.arrow:
-                arrows += arrows;
+                arrows += num;
                 if (arrows < 0)
                 {
                     arrows = 0;
@@ -243,6 +257,23 @@ public class ToolInfo
                 else if (arrows > maxArrows)
                 {
                     arrows = maxArrows;
+                }
+                if (arrowsText != null)
+                {
+                    arrowsText.SetText(arrowsText.ToString());
+                }
+            break;
+
+            case CollectableItemType.fobiddenCoin:
+                fobiddenCoin += num;
+                if (fobiddenCoin < 0)
+                {
+                    fobiddenCoin = 0;
+                }
+
+                if (fobiddenCoinText != null)
+                {
+                    fobiddenCoinText.SetText(fobiddenCoin.ToString());
                 }
             break;
             
