@@ -34,7 +34,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 0
+    filterMode: 1
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -256,8 +256,8 @@ TextureImporter:
       name: UIElements_7
       rect:
         serializedVersion: 2
-        x: 0
-        y: 70
+        x: 210
+        y: 140
         width: 70
         height: 70
       alignment: 0
@@ -277,7 +277,7 @@ TextureImporter:
       name: UIElements_8
       rect:
         serializedVersion: 2
-        x: 70
+        x: 0
         y: 70
         width: 70
         height: 70
@@ -298,7 +298,7 @@ TextureImporter:
       name: UIElements_9
       rect:
         serializedVersion: 2
-        x: 140
+        x: 70
         y: 70
         width: 70
         height: 70
@@ -311,6 +311,48 @@ TextureImporter:
       bones: []
       spriteID: 092eac7722e227a46a407f97a9a0c43b
       internalID: -781102874
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UIElements_10
+      rect:
+        serializedVersion: 2
+        x: 140
+        y: 70
+        width: 70
+        height: 70
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bba760c266b43e14cbb2e44aafd1f45f
+      internalID: -750967329
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UIElements_11
+      rect:
+        serializedVersion: 2
+        x: 210
+        y: 70
+        width: 70
+        height: 70
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 909902673d762314da219476849663d9
+      internalID: -902928977
       vertices: []
       indices: 
       edges: []
@@ -330,10 +372,12 @@ TextureImporter:
       UIElements_0: 1581858588
       UIElements_2: 1200541934
       UIElements_8: -564271289
+      UIElements_11: -902928977
       UIElements_1: -467320063
       UIElements_6: 231334140
       UIElements_3: -509487133
       UIElements_4: 514707589
+      UIElements_10: -750967329
       UIElements_5: -1093096021
       UIElements_9: -781102874
   spritePackingTag: 
