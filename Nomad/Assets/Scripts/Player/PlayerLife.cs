@@ -179,6 +179,7 @@ public class ToolInfo
     private TMP_Text fobiddenCoinText {get {return UI.fobiddenCoinText;} set {UI.fobiddenCoinText = value;}}
     private TMP_Text arrowsText {get {return UI.arrowsText;} set {UI.arrowsText = value;}}
     private Vector3 spawnPoint;
+    private Vector3 checkPointSpawn;
 
 
     
@@ -190,6 +191,7 @@ public class ToolInfo
     void Start()
     {
         spawnPoint = transform.position;
+        checkPointSpawn = transform.position;
         curHealth = health;
         curHunger = hunger;
         UpdateHealthUI();
@@ -321,11 +323,22 @@ public class ToolInfo
         OpenMenu();
     }
 
+    public void CheckPointRespawn()
+    {
+        transform.position = checkPointSpawn;
+    }
+
     public void RestRestore(Vector3 newPosition)
     {
         spawnPoint = newPosition;
+        checkPointSpawn = newPosition;
         curHealth = health;
         UpdateHealthUI();
+    }
+
+    public void SetCheckPoint(Vector3 newPosition)
+    {
+        checkPointSpawn = newPosition;
     }
     #endregion
     

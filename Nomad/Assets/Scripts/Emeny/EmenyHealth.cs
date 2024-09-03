@@ -42,6 +42,11 @@ public class EmenyHealth : MonoBehaviour
         }
         Destroy(gameObject);
     }
+    public void ForceDeath()
+    {
+        health = 0;
+        Killed();
+    }
 
     public virtual void Damage(float damage)
     {
