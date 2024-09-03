@@ -72,6 +72,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] bool freazeMovement;
     [SerializeField] float speed = 3;
     [SerializeField] float airMultiplier = 1;
+    [SerializeField] float airDevider = 0.5f;
     [SerializeField] float bodyRotateSpeed = 60;
     [SerializeField] float maxSlopeAngle = 45;
 
@@ -375,6 +376,7 @@ public class PlayerMovement : MonoBehaviour
                 }
                 else if (rb.mass != gravityGlide)
                 {
+                    rb.AddForce(moveDirection.normalized * speed * airDevider * 10f, ForceMode.Force);
                     rb.mass = gravityGlide;
                 }
 
@@ -511,15 +513,16 @@ public class PlayerMovement : MonoBehaviour
                 {
                     StopSwing();
                 }
-
-                if (curMovmenent == MovementType.climbing)
+                else if (curMovmenent == MovementType.climbing)
                 {
                     ExitingClimbing();
                 }
+                else
+                {
+                    rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
+                }
                 readyToJump = false;
                 rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
-    
-                rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
     
                 Invoke(nameof(ResetJump), jumpCooldown);
             }

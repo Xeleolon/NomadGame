@@ -355,7 +355,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 2700543971393520748}
         m_TargetAssemblyTypeName: PlayerLife, Assembly-CSharp
-        m_MethodName: Respawn
+        m_MethodName: CheckPointRespawn
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2503,7 +2503,7 @@ Transform:
   - {fileID: 2700543972091085099}
   - {fileID: 2700543971962854697}
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!136 &2700543971393520738
 CapsuleCollider:
@@ -2627,6 +2627,7 @@ MonoBehaviour:
   freazeMovement: 0
   speed: 8
   airMultiplier: 1
+  airDevider: 0.5
   bodyRotateSpeed: 3
   maxSlopeAngle: 45
   groundDrag: 10
