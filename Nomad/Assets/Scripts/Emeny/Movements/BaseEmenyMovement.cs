@@ -41,6 +41,11 @@ public class BaseEmenyMovement : MonoBehaviour
         }
     }
 
+    public void VelocityZero()
+    {
+        rb.velocity = Vector3.zero;
+    }
+
     public void Move(Vector2 speed, Vector3 rotationTarget, bool rotate)
     {
         Velocity = Vector3.zero;

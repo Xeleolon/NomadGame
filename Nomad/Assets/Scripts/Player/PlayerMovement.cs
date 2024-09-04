@@ -481,7 +481,8 @@ public class PlayerMovement : MonoBehaviour
     }
     private bool GroundCheck()
     {
-        bool grounded = Physics.Raycast(transform.position, Vector3.down, 2 * 0.5f + 0.2f, whatIsGround);
+        RaycastHit groundHit;
+        bool grounded = Physics.SphereCast(transform.position, 0.5f, Vector3.down, out groundHit, 2 * 0.5f + 0.2f, whatIsGround);
 
         if (grounded)
         {
@@ -558,6 +559,11 @@ public class PlayerMovement : MonoBehaviour
                 //{
                 rb.mass = 1;
                 newBodyTarget = cameraCenter.TransformDirection(hopPosition);
+                    if (joint != null)
+                    {
+                        Destroy(joint);
+                    }
+                    
                     climbingWall = wall;
                     lastInputs = Vector2.zero;
                     cameraSets = CameraSets.detach;

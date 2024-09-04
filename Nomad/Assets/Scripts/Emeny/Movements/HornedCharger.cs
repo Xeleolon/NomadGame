@@ -9,6 +9,7 @@ public class HornedCharger : BaseEmenyMovement
     [SerializeField] float speedCharge = 6;
     [SerializeField] float speedNeutral = 3;
     [SerializeField] float damage = 1;
+    [SerializeField] float knockback = 2;
 
     [Header("PlayerTargeting")]
     [SerializeField] Vector2 AgroDistance = new Vector2(3, 5);
@@ -128,17 +129,22 @@ public class HornedCharger : BaseEmenyMovement
         Move(Vector2.zero, player.position, true);
     }
 
-    void ActackCharge()
+    #region actack
+        
+    void ActackCharge() //actacl=k
     {
         Vector3 alterChargePosition = new Vector3(ChargePosition.x, transform.position.y, ChargePosition.z);
         //Debug.Log("charging at " + alterChargePosition);
-        if (Vector3.Distance(transform.position, alterChargePosition) > 0.1f )
+        if (Vector3.Distance(transform.position, player.position) > 0.1f )
         {
             if (collided)
             {
                 switch (collisionType)
                 {
                     case 0: //player
+                    player.gameObject.GetComponent<Rigidbody>().AddForce(transform.forward * knockback, ForceMode.Impulse);
+
+                    VelocityZero();
                     playerLife.AlterHealth(-damage);
                     collided = false;
                     break;
@@ -163,6 +169,8 @@ public class HornedCharger : BaseEmenyMovement
             //Debug.Log("Exiting out here at Else");
             ExitCharge();
         }
+
+    #endregion
 
         void ExitCharge()
         {
