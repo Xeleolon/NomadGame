@@ -1105,7 +1105,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Boss Chamber
+  m_text: Reload Level
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1610,12 +1610,12 @@ GameObject:
   - component: {fileID: 1861983615}
   - component: {fileID: 1861983614}
   m_Layer: 15
-  m_Name: ParkhourChamber
+  m_Name: Button2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1861983613
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1744,7 +1744,7 @@ GameObject:
   - component: {fileID: 2031116465}
   - component: {fileID: 2031116464}
   m_Layer: 15
-  m_Name: Boss Chamber
+  m_Name: Button1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1862,7 +1862,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: FirstDungeonBossTesting
+          m_StringArgument: ForestTestV3
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!1 &2067958254
@@ -2396,7 +2396,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1578352614867739815
 Transform:
   m_ObjectHideFlags: 0
@@ -2503,7 +2503,7 @@ Transform:
   - {fileID: 2700543972091085099}
   - {fileID: 2700543971962854697}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!136 &2700543971393520738
 CapsuleCollider:
@@ -2632,17 +2632,17 @@ MonoBehaviour:
   maxSlopeAngle: 45
   groundDrag: 10
   airDrag: 0.6
-  jumpForce: 6
+  jumpForce: 8
   jumpCooldown: 0.6
-  airGlideLength: 1
-  gravityGlide: 2
+  airGlideLength: 0.5
+  gravityGlide: 5
   whatIsGround:
     serializedVersion: 2
     m_Bits: 128
   climbSpeed: 5
-  forceToWall: 9
+  forceToWall: 6
   distanceCheck: 1.1
-  maxClimbEnterCloc: 1
+  maxClimbEnterCloc: 0.2
   forwardForce: {x: 0.2, y: 0.2}
   detectionLength: 0.8
   sphereCastRadius: 0.4
