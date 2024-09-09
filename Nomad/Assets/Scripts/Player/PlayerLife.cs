@@ -319,12 +319,13 @@ public class ToolInfo
     {
         curHealth = health;
         transform.position = spawnPoint;
-
+        LevelManager.instance.ResetTo(LevelManager.ResetStates.respawn);
         OpenMenu();
     }
 
     public void CheckPointRespawn()
     {
+        LevelManager.instance.ResetTo(LevelManager.ResetStates.checkpoint);
         transform.position = checkPointSpawn;
     }
 

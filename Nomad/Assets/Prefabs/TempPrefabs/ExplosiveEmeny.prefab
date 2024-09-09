@@ -35,7 +35,7 @@ Transform:
   - {fileID: 6618373949020503016}
   - {fileID: 6618373948273826922}
   m_Father: {fileID: 0}
-  m_RootOrder: 15
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!135 &6618373948240900964
 SphereCollider:
@@ -66,7 +66,7 @@ MonoBehaviour:
   dectectRange: 6.6
   damage: 1
   fireDamage: 2
-  explosionRate: {x: 1, y: 3}
+  explosionRate: {x: 2, y: 5}
   clockStartPosition: 10
   clockHoldPosition: 5
   minDistance: 0.5

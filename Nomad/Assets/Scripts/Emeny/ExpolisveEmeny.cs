@@ -31,6 +31,8 @@ public class ExpolisveEmeny : MonoBehaviour
     void Start()
     {
         headExplosive.transform.localScale = new Vector3(headSize.y, headSize.y, headSize.y);
+
+        LevelManager.instance.onResetRespawn += Reset;
     }
 
     void Update()
@@ -89,9 +91,7 @@ public class ExpolisveEmeny : MonoBehaviour
             else
             {
                 Debug.Log("releasing explosive hold with player at " + distance);
-                explosionClock = clockStartPosition;
-                explosionState = ExpolisveState.neurtal;
-                headExplosive.transform.localScale = new Vector3(headSize.y, headSize.y, headSize.y);
+                Reset();
             }
         }
     }
@@ -129,6 +129,17 @@ public class ExpolisveEmeny : MonoBehaviour
 
         particleSystem.Play();
     }
+
+    void Reset()
+    {
+        if (!headExplosive.activeSelf)
+        {
+            headExplosive.SetActive(true);
+        }
+        explosionClock = clockStartPosition;
+        explosionState = ExpolisveState.neurtal;
+        headExplosive.transform.localScale = new Vector3(headSize.y, headSize.y, headSize.y);
+    }
     void OnTriggerEnter(Collider other) 
     {
         Debug.Log("Dectecting clossion with " + other.gameObject);
@@ -143,6 +154,12 @@ public class ExpolisveEmeny : MonoBehaviour
             player = other.gameObject;
             playerLife = PlayerLife.instance;
         }
+    }
+
+    public virtual void OnDrawGizmosSelected ()
+    {
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(transform.position , explosionRange);
     }
 
 

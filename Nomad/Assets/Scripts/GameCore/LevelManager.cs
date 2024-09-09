@@ -28,17 +28,30 @@ public class LevelManager : MonoBehaviour
     public onDayNightShift onSunSetCallback;
     public onDayNightShift onSunRiseCallback;
 
+    public enum ResetStates {checkpoint, respawn}
+    public delegate void onResetDelegate();
+    public onResetDelegate onResetCheckPoint;
+    public onResetDelegate onResetRespawn;
+
     // Start is called before the first frame update
     void Start()
     {
         Cursor.lockState = CursorLockMode.Confined;
-        Cursor.visible = false;   
+        Cursor.visible = false;
+
+        onResetCheckPoint += DebugLogReset;
+        onResetRespawn += DebugLogReset;
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
 
+    }
+
+    void DebugLogReset()
+    {
+        Debug.Log("resetting Level");
     }
 
     
@@ -62,6 +75,21 @@ public class LevelManager : MonoBehaviour
             }
             
             Debug.Log("Invoking Night time");
+        }
+    }
+
+    public void ResetTo(ResetStates resetState)
+    {
+        switch (resetState)
+        {
+            case ResetStates.checkpoint:
+            onResetCheckPoint.Invoke();
+            return;
+
+            case ResetStates.respawn:
+            onResetRespawn.Invoke();
+            return;
+
         }
     }
 
