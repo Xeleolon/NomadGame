@@ -45,24 +45,36 @@ public class HornedCharger : BaseEmenyMovement
         switch (curMode)
         {
             case (0):
-            //Debug.Log("eatingBush");
+            Debug.Log("eatingBush");
             NeutralEatingBush();
             break;
 
             case (1):
-            //Debug.Log("Emeny agro");
+            Debug.Log("Emeny agro");
             AgroWarning();
             break;
 
             case (2):
-            //Debug.Log("actackWait");
+            Debug.Log("actackWait");
             ActackWait();
             break;
 
             case (3):
-            //Debug.Log("charge Player");
+            Debug.Log("charge Player");
             ActackCharge();
             break;
+        }
+    }
+
+    public void DisableMovement(bool disable)
+    {
+        if (disable)
+        {
+            curMode = 4;
+        }
+        else
+        {
+            curMode = 0;
         }
     }
 
@@ -114,7 +126,7 @@ public class HornedCharger : BaseEmenyMovement
         {
             curMode = 1;
         }
-        else if (actackClock < 0 && RaycasyCheck(AgroDistance.y))
+        else if (actackClock < 0 /*&& RaycasyCheck(AgroDistance.y)*/)
         {
             curMode = 3;
             actackClock = Random.Range(actackPause.x, actackPause.y);
@@ -134,8 +146,12 @@ public class HornedCharger : BaseEmenyMovement
     void ActackCharge() //actacl=k
     {
         Vector3 alterChargePosition = new Vector3(ChargePosition.x, transform.position.y, ChargePosition.z);
-        //Debug.Log("charging at " + alterChargePosition);
-        if (Vector3.Distance(transform.position, player.position) > 0.1f )
+        Debug.Log(Vector3.Distance(transform.position, ChargePosition));
+        if (Vector3.Distance(transform.position, player.position) < 0.1f || Vector3.Distance(transform.position, alterChargePosition) < 1)
+        {
+            ExitCharge();
+        }
+        else
         {
             if (collided)
             {
@@ -147,27 +163,30 @@ public class HornedCharger : BaseEmenyMovement
                     VelocityZero();
                     playerLife.AlterHealth(-damage);
                     collided = false;
+
+                    Debug.Log("exiting charge at 0");
+                    ExitCharge();
                     break;
 
                     case 1:
                     //Debug.Log("Exiting out here at collisionCheck");
                     //Move(Vector2.zero, alterChargePosition, true);
+
+                    Debug.Log("exiting charge at 1");
                     ExitCharge(); 
                     break;
 
                     case 2:
                     //collider with moveable object some effect should occur
                     collided = false;
+
+                    Debug.Log("exiting charge at ");
+                    ExitCharge();
                     break;
                 }
             }
 
             Move(new Vector2(speedCharge, 0), alterChargePosition, true);
-        }
-        else
-        {
-            //Debug.Log("Exiting out here at Else");
-            ExitCharge();
         }
 
     #endregion

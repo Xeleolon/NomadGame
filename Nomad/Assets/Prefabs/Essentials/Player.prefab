@@ -2503,7 +2503,7 @@ Transform:
   - {fileID: 2700543972091085099}
   - {fileID: 2700543971962854697}
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!136 &2700543971393520738
 CapsuleCollider:
@@ -3561,7 +3561,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -879992215, guid: c6ee2ca114be33e44ba6dab93836e3d1, type: 3}
+  m_Sprite: {fileID: -750967329, guid: c6ee2ca114be33e44ba6dab93836e3d1, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

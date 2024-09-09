@@ -6,21 +6,30 @@ public class EmenyHealth : MonoBehaviour
 {
     [SerializeField] private float health = 3;
     [SerializeField] private bool dayCreature;
+    [SerializeField] private bool disableDayCycle;
     private float curHealth;
     [SerializeField] GameObject remainsPrefab;
     [SerializeField] GameObject particaleEffectPrefab; 
     public SkellyMovement movementScript;
+    public HornedCharger hornedCharger;
+    private Vector3 spawn;
+    Renderer renderer;
+    Collider collider;
     private void Start()
     {
-
-        if(dayCreature)
+        if (!disableDayCycle)
         {
-            LevelManager.instance.onSunSetCallback += dayNightShift;
+            if(dayCreature)
+            {
+                LevelManager.instance.onSunSetCallback += dayNightShift;
+            }
+            else
+            {
+                LevelManager.instance.onSunRiseCallback += dayNightShift;
+            }
         }
-        else
-        {
-            LevelManager.instance.onSunRiseCallback += dayNightShift;
-        }
+        spawn = transform.position;
+        LevelManager.instance.onResetRespawn += Reset;
         curHealth = health;
     }
 
@@ -35,12 +44,33 @@ public class EmenyHealth : MonoBehaviour
             GameObject temp = Instantiate(remainsPrefab, transform.position, Quaternion.identity);
             SpawnCylce.instance.AddSpawnPoint(temp, true);
         }
+
+        if (hornedCharger != null)
+        {
+            hornedCharger.DisableMovement(true);
+        }
         
         if (!dayCreature)
         {
             LevelManager.instance.onSunRiseCallback -= Killed;
         }
-        Destroy(gameObject);
+        //Destroy(gameObject);
+        transform.position = spawn;
+        CheckRendererBoxCollider();
+        renderer.enabled = false;
+        collider.enabled = false;
+
+    }
+    private void Reset()
+    {
+        if (hornedCharger != null)
+        {
+            hornedCharger.DisableMovement(false);
+        }
+        transform.position = spawn;
+        CheckRendererBoxCollider();
+        renderer.enabled = true;
+        collider.enabled = true;
     }
     public void ForceDeath()
     {
@@ -89,5 +119,15 @@ public class EmenyHealth : MonoBehaviour
             }
             Killed();
         }
+    }
+
+    void CheckRendererBoxCollider()
+    {
+        if (renderer != null && collider != null)
+        {
+            return;
+        }
+        renderer = gameObject.GetComponent<Renderer>();
+        collider = gameObject.GetComponent<Collider>();
     }
 }

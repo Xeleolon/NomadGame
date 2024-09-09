@@ -1718,6 +1718,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8270322919751412240, guid: 3dd5187e2dac2a74b926927b43a5cb7b,
         type: 3}
+      propertyPath: m_Icon
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 8270322919751412240, guid: 3dd5187e2dac2a74b926927b43a5cb7b,
+        type: 3}
       propertyPath: m_Name
       value: HornedEmeny
       objectReference: {fileID: 0}
@@ -1725,6 +1730,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Layer
       value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 8270322919751412246, guid: 3dd5187e2dac2a74b926927b43a5cb7b,
+        type: 3}
+      propertyPath: curMode
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 8270322919751412246, guid: 3dd5187e2dac2a74b926927b43a5cb7b,
         type: 3}
