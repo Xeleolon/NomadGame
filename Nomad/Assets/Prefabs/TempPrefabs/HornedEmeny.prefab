@@ -18,7 +18,7 @@ GameObject:
   - component: {fileID: 8270322919751412232}
   m_Layer: 0
   m_Name: HornedEmeny
-  m_TagString: Untagged
+  m_TagString: Emeny
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -115,11 +115,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   health: 3
   dayCreature: 1
+  disableDayCycle: 1
   remainsPrefab: {fileID: 6370355482741390595, guid: 466a076cd909c9a46b3c4fa4ffcf6a03,
     type: 3}
   particaleEffectPrefab: {fileID: 2886289661241085768, guid: 6ac29e49a82da5a41a1c76b954d47672,
     type: 3}
   movementScript: {fileID: 0}
+  hornedCharger: {fileID: 8270322919751412246}
 --- !u!114 &8270322919751412246
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -136,12 +138,12 @@ MonoBehaviour:
   speedCharge: 12
   speedNeutral: 6
   damage: 1
+  knockback: 2
   AgroDistance: {x: 8, y: 10}
   targetPlayer: 0
   targetBush: {fileID: 0}
   curMode: 0
   actackPause: {x: 0.5, y: 1}
-  actackOverShoot: 3
   ground: Respawn
   agroColor: {r: 0.990566, g: 0.21960661, b: 0.71510166, a: 0}
   actackingColor: {r: 1, g: 0.11792451, b: 0.11792451, a: 0}

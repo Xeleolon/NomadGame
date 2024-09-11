@@ -66,7 +66,7 @@ public class HornedCharger : BaseEmenyMovement
         }
     }
 
-    public void DisableMovement(bool disable)
+    public override void DisableMovement(bool disable)
     {
         if (disable)
         {

@@ -11,7 +11,7 @@ public class EmenyHealth : MonoBehaviour
     [SerializeField] GameObject remainsPrefab;
     [SerializeField] GameObject particaleEffectPrefab; 
     public SkellyMovement movementScript;
-    public HornedCharger hornedCharger;
+    public BaseEmenyMovement hornedCharger;
     private Vector3 spawn;
     Renderer renderer;
     Collider collider;

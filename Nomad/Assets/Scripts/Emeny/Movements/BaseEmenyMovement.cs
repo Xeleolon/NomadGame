@@ -40,6 +40,10 @@ public class BaseEmenyMovement : MonoBehaviour
             //rb.velocity = Vector3.zero;
         }
     }
+    public virtual void DisableMovement(bool disable)
+    {
+        
+    }
 
     public void VelocityZero()
     {

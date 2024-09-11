@@ -2988,6 +2988,7 @@ MonoBehaviour:
   - Player
   - CameraIgnore
   - Emeny
+  - Fire
   offSet: -0.5
   cameraRange: {x: -3, y: -0.8}
   speed: 2

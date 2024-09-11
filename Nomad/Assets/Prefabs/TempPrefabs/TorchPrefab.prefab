@@ -132,7 +132,7 @@ GameObject:
   - component: {fileID: 3107692305890333127}
   m_Layer: 15
   m_Name: TorchPrefab
-  m_TagString: cameraIgnore
+  m_TagString: Fire
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
