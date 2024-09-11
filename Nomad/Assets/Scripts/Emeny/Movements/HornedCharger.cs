@@ -45,22 +45,22 @@ public class HornedCharger : BaseEmenyMovement
         switch (curMode)
         {
             case (0):
-            Debug.Log("eatingBush");
+            //Debug.Log("eatingBush");
             NeutralEatingBush();
             break;
 
             case (1):
-            Debug.Log("Emeny agro");
+            //Debug.Log("Emeny agro");
             AgroWarning();
             break;
 
             case (2):
-            Debug.Log("actackWait");
+            //Debug.Log("actackWait");
             ActackWait();
             break;
 
             case (3):
-            Debug.Log("charge Player");
+            //Debug.Log("charge Player");
             ActackCharge();
             break;
         }
@@ -132,7 +132,7 @@ public class HornedCharger : BaseEmenyMovement
             actackClock = Random.Range(actackPause.x, actackPause.y);
             //ChargePosition = Vector3.forward * (Vector3.Distance(player.position, transform.position) /*+ actackOverShoot*/);
             ChargePosition = player.position;
-            Debug.Log("charging at " + ChargePosition);
+            //Debug.Log("charging at " + ChargePosition);
         }
         else
         {
@@ -146,7 +146,7 @@ public class HornedCharger : BaseEmenyMovement
     void ActackCharge() //actacl=k
     {
         Vector3 alterChargePosition = new Vector3(ChargePosition.x, transform.position.y, ChargePosition.z);
-        Debug.Log(Vector3.Distance(transform.position, ChargePosition));
+        //Debug.Log(Vector3.Distance(transform.position, ChargePosition));
         if (Vector3.Distance(transform.position, player.position) < 0.1f || Vector3.Distance(transform.position, alterChargePosition) < 1)
         {
             ExitCharge();
@@ -164,7 +164,7 @@ public class HornedCharger : BaseEmenyMovement
                     playerLife.AlterHealth(-damage);
                     collided = false;
 
-                    Debug.Log("exiting charge at 0");
+                    //Debug.Log("exiting charge at 0");
                     ExitCharge();
                     break;
 
@@ -180,7 +180,7 @@ public class HornedCharger : BaseEmenyMovement
                     //collider with moveable object some effect should occur
                     collided = false;
 
-                    Debug.Log("exiting charge at ");
+                    //Debug.Log("exiting charge at ");
                     ExitCharge();
                     break;
                 }

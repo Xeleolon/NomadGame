@@ -43,7 +43,7 @@ public class CameraMovement : MonoBehaviour
                 rateToPlace = 0;
                 startPlace = transform.localPosition.z;
                 cameraCurSeat = LeftCollisionRayCast();
-                Debug.Log("reset to origin " + cameraCurSeat);
+                //Debug.Log("reset to origin " + cameraCurSeat);
             }
             else if (cameraDirection == CameraDirection.forward)
             {
