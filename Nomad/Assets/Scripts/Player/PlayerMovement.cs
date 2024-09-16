@@ -115,6 +115,10 @@ public class PlayerMovement : MonoBehaviour
 
     [SerializeField] LineRenderer lr;
 
+    [Header("UI insturctions")]
+    [SerializeField] string exitInstruction;
+    [SerializeField] string exitPressKey;
+
     public enum CameraSets {standard, forceFollow, onlyHorizontal, reset, detach}
 
     [System.Serializable]
@@ -576,6 +580,7 @@ public class PlayerMovement : MonoBehaviour
             case MovementType.climbing:
                 //if (playerBody != null)
                 //{
+                PlayerLife.instance.ActiveInstructionPanel(true, exitInstruction, exitPressKey);
                 rb.mass = 1;
                 newBodyTarget = cameraCenter.TransformDirection(hopPosition);
                     if (joint != null)
@@ -636,7 +641,7 @@ public class PlayerMovement : MonoBehaviour
             cameraSets = CameraSets.standard;
             return;
         }
-
+        PlayerLife.instance.ActiveInstructionPanel(false, exitInstruction, exitPressKey);
 
         EnteringFreeFalling();
         cameraSets = CameraSets.forceFollow;
@@ -647,6 +652,7 @@ public class PlayerMovement : MonoBehaviour
 
     public void StartSwing(Vector3 swingAnchor, GameObject anchorObject)
     {
+        PlayerLife.instance.ActiveInstructionPanel(true, exitInstruction, exitPressKey);
         curMovmenent = MovementType.swinging;
         rb.mass = 1;
         swingPoint = swingAnchor;
@@ -691,9 +697,17 @@ public class PlayerMovement : MonoBehaviour
 
         lr.positionCount = 2;
     }
+    public void KillJoint()
+    {
+        if (joint != null)
+        {
+            Destroy(joint);
+        }
+    }
 
     void StopSwing()
     {
+        PlayerLife.instance.ActiveInstructionPanel(false, exitInstruction, exitPressKey);
         if (swingScript != null)
         {
             swingScript.HideRope(false);

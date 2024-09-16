@@ -155,9 +155,15 @@ public class ToolInfo
     [System.Serializable]
     public class UIVariables
     {
+        public GameObject menuUi;
+        public GameObject deathUI;
+        public GameObject restUI;
         public GameObject healthyUiPrefab;
         public Transform healthParent;
         public Animation toolanimation;
+        public GameObject instructionPanel;
+        public TMP_Text instructionText;
+        public TMP_Text keyPressText;
         public Image toolSlotA;
         public Image toolSlotB;
         public Image toolSlotC;
@@ -168,10 +174,16 @@ public class ToolInfo
 
     [Header("UI")]
     [SerializeField] UIVariables UI;
-    [SerializeField] private GameObject menuUi;
+    private GameObject menuUi {get {return UI.menuUi;} set {UI.menuUi = value;}}
+    
+    private GameObject deathUI {get {return UI.deathUI;} set {UI.deathUI = value;}}
+    private GameObject restUI {get {return UI.restUI;} set {UI.restUI = value;}}
     private GameObject healthyUiPrefab {get {return UI.healthyUiPrefab;} set {UI.healthyUiPrefab = value;}}
     private Transform healthParent {get {return UI.healthParent;} set {UI.healthParent = value;}}
     private Animation toolanimation {get {return UI.toolanimation;} set {UI.toolanimation = value;}}
+    private GameObject instructionPanel {get {return UI.instructionPanel;} set {UI.instructionPanel = value;}}
+    private TMP_Text instructionText {get {return UI.instructionText;} set {UI.instructionText = value;}}
+    private TMP_Text keyPressText {get {return UI.keyPressText;} set {UI.keyPressText = value;}}
     private Image toolSlotA {get {return UI.toolSlotA;} set {UI.toolSlotA = value;}}
     private Image toolSlotB {get {return UI.toolSlotB;} set {UI.toolSlotB = value;}}
     private Image toolSlotC {get {return UI.toolSlotC;} set {UI.toolSlotC = value;}}
@@ -197,6 +209,11 @@ public class ToolInfo
         UpdateHealthUI();
         ToolChange(curTool);
         interactTrigger = playerBody.GetComponent<InteractionTrigger>();
+
+        if (instructionPanel != null && instructionPanel.activeSelf)
+        {
+            instructionPanel.SetActive(false);
+        }
     }
 
     void Update()
@@ -306,7 +323,7 @@ public class ToolInfo
         if (curHealth <= 0)
         {
             Debug.Log("Player Died");
-            Respawn();
+            DeathScreen(true);
         }
         else if (curHealth > health)
         {
@@ -320,13 +337,15 @@ public class ToolInfo
         curHealth = health;
         transform.position = spawnPoint;
         LevelManager.instance.ResetTo(LevelManager.ResetStates.respawn);
-        OpenMenu();
+        PlayerMovement.instance.KillJoint();
+        DeathScreen(false);
     }
 
     public void CheckPointRespawn()
     {
         LevelManager.instance.ResetTo(LevelManager.ResetStates.checkpoint);
         transform.position = checkPointSpawn;
+        PlayerMovement.instance.KillJoint();
     }
 
     public void RestRestore(Vector3 newPosition)
@@ -335,6 +354,11 @@ public class ToolInfo
         checkPointSpawn = newPosition;
         curHealth = health;
         UpdateHealthUI();
+        if (restUI != null && !restUI.activeSelf)
+        {
+            Time.timeScale = 0;
+            restUI.SetActive(true);
+        }
     }
 
     public void SetCheckPoint(Vector3 newPosition)
@@ -797,10 +821,52 @@ public class ToolInfo
         OpenMenu();
     }
 
+    public void RestPopUpExit()
+    {
+        if (restUI != null && restUI.activeSelf)
+        {
+            restUI.SetActive(false);
+            Time.timeScale = 1;
+        }
+    }
+
+    void DeathScreen(bool Open)
+    {
+        if (deathUI == null)
+        { 
+            return;
+        }
+
+        if (Open && !deathUI.activeSelf)
+        {
+            Time.timeScale = 0;
+            deathUI.SetActive(true);
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+        }
+        else if (!Open)
+        {
+            if (deathUI.activeSelf)
+            {
+                deathUI.SetActive(false);
+            }
+
+            if (menuUi.activeSelf)
+            {
+                menuUi.SetActive(false);
+            }
+            Time.timeScale = 1;
+            
+            Cursor.lockState = CursorLockMode.Confined;
+            Cursor.visible = false;
+        }
+    }
+
     void OpenMenu()
     {
         if (menuUi.activeSelf)
         {
+            if ((deathUI != null && !deathUI.activeSelf) || (restUI != null && !restUI.activeSelf))
             menuUi.SetActive(false);
             Time.timeScale = 1;
             Cursor.lockState = CursorLockMode.Confined;
@@ -905,6 +971,32 @@ public class ToolInfo
         }
 
 
+    }
+
+    public void ActiveInstructionPanel(bool activate, string instruction, string keyPress)
+    {
+        if (instructionPanel == null)
+        {
+            return;
+        }
+        
+        if (activate)
+        {
+            if (!instructionPanel.activeSelf)
+            {
+                instructionPanel.SetActive(true);
+            }
+
+            instructionText.SetText(instruction);
+            keyPressText.SetText(keyPress);
+        }
+        else
+        {
+            if (instructionPanel.activeSelf && instructionText.text.Contains(instruction))
+            {
+                instructionPanel.SetActive(false);
+            }
+        }
     }
 
 
