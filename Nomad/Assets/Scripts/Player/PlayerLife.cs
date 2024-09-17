@@ -158,18 +158,23 @@ public class ToolInfo
         public GameObject menuUi;
         public GameObject deathUI;
         public GameObject restUI;
+
         public GameObject healthyUiPrefab;
         public Transform healthParent;
         public Animation toolanimation;
+
         public GameObject instructionPanel;
+
         public TMP_Text instructionText;
         public TMP_Text keyPressText;
+
         public Image toolSlotA;
         public Image toolSlotB;
         public Image toolSlotC;
+
         public TMP_Text coinText;
         public TMP_Text fobiddenCoinText;
-        public TMP_Text arrowsText; 
+        public TMP_Text arrowsText;
     }
 
     [Header("UI")]
@@ -179,17 +184,22 @@ public class ToolInfo
     private GameObject deathUI {get {return UI.deathUI;} set {UI.deathUI = value;}}
     private GameObject restUI {get {return UI.restUI;} set {UI.restUI = value;}}
     private GameObject healthyUiPrefab {get {return UI.healthyUiPrefab;} set {UI.healthyUiPrefab = value;}}
+
     private Transform healthParent {get {return UI.healthParent;} set {UI.healthParent = value;}}
     private Animation toolanimation {get {return UI.toolanimation;} set {UI.toolanimation = value;}}
     private GameObject instructionPanel {get {return UI.instructionPanel;} set {UI.instructionPanel = value;}}
+
     private TMP_Text instructionText {get {return UI.instructionText;} set {UI.instructionText = value;}}
     private TMP_Text keyPressText {get {return UI.keyPressText;} set {UI.keyPressText = value;}}
+
     private Image toolSlotA {get {return UI.toolSlotA;} set {UI.toolSlotA = value;}}
     private Image toolSlotB {get {return UI.toolSlotB;} set {UI.toolSlotB = value;}}
     private Image toolSlotC {get {return UI.toolSlotC;} set {UI.toolSlotC = value;}}
+
     private TMP_Text coinText {get {return UI.coinText;} set {UI.coinText = value;}}
     private TMP_Text fobiddenCoinText {get {return UI.fobiddenCoinText;} set {UI.fobiddenCoinText = value;}}
     private TMP_Text arrowsText {get {return UI.arrowsText;} set {UI.arrowsText = value;}}
+
     private Vector3 spawnPoint;
     private Vector3 checkPointSpawn;
 
@@ -866,7 +876,6 @@ public class ToolInfo
     {
         if (menuUi.activeSelf)
         {
-            if ((deathUI != null && !deathUI.activeSelf) || (restUI != null && !restUI.activeSelf))
             menuUi.SetActive(false);
             Time.timeScale = 1;
             Cursor.lockState = CursorLockMode.Confined;
@@ -875,6 +884,11 @@ public class ToolInfo
         }
         else
         {
+            if ((deathUI != null && !deathUI.activeSelf) || (restUI != null && !restUI.activeSelf))
+            {
+                return;
+            }
+            
             menuUi.SetActive(true);
             Time.timeScale = 0;
             Cursor.lockState = CursorLockMode.None;

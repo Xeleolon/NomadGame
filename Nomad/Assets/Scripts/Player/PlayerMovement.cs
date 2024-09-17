@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -137,6 +138,8 @@ public class PlayerMovement : MonoBehaviour
         public float cameraOffset = 10;
         public GameObject blackScreen;
         public string blackScreenAnimationName;
+
+        public Slider mouseSlider;
     }
 
     public CameraControls cameraControls;
@@ -154,6 +157,8 @@ public class PlayerMovement : MonoBehaviour
     private GameObject blackScreen {get {return cameraControls.blackScreen;} set {cameraControls.blackScreen = value;}}
     private string blackScreenAnimationName {get {return cameraControls.blackScreenAnimationName;} set {cameraControls.blackScreenAnimationName = value;}}
 
+    private Slider mouseSlider {get {return cameraControls.mouseSlider;} set {cameraControls.mouseSlider = value;}}
+
     
     public References references;
 
@@ -164,6 +169,8 @@ public class PlayerMovement : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         newBodyTarget = cameraCenter.forward;
         ResetJump();
+
+        mouseSlider.value = cameraSensitivity;
     }
     void Update()
     {
@@ -894,6 +901,11 @@ public class PlayerMovement : MonoBehaviour
         {
             cameraRange.z = cameraDistance;
         }*/
+    }
+
+    public void SetMouseSensitivity()
+    {
+        cameraSensitivity = mouseSlider.value;
     }
 
     
