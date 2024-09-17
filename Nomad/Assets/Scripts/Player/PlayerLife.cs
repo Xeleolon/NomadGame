@@ -161,6 +161,7 @@ public class ToolInfo
         
         public Animator uianimator;
         public string restAnimation;
+        public string damageHealth;
 
         public GameObject healthyUiPrefab;
         public Transform healthParent;
@@ -189,6 +190,7 @@ public class ToolInfo
 
     private Animator uianimator {get {return UI.uianimator;} set {UI.uianimator = value;}}
     private string restAnimation {get {return UI.restAnimation;} set {UI.restAnimation = value;}}
+    private string damageHealth {get {return UI.damageHealth;} set {UI.damageHealth = value;}}
     private GameObject healthyUiPrefab {get {return UI.healthyUiPrefab;} set {UI.healthyUiPrefab = value;}}
 
     private Transform healthParent {get {return UI.healthParent;} set {UI.healthParent = value;}}
@@ -334,7 +336,11 @@ public class ToolInfo
     public void AlterHealth(float temp)
     {
         curHealth += temp;
-        //Debug.Log("Player recieved damage");
+        //Debug.Log("Player recieved damage " + temp);
+        if (temp <= 0)
+        {
+            PlayUiAnimation(damageHealth);
+        }
 
         if (curHealth <= 0)
         {
@@ -917,7 +923,7 @@ public class ToolInfo
         if (uianimator != null && animationName != "")
         {
             uianimator.Play(animationName);
-            
+            Debug.Log("playing animation " + animationName);
         }
         
     }
