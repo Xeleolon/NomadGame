@@ -158,6 +158,9 @@ public class ToolInfo
         public GameObject menuUi;
         public GameObject deathUI;
         public GameObject restUI;
+        
+        public Animator uianimator;
+        public string restAnimation;
 
         public GameObject healthyUiPrefab;
         public Transform healthParent;
@@ -183,6 +186,9 @@ public class ToolInfo
     
     private GameObject deathUI {get {return UI.deathUI;} set {UI.deathUI = value;}}
     private GameObject restUI {get {return UI.restUI;} set {UI.restUI = value;}}
+
+    private Animator uianimator {get {return UI.uianimator;} set {UI.uianimator = value;}}
+    private string restAnimation {get {return UI.restAnimation;} set {UI.restAnimation = value;}}
     private GameObject healthyUiPrefab {get {return UI.healthyUiPrefab;} set {UI.healthyUiPrefab = value;}}
 
     private Transform healthParent {get {return UI.healthParent;} set {UI.healthParent = value;}}
@@ -368,6 +374,7 @@ public class ToolInfo
         {
             Time.timeScale = 0;
             restUI.SetActive(true);
+            PlayUiAnimation(restAnimation);
         }
     }
 
@@ -906,6 +913,13 @@ public class ToolInfo
     #endregion
 
     #region UI
+    void PlayUiAnimation(string animationName)
+    {
+        if (uianimator != null && animationName != "")
+        {
+            uianimator.Play(animationName);
+        }
+    }
 
     void UpdateToolIconUI()
     {
