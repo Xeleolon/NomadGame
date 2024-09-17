@@ -77,11 +77,14 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] float bodyRotateSpeed = 60;
     [SerializeField] float maxSlopeAngle = 45;
 
-    //air controls
+    [Header("Air Control")]
     [SerializeField] float groundDrag = 10f;
     [SerializeField] float airDrag = 0.2f;
+    [SerializeField] float downWardForce = 1;
+    [SerializeField] float airSideWardDevider = 2;
     [SerializeField] private float jumpForce = 3;
     [SerializeField] private float jumpCooldown = 1;
+    [SerializeField] private Vector2 gravity = new Vector2(0.2f, 1);
 
     [SerializeField] private float airGlideLength = 1;
     [SerializeField] private float gravityGlide = 2;
@@ -209,6 +212,7 @@ public class PlayerMovement : MonoBehaviour
 
     #region Movement
     Vector3 moveDirection;
+    float lastHeightPosition;
     float lastPlayerHeight;
     RaycastHit slopeHit;
     RaycastHit climbHit;
@@ -347,6 +351,13 @@ public class PlayerMovement : MonoBehaviour
                 }
             break;
 
+            case MovementType.freefalling:
+                moveDirection = cameraCenter.forward * inputVariables.y + cameraCenter.right * inputVariables.x/airSideWardDevider;
+                moveDirection.y = 0;
+
+
+            break;
+
             default:
                 moveDirection = cameraCenter.forward * inputVariables.y + cameraCenter.right * inputVariables.x/2;
                 moveDirection.y = 0;
@@ -389,15 +400,26 @@ public class PlayerMovement : MonoBehaviour
             break;
 
             case MovementType.freefalling: //FreeFalling
+                
+                Vector3 airDownForce = Vector3.zero;
+                if (lastHeightPosition > transform.position.y)
+                {
+                    airDownForce = new Vector3(0, -downWardForce * glideClock, 0);
+                }
+
+                lastHeightPosition = transform.position.y;
+
+
                 if (glideClock < airGlideLength)
                 {
-                    rb.AddForce(moveDirection.normalized * speed * airMultiplier * 10f, ForceMode.Force);
+                    rb.AddForce((moveDirection.normalized * speed * airMultiplier + airDownForce) * 10f, ForceMode.Force);
                     glideClock += 1 * Time.deltaTime;
                 }
                 else if (rb.mass != gravityGlide)
                 {
                     rb.AddForce(moveDirection.normalized * speed * airDevider * 10f, ForceMode.Force);
                     rb.mass = gravityGlide;
+                    glideClock += 1 * Time.deltaTime;
                 }
 
                 //rb.AddForce(moveDirection.normalized * speed * airMultiplier * 10f, ForceMode.Force);
@@ -440,6 +462,7 @@ public class PlayerMovement : MonoBehaviour
 
     void CheckMovmenentState(bool forceOut)
     {
+        rb.mass = gravity.y;
         if (!forceOut)
         {
             if (curMovmenent == MovementType.climbing)
@@ -458,7 +481,9 @@ public class PlayerMovement : MonoBehaviour
         {
             if (curMovmenent != MovementType.slope)
             {
-                rb.useGravity = false;
+                //rb.useGravity = false;
+                rb.mass = gravity.x;
+                rb.drag = groundDrag;
                 curMovmenent =  MovementType.slope;
             }
             return;
@@ -483,6 +508,7 @@ public class PlayerMovement : MonoBehaviour
             return;
         }
         curMovmenent = MovementType.freefalling;
+        lastHeightPosition = transform.position.y;
         glideClock = 0;
 
     }
@@ -526,7 +552,7 @@ public class PlayerMovement : MonoBehaviour
         if (grounded)
         {
             rb.drag = groundDrag;
-            rb.mass = 1;
+            rb.mass = gravity.y;
             return true;
         }
  

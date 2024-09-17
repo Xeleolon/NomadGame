@@ -1043,7 +1043,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-1740
+  m_Name: pb_Mesh-8648
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -1824,6 +1824,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8270322919751412240, guid: 3dd5187e2dac2a74b926927b43a5cb7b,
         type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8270322919751412240, guid: 3dd5187e2dac2a74b926927b43a5cb7b,
+        type: 3}
       propertyPath: m_TagString
       value: Emeny
       objectReference: {fileID: 0}
@@ -2427,7 +2432,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-1726
+  m_Name: pb_Mesh-8634
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -8195,6 +8200,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Ghost
+      objectReference: {fileID: 0}
+    - target: {fileID: 8792298435315850920, guid: 1a2de16152e5e014892459e6e225e08e,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_AddedGameObjects: []

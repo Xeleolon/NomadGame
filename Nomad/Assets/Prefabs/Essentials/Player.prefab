@@ -4023,9 +4023,11 @@ MonoBehaviour:
   bodyRotateSpeed: 3
   maxSlopeAngle: 45
   groundDrag: 10
-  airDrag: 0.6
-  jumpForce: 8
+  airDrag: 10
+  downWardForce: 8
+  jumpForce: 16
   jumpCooldown: 0.6
+  gravity: {x: 0.2, y: 1}
   airGlideLength: 0.5
   gravityGlide: 5
   whatIsGround:
