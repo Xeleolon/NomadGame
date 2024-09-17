@@ -372,9 +372,9 @@ public class ToolInfo
         UpdateHealthUI();
         if (restUI != null && !restUI.activeSelf)
         {
-            Time.timeScale = 0;
             restUI.SetActive(true);
             PlayUiAnimation(restAnimation);
+            
         }
     }
 
@@ -843,7 +843,6 @@ public class ToolInfo
         if (restUI != null && restUI.activeSelf)
         {
             restUI.SetActive(false);
-            Time.timeScale = 1;
         }
     }
 
@@ -918,7 +917,9 @@ public class ToolInfo
         if (uianimator != null && animationName != "")
         {
             uianimator.Play(animationName);
+            
         }
+        
     }
 
     void UpdateToolIconUI()

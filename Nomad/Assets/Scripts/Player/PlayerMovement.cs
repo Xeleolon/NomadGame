@@ -186,6 +186,15 @@ public class PlayerMovement : MonoBehaviour
             rb.useGravity = false;
         }
     }
+    public void FreazePlayer()
+    {
+        freazeMovement = !freazeMovement;
+
+        if (freazeMovement)
+        {
+            rb.velocity = Vector3.zero;
+        }
+    }
 
     void FixedUpdate()
     {
