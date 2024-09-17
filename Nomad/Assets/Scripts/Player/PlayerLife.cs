@@ -862,7 +862,7 @@ public class ToolInfo
         }
     }
 
-    void OpenMenu()
+    public void OpenMenu()
     {
         if (menuUi.activeSelf)
         {
@@ -882,6 +882,11 @@ public class ToolInfo
 
             //gamePaused = false;
         }
+    }
+    
+    public void WindowMode(bool windowed)
+    {
+        Screen.fullScreen = !windowed;
     }
 
     #endregion
