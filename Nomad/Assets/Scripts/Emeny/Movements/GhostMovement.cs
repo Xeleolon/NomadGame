@@ -108,6 +108,7 @@ public class GhostMovement : BaseEmenyMovement
 
         if (Vector3.Distance(transform.position, player.position) <= damageDistance)
         {
+            Debug.Log(gameObject.name + " is damage player at " + transform.position + " with player at " + player.position + " distance is " + damageDistance);
             if (damageClock >= damageSpeed)
             {
                 damageClock = 0;

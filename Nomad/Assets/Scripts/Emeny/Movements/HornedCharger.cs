@@ -17,7 +17,8 @@ public class HornedCharger : BaseEmenyMovement
     private Transform player;
     private PlayerLife playerLife;
     private Vector3 ChargePosition;
-    public Transform targetBush;
+    Transform targetBush;
+    [SerializeField] Transform[] potentialBush;
     public int curMode; //this contains the mode which the Ai is directed by
     [SerializeField] private Vector2 actackPause = new Vector2(0.5f, 1);
     private float actackClock;
@@ -90,7 +91,31 @@ public class HornedCharger : BaseEmenyMovement
 
         if (targetBush == null)
         {
-            targetBush = GameObject.FindWithTag("Bush").transform;
+            if (potentialBush.Length < 1)
+            {
+                GameObject[] newBushes = GameObject.FindGameObjectsWithTag("Bush");
+
+                if (newBushes.Length > 1)
+                {
+                    targetBush = newBushes[Random.Range(0, newBushes.Length - 1)].transform;
+                }
+                else if (newBushes.Length == 1)
+                {
+                    targetBush = newBushes[0].transform;
+                }
+            }
+            else
+            {
+                if (potentialBush.Length == 1)
+                {
+                    targetBush = potentialBush[0];
+                }
+                else
+                {
+                    targetBush = potentialBush[Random.Range(0, potentialBush.Length - 1)];
+                }
+            }
+
         }
         if (Vector3.Distance(transform.position, targetBush.position) > 1)
         {
@@ -164,7 +189,7 @@ public class HornedCharger : BaseEmenyMovement
                     playerLife.AlterHealth(-damage);
                     collided = false;
 
-                    //Debug.Log("exiting charge at 0");
+                    Debug.Log("exiting charge at 0");
                     ExitCharge();
                     break;
 
@@ -173,7 +198,8 @@ public class HornedCharger : BaseEmenyMovement
                     //Move(Vector2.zero, alterChargePosition, true);
 
                     Debug.Log("exiting charge at 1");
-                    ExitCharge(); 
+                    ExitCharge();
+                    collided = false;
                     break;
 
                     case 2:
@@ -218,10 +244,8 @@ public class HornedCharger : BaseEmenyMovement
         ray = new Ray(gameObject.transform.position, gameObject.transform.forward);
     
         RaycastHit hit;
-    
-
-    
-        if (Physics.Raycast(ray, out hit, maxDistance))
+        
+        if (Physics.SphereCast(transform.position, 0.2f, transform.forward, out hit, maxDistance))
         {
             if (hit.collider.gameObject.tag == "Player")
             {

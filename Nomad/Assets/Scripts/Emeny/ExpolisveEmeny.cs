@@ -55,7 +55,7 @@ public class ExpolisveEmeny : MonoBehaviour
             //check player distance alter timer and alter head size hold if out side explosion range
             if (distance <= minDistance)
             {
-                Debug.Log("Activating explosion as player triggered min distance check at " + distance + " player position is beening seen at " + player.transform.position);
+                //Debug.Log("Activating explosion as player triggered min distance check at " + distance + " player position is beening seen at " + player.transform.position);
                 Explode(distance);
                 return;
             }
@@ -90,7 +90,7 @@ public class ExpolisveEmeny : MonoBehaviour
             }
             else
             {
-                Debug.Log("releasing explosive hold with player at " + distance);
+                //Debug.Log("releasing explosive hold with player at " + distance);
                 Reset();
             }
         }
@@ -142,7 +142,7 @@ public class ExpolisveEmeny : MonoBehaviour
     }
     void OnTriggerEnter(Collider other) 
     {
-        Debug.Log("Dectecting clossion with " + other.gameObject);
+        //Debug.Log("Dectecting clossion with " + other.gameObject);
         if (other.gameObject.tag == "Player" && explosionState == ExpolisveState.neurtal)
         {
             if (!headExplosive.activeSelf)
