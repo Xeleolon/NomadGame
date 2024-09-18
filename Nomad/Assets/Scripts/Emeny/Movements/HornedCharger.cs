@@ -217,25 +217,27 @@ public class HornedCharger : BaseEmenyMovement
 
     #endregion
 
-        void ExitCharge()
-        {
-            //Debug.Log("Exiting out here");
-            float distance = Vector3.Distance(transform.position, player.position);
-            if (distance > AgroDistance.x)
-            {
-                curMode = 1;
-            }
-            else if (distance > AgroDistance.y)
-            {
-                curMode = 0;
-            }
-            else
-            {
-                curMode = 2;
-                actackClock = Random.Range(actackPause.x, actackPause.y);
-            }
-        }
         
+        
+    }
+
+    void ExitCharge()
+    {
+            //Debug.Log("Exiting out here");
+        float distance = Vector3.Distance(transform.position, player.position);
+        if (distance > AgroDistance.x)
+        {
+            curMode = 1;
+         }
+        else if (distance > AgroDistance.y)
+        {
+            curMode = 0;
+        }
+        else
+        {
+            curMode = 2;
+            actackClock = Random.Range(actackPause.x, actackPause.y);
+        }
     }
 
     bool RaycasyCheck(float maxDistance)
@@ -262,20 +264,27 @@ public class HornedCharger : BaseEmenyMovement
 
             if (collision.gameObject.tag == "Player" && !hitPlayer)
             {
-                collisionType = 0;
-                collided = true;
-                hitPlayer = true;
+                player.gameObject.GetComponent<Rigidbody>().AddForce(transform.forward * knockback, ForceMode.Impulse);
+
+                VelocityZero();
+                playerLife.AlterHealth(-damage);
+                collided = false;
+
+                Debug.Log("exiting charge at 0");
+                ExitCharge();
             }
             else if (collision.gameObject.isStatic)
             {
-                //Debug.Log("colliding with" + collision.gameObject.name);
-                collisionType = 1;
-                collided = true;
+                Debug.Log("exiting charge at 1");
+                ExitCharge();
+                collided = false;
             }
             else
             {
-                collisionType = 2;
-                collided = true;
+                collided = false;
+
+                    //Debug.Log("exiting charge at ");
+                ExitCharge();
             }
         }
         else if (collided)

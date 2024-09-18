@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 11698749}
   m_Layer: 15
   m_Name: Bow
-  m_TagString: Player
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -149,7 +149,7 @@ GameObject:
   - component: {fileID: 330480196}
   m_Layer: 15
   m_Name: Rope
-  m_TagString: Player
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1702,7 +1702,7 @@ GameObject:
   - component: {fileID: 7771939465882092393}
   m_Layer: 15
   m_Name: Spear
-  m_TagString: Player
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3618,7 +3618,7 @@ GameObject:
   - component: {fileID: 3223420625262809057}
   m_Layer: 15
   m_Name: Torch
-  m_TagString: Player
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3944,8 +3944,8 @@ MonoBehaviour:
   playerBody: {fileID: 2700543971962854697}
   toolA: 1
   toolB: 2
-  toolC: 3
-  curTool: 1
+  toolC: 0
+  curTool: 0
   toolsAnimator: {fileID: 1603491645}
   spear: {fileID: 11400000, guid: d6dc2a4b423f0f747b74ae5e862e7260, type: 2}
   spearInfo:
@@ -4025,6 +4025,7 @@ MonoBehaviour:
   groundDrag: 10
   airDrag: 10
   downWardForce: 8
+  airSideWardDevider: 2
   jumpForce: 16
   jumpCooldown: 0.6
   gravity: {x: 0.2, y: 1}
@@ -4523,7 +4524,7 @@ GameObject:
   - component: {fileID: 854572644}
   m_Layer: 15
   m_Name: BodyRotation
-  m_TagString: Player
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -6403,6 +6404,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 52064433262021083}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &4403844260907472009
 GameObject:
   m_ObjectHideFlags: 0
@@ -7235,7 +7248,7 @@ GameObject:
   - component: {fileID: 4746336771635846850}
   m_Layer: 15
   m_Name: CharacterModelV1
-  m_TagString: Player
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

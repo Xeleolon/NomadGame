@@ -138,10 +138,10 @@ MonoBehaviour:
   speedCharge: 12
   speedNeutral: 6
   damage: 1
-  knockback: 2
+  knockback: 32
   AgroDistance: {x: 8, y: 10}
   targetPlayer: 0
-  targetBush: {fileID: 0}
+  potentialBush: []
   curMode: 0
   actackPause: {x: 0.5, y: 1}
   ground: Respawn
