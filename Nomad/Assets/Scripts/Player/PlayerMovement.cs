@@ -529,13 +529,13 @@ public class PlayerMovement : MonoBehaviour
     {
         RaycastHit groundHit;
         bool grounded; 
-        bool testingGround = Physics.SphereCast(transform.position, 0.5f, Vector3.down, out groundHit, 2 * 0.5f + 0.2f, whatIsGround);
+        bool testingGround = Physics.SphereCast(transform.position, 0.4f, Vector3.down, out groundHit, 2 * 0.5f + 0.2f, whatIsGround);
 
         if (testingGround)
         {
             Vector3 raycastHitPosition = groundHit.point;
             float heightDistance = transform.position.y - raycastHitPosition.y;
-            if (heightDistance > 0.8f && heightDistance < 1.2f)
+            if (heightDistance > 0.9f && heightDistance < 1.2f)
             {
                 grounded = true;
             }

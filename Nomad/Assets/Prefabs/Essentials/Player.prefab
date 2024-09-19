@@ -4023,7 +4023,7 @@ MonoBehaviour:
   bodyRotateSpeed: 3
   maxSlopeAngle: 45
   groundDrag: 10
-  airDrag: 10
+  airDrag: 0.6
   downWardForce: 8
   airSideWardDevider: 2
   jumpForce: 16
