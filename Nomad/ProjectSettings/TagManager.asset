@@ -8,6 +8,7 @@ TagManager:
   - CameraIgnore
   - Bush
   - Fire
+  - cameraIgnore
   layers:
   - Default
   - TransparentFX
@@ -19,7 +20,7 @@ TagManager:
   - Ground
   - Climbable
   - Projectile
-  - 
+  - EmenyWall
   - cameraSeeThrough
   - Emeny
   - GhostEmeny
