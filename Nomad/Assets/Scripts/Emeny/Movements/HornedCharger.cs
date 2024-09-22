@@ -26,7 +26,7 @@ public class HornedCharger : BaseEmenyMovement
     private int collisionType;
     private bool hitPlayer;
     [SerializeField] string ground;
-    
+    [SerializeField] MeshRenderer colorChangeMesh;
 
 
     [Header("Temp Color Changes")]
@@ -36,7 +36,12 @@ public class HornedCharger : BaseEmenyMovement
     public override void Start()
     {
         base.Start();
-        neutralColor = GetComponent<MeshRenderer>().material.color;
+        if (colorChangeMesh == null)
+        {
+            colorChangeMesh = GetComponent<MeshRenderer>();
+        }
+
+        neutralColor = colorChangeMesh.material.color;
         player = GameObject.FindWithTag("Player").transform;
         playerLife = player.gameObject.GetComponent<PlayerLife>();
     }
@@ -86,7 +91,7 @@ public class HornedCharger : BaseEmenyMovement
         {
             //switch to curMode to agressive at player
             curMode = 1;
-            GetComponent<MeshRenderer>().material.color = agroColor;
+            colorChangeMesh.material.color = agroColor;
         }
 
         if (targetBush == null)
@@ -134,12 +139,12 @@ public class HornedCharger : BaseEmenyMovement
         if (distance > AgroDistance.y)
         {
             curMode = 0;
-            GetComponent<MeshRenderer>().material.color = neutralColor;
+            colorChangeMesh.material.color = neutralColor;
         }
         else if (distance < AgroDistance.x)
         {
             curMode = 2;
-            GetComponent<MeshRenderer>().material.color = actackingColor;
+            colorChangeMesh.material.color = actackingColor;
         }
         
         Move(Vector2.zero, player.position, true);
