@@ -372,6 +372,7 @@ public class ToolInfo
 
     public void RestRestore(Vector3 newPosition)
     {
+        Debug.Log("resting and setting new spawn point");
         spawnPoint = newPosition;
         checkPointSpawn = newPosition;
         curHealth = health;
@@ -386,6 +387,7 @@ public class ToolInfo
 
     public void SetCheckPoint(Vector3 newPosition)
     {
+        Debug.Log("new CheckPoint");
         checkPointSpawn = newPosition;
     }
     #endregion

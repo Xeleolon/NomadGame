@@ -4022,11 +4022,12 @@ MonoBehaviour:
   airDevider: 0.5
   bodyRotateSpeed: 3
   maxSlopeAngle: 45
-  groundDrag: 10
-  airDrag: 0.6
-  downWardForce: 8
+  groundDrag: 9
+  airDrag: 1
+  downWardForce: {x: 3, y: 6}
+  jumpHieght: 1
   airSideWardDevider: 2
-  jumpForce: 16
+  jumpForce: {x: 3, y: 2}
   jumpCooldown: 0.6
   gravity: {x: 0.2, y: 1}
   airGlideLength: 0.5
@@ -4034,11 +4035,14 @@ MonoBehaviour:
   whatIsGround:
     serializedVersion: 2
     m_Bits: 128
+  groundCheckSphereSize: 0.6
+  slopeGroundCheckSphere: 0.6
+  groundCheckHieght: {x: 0.8, y: 1.05}
   climbSpeed: 5
   forceToWall: 6
   distanceCheck: 1.1
   maxClimbEnterCloc: 0.2
-  forwardForce: {x: 0.2, y: 0.2}
+  forwardForce: {x: 0.05, y: 0.2}
   detectionLength: 0.8
   sphereCastRadius: 0.4
   whatIsWall:
@@ -4388,7 +4392,7 @@ MonoBehaviour:
   - Emeny
   - Fire
   offSet: -0.5
-  cameraRange: {x: -3, y: -0.8}
+  cameraRange: {x: -3, y: -1.5}
   speed: 2
   bowCameraSetting: 0
   alterMinCoolDown: 0.2

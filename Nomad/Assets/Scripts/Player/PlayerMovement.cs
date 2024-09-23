@@ -502,9 +502,10 @@ public class PlayerMovement : MonoBehaviour
     void CheckMovmenentState(bool forceOut)
     {
         rb.mass = gravity.y;
+        //Debug.Log("changing state with forceout being " + forceOut);
         if (!forceOut)
         {
-            if (curMovmenent == MovementType.climbing && curMovmenent == MovementType.jumping)
+            if (curMovmenent == MovementType.climbing || curMovmenent == MovementType.jumping)
             {
                 rb.useGravity = false;
                 return;
@@ -519,7 +520,7 @@ public class PlayerMovement : MonoBehaviour
 
         if (OnSlope())
         {
-            if (curMovmenent != MovementType.slope && curMovmenent != MovementType.jumping)
+            if (curMovmenent != MovementType.slope && curMovmenent != MovementType.jumping && curMovmenent != MovementType.climbing)
             {
                 //rb.useGravity = false;
                 rb.mass = gravity.x;
@@ -536,7 +537,6 @@ public class PlayerMovement : MonoBehaviour
             EnteringFreeFalling();
             return;
         }
-        
         curMovmenent = MovementType.walking;
         return;
     }
@@ -547,6 +547,7 @@ public class PlayerMovement : MonoBehaviour
         {
             return;
         }
+        Debug.Log("Entering Freefall transfer");
         curMovmenent = MovementType.freefalling;
         lastHeightPosition = transform.position.y;
         glideClock = 0;
@@ -669,6 +670,7 @@ public class PlayerMovement : MonoBehaviour
                 else if (curMovmenent == MovementType.climbing)
                 {
                     ExitingClimbing();
+                    Debug.Log("exiting climb at jump input");
                     curMovmenent = MovementType.freefalling;
                 }
                 else
@@ -706,7 +708,7 @@ public class PlayerMovement : MonoBehaviour
     }
     public void ChangeMovement(MovementType newMovement, Vector3 hopPosition, Transform wall)
     {
-
+        Debug.Log("entering climb");
         switch (newMovement)
         {
             case MovementType.climbing:
@@ -727,7 +729,7 @@ public class PlayerMovement : MonoBehaviour
                     enteringClimb = true;
                     climbEnterClock = 0;
 
-
+                rb.velocity = Vector3.zero;
                 rb.AddForce(playerBody.forward * forceToWall, ForceMode.Impulse);
                 //}
             break;
@@ -765,6 +767,8 @@ public class PlayerMovement : MonoBehaviour
 
     private void ExitingClimbing()
     {
+        //Debug.Log("Ending climb through exiting climb");
+        PlayerLife.instance.ActiveInstructionPanel(false, exitInstruction, exitPressKey);
         if (GroundCheck())
         {
             climbEnterClock = 0;
