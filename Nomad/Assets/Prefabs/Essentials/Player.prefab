@@ -4052,8 +4052,8 @@ MonoBehaviour:
   extendRopeSpeed: 30
   ropeTool: {fileID: 330480195}
   lr: {fileID: 1906559610}
-  exitInstruction: 
-  exitPressKey: 
+  exitInstruction: Exit out
+  exitPressKey: space
   cameraControls:
     cameraSets: 0
     cameraSensitivity: 1.5

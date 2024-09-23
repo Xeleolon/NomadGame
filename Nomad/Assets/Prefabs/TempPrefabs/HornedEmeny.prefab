@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6023825770601983835}
   - component: {fileID: 3184426669017225825}
   - component: {fileID: 7786825068578028386}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: BoreModel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -99,7 +99,7 @@ GameObject:
   - component: {fileID: 8270322919751412246}
   - component: {fileID: 8270322919751412241}
   - component: {fileID: 8270322919751412232}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: HornedEmeny
   m_TagString: Emeny
   m_Icon: {fileID: 0}
