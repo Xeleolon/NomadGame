@@ -67,8 +67,11 @@ public class PlayerMovement : MonoBehaviour
     private Rigidbody rb;
     private Vector3 newBodyTarget;
 
-    public enum MovementType {walking, freefalling, slope, climbing, swinging}
+
+    public enum MovementType {walking, freefalling, slope, climbing, swinging, jumping}
     [SerializeField] MovementType curMovmenent = MovementType.walking;
+
+
     [Header("Movement")]
     [SerializeField] bool freazeMovement;
     [SerializeField] float speed = 3;
@@ -77,20 +80,32 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] float bodyRotateSpeed = 60;
     [SerializeField] float maxSlopeAngle = 45;
 
+
+
     [Header("Air Control")]
     [SerializeField] float groundDrag = 10f;
     [SerializeField] float airDrag = 0.2f;
-    [SerializeField] float downWardForce = 1;
+    [SerializeField] Vector2 downWardForce = new Vector2(2, 4);
+    [SerializeField] float jumpHieght;
     [SerializeField] float airSideWardDevider = 2;
-    [SerializeField] private float jumpForce = 3;
+    [SerializeField] private Vector2 jumpForce = new Vector2(3, 2);
     [SerializeField] private float jumpCooldown = 1;
     [SerializeField] private Vector2 gravity = new Vector2(0.2f, 1);
-
     [SerializeField] private float airGlideLength = 1;
     [SerializeField] private float gravityGlide = 2;
     private float glideClock;
     private bool readyToJump;
     [SerializeField] LayerMask whatIsGround;
+
+
+
+    [Header("Ground Check")]
+    [Tooltip("Size of raycast sphere cast being generated")]
+    [SerializeField] float groundCheckSphereSize = 0.6f;
+    [SerializeField] float slopeGroundCheckSphere = 0.2f;
+    [Tooltip("Height at which ground check is being except to ocurr at")]
+    [SerializeField] Vector2 groundCheckHieght = new Vector2(0.9f, 1.2f);
+
 
 
     [Header("climbing and swinging")]
@@ -122,6 +137,8 @@ public class PlayerMovement : MonoBehaviour
     [Header("UI insturctions")]
     [SerializeField] string exitInstruction;
     [SerializeField] string exitPressKey;
+    #endregion
+    #region Camera Variables
 
     public enum CameraSets {standard, forceFollow, onlyHorizontal, reset, detach}
 
@@ -355,6 +372,19 @@ public class PlayerMovement : MonoBehaviour
                 moveDirection = cameraCenter.forward * inputVariables.y + cameraCenter.right * inputVariables.x/airSideWardDevider;
                 moveDirection.y = 0;
 
+                //Faling addition power
+                Vector3 airDownForce = Vector3.zero;
+                if (glideClock < airGlideLength)
+                {
+                    airDownForce = new Vector3(0, downWardForce.x * Time.deltaTime, 0);
+                }
+                else if (glideClock > airGlideLength)
+                {
+                     airDownForce = new Vector3(0, downWardForce.y * Time.deltaTime, 0);
+                }
+
+                transform.position -= airDownForce;
+
 
             break;
 
@@ -378,7 +408,13 @@ public class PlayerMovement : MonoBehaviour
             case MovementType.slope: //Slope
 
                 rb.AddForce(GetSlopeMoveDirection() * speed * 10f, ForceMode.Force);
-            
+    
+                Vector3 GetSlopeMoveDirection()
+                {
+                    return Vector3.ProjectOnPlane(moveDirection, slopeHit.normal).normalized;
+                }
+                NormalizeAllMovement();
+
                 if(rb.velocity.y > 0)
                 {
                     if (transform.position.y < lastPlayerHeight)
@@ -390,37 +426,39 @@ public class PlayerMovement : MonoBehaviour
                         rb.AddForce(Vector3.down * 20f, ForceMode.Force);
                     }
                 }
-    
-                Vector3 GetSlopeMoveDirection()
-                {
-                    return Vector3.ProjectOnPlane(moveDirection, slopeHit.normal).normalized;
-                }
-                NormalizeAllMovement();
 
             break;
 
             case MovementType.freefalling: //FreeFalling
-                
-                Vector3 airDownForce = Vector3.zero;
-                if (lastHeightPosition > transform.position.y)
-                {
-                    airDownForce = new Vector3(0, -downWardForce * glideClock, 0);
-                }
-
-                lastHeightPosition = transform.position.y;
 
 
                 if (glideClock < airGlideLength)
                 {
-                    rb.AddForce((moveDirection.normalized * speed * airMultiplier + airDownForce) * 10f, ForceMode.Force);
+                    rb.AddForce((moveDirection.normalized * speed * airMultiplier) * 10f, ForceMode.Force);
                     glideClock += 1 * Time.deltaTime;
                 }
-                else if (rb.mass != gravityGlide)
+                else
+                {
+                    rb.AddForce(moveDirection.normalized * speed * airMultiplier * 10f, ForceMode.Force);
+                }
+                /*else if (rb.mass != gravityGlide)
                 {
                     rb.AddForce(moveDirection.normalized * speed * airDevider * 10f, ForceMode.Force);
                     rb.mass = gravityGlide;
                     glideClock += 1 * Time.deltaTime;
-                }
+                }*/
+
+                //rb.AddForce(moveDirection.normalized * speed * airMultiplier * 10f, ForceMode.Force);
+                NormalizeAllMovement();
+            break;
+
+            case MovementType.jumping: //FreeFalling
+
+
+                
+                rb.AddForce((moveDirection.normalized * speed * airMultiplier) * 10f, ForceMode.Force);
+                    
+                
 
                 //rb.AddForce(moveDirection.normalized * speed * airMultiplier * 10f, ForceMode.Force);
                 NormalizeAllMovement();
@@ -465,7 +503,7 @@ public class PlayerMovement : MonoBehaviour
         rb.mass = gravity.y;
         if (!forceOut)
         {
-            if (curMovmenent == MovementType.climbing)
+            if (curMovmenent == MovementType.climbing && curMovmenent == MovementType.jumping)
             {
                 rb.useGravity = false;
                 return;
@@ -475,11 +513,12 @@ public class PlayerMovement : MonoBehaviour
                 rb.useGravity = true;
                 return;
             }
+
         }
 
         if (OnSlope())
         {
-            if (curMovmenent != MovementType.slope)
+            if (curMovmenent != MovementType.slope && curMovmenent != MovementType.jumping)
             {
                 //rb.useGravity = false;
                 rb.mass = gravity.x;
@@ -503,7 +542,7 @@ public class PlayerMovement : MonoBehaviour
 
     void EnteringFreeFalling()
     {
-        if (curMovmenent == MovementType.freefalling)
+        if (curMovmenent == MovementType.freefalling || curMovmenent == MovementType.jumping)
         {
             return;
         }
@@ -514,7 +553,7 @@ public class PlayerMovement : MonoBehaviour
     }
     #endregion
 
-    #region Slope And Jump Movement;
+    #region OnSlopeFunctionCheck;
 
     private bool OnSlope()
     {
@@ -525,17 +564,32 @@ public class PlayerMovement : MonoBehaviour
         }
         return false;
     }
+    #endregion
+    #region on Ground Check
     private bool GroundCheck()
     {
+        if (curMovmenent == MovementType.jumping)
+        {
+            return false;
+        }
+
         RaycastHit groundHit;
-        bool grounded; 
-        bool testingGround = Physics.SphereCast(transform.position, 0.4f, Vector3.down, out groundHit, 2 * 0.5f + 0.2f, whatIsGround);
+        bool grounded;
+        bool testingGround;
+        if (curMovmenent == MovementType.slope)
+        {
+            testingGround = Physics.SphereCast(transform.position, slopeGroundCheckSphere, Vector3.down, out groundHit, 2 * 0.5f + 1, whatIsGround);
+        }
+        else
+        {
+            testingGround = Physics.SphereCast(transform.position, groundCheckSphereSize, Vector3.down, out groundHit, 2 * 0.5f + 1, whatIsGround);
+        }
 
         if (testingGround)
         {
             Vector3 raycastHitPosition = groundHit.point;
             float heightDistance = transform.position.y - raycastHitPosition.y;
-            if (heightDistance > 0.9f && heightDistance < 1.2f)
+            if (heightDistance > groundCheckHieght.x && heightDistance < groundCheckHieght.y)
             {
                 grounded = true;
             }
@@ -555,19 +609,46 @@ public class PlayerMovement : MonoBehaviour
             rb.mass = gravity.y;
             return true;
         }
- 
-        rb.drag = airDrag;
-        if (curMovmenent == MovementType.climbing)
+        if (curMovmenent == MovementType.swinging)
         {
-            rb.drag = groundDrag;
+            rb.drag = airDrag;
         }
+        
+        rb.drag = groundDrag;
+    
         return false;
         
     }
 
+    #endregion
+    #region Jump
+    private float jumpStartHeight;
     private void JumpFunction()
     {
-        if (jumpInput.ReadValue<float>() > 0)
+
+        if (curMovmenent == MovementType.jumping) //in middle of jump
+        {
+            if (transform.position.y >= jumpStartHeight + jumpHieght)
+            {
+                curMovmenent = MovementType.freefalling;
+                glideClock = 0;
+                rb.velocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);
+                rb.useGravity = true;
+            }
+            else if (transform.position.y >= jumpStartHeight + jumpHieght/0.8f)
+            {
+                transform.position += new Vector3(0, jumpForce.y  * Time.deltaTime, 0);
+                rb.drag = groundDrag;
+                rb.useGravity = false;
+            }
+            else
+            {
+                transform.position += new Vector3(0, jumpForce.x * Time.deltaTime, 0);
+                rb.drag = groundDrag;
+                rb.useGravity = false;
+            }
+        }
+        else if (jumpInput.ReadValue<float>() > 0)
         {
             
             //Debug.Log("attemp Jump " + readyToJump + GroundCheck());
@@ -578,15 +659,19 @@ public class PlayerMovement : MonoBehaviour
                 if (curMovmenent == MovementType.swinging)
                 {
                     StopSwing();
+                    curMovmenent = MovementType.freefalling;
                 }
                 else if (curMovmenent == MovementType.climbing)
                 {
                     ExitingClimbing();
+                    curMovmenent = MovementType.freefalling;
                 }
                 else
                 {
-                    rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
+                    curMovmenent = MovementType.jumping;
+                    jumpStartHeight = transform.position.y;
                 }
+                
                 readyToJump = false;
                 rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
     

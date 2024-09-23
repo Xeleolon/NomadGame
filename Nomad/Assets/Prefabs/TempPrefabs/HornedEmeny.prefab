@@ -25,14 +25,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1186635553636871364}
-  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: -0.537, z: 0.37}
+  m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: 0, y: -0.537, z: -0.541}
   m_LocalScale: {x: 70.832, y: 70.832, z: 70.832}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8270322919751412234}
   m_RootOrder: -1
-  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
 --- !u!33 &3184426669017225825
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -120,7 +120,7 @@ Transform:
   m_Children:
   - {fileID: 6023825770601983835}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &8270322919751412245
 MeshFilter:
@@ -230,8 +230,8 @@ MonoBehaviour:
   actackPause: {x: 0.5, y: 1}
   ground: Respawn
   colorChangeMesh: {fileID: 7786825068578028386}
-  agroColor: {r: 0.990566, g: 0.21960661, b: 0.71510166, a: 0}
-  actackingColor: {r: 1, g: 0.11792451, b: 0.11792451, a: 0}
+  agroColor: {r: 0.990566, g: 0.21960661, b: 0.71510166, a: 1}
+  actackingColor: {r: 1, g: 0.11792451, b: 0.11792451, a: 1}
 --- !u!54 &8270322919751412241
 Rigidbody:
   m_ObjectHideFlags: 0
