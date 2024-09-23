@@ -896,7 +896,7 @@ public class ToolInfo
         }
         else
         {
-            if ((deathUI != null && !deathUI.activeSelf) || (restUI != null && !restUI.activeSelf))
+            if ((deathUI != null && deathUI.activeSelf) || (restUI != null && restUI.activeSelf))
             {
                 return;
             }

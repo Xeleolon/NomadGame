@@ -372,19 +372,6 @@ public class PlayerMovement : MonoBehaviour
                 moveDirection = cameraCenter.forward * inputVariables.y + cameraCenter.right * inputVariables.x/airSideWardDevider;
                 moveDirection.y = 0;
 
-                //Faling addition power
-                Vector3 airDownForce = Vector3.zero;
-                if (glideClock < airGlideLength)
-                {
-                    airDownForce = new Vector3(0, downWardForce.x * Time.deltaTime, 0);
-                }
-                else if (glideClock > airGlideLength)
-                {
-                     airDownForce = new Vector3(0, downWardForce.y * Time.deltaTime, 0);
-                }
-
-                transform.position -= airDownForce;
-
 
             break;
 
@@ -419,7 +406,8 @@ public class PlayerMovement : MonoBehaviour
                 {
                     if (transform.position.y < lastPlayerHeight)
                     {
-                        rb.AddForce(Vector3.down * 60f, ForceMode.Force);
+                        //rb.AddForce(Vector3.down * 60f, ForceMode.Force);
+                        transform.position -= new Vector3(0, downWardForce.y * Time.deltaTime, 0);
                     }
                     else
                     {
@@ -441,6 +429,19 @@ public class PlayerMovement : MonoBehaviour
                 {
                     rb.AddForce(moveDirection.normalized * speed * airMultiplier * 10f, ForceMode.Force);
                 }
+
+                //Faling addition power
+                Vector3 airDownForce = Vector3.zero;
+                if (glideClock < airGlideLength)
+                {
+                    airDownForce = new Vector3(0, downWardForce.x, 0);
+                }
+                else if (glideClock > airGlideLength)
+                {
+                    airDownForce = new Vector3(0, downWardForce.y, 0);
+                }
+
+                rb.AddForce(-airDownForce * 10f, ForceMode.Force) ;
                 /*else if (rb.mass != gravityGlide)
                 {
                     rb.AddForce(moveDirection.normalized * speed * airDevider * 10f, ForceMode.Force);
@@ -557,6 +558,10 @@ public class PlayerMovement : MonoBehaviour
 
     private bool OnSlope()
     {
+        if (!GroundCheck())
+        {
+            return false;
+        }
         if (Physics.Raycast(transform.position, Vector3.down, out slopeHit, 2 * 0.5f + 2.0f))
         {
             float angle = Vector3.Angle(Vector3.up, slopeHit.normal);
