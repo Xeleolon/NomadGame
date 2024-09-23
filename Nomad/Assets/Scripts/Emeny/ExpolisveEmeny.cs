@@ -22,6 +22,7 @@ public class ExpolisveEmeny : MonoBehaviour
     [SerializeField] Vector2 headSize;
     private float currentHeadSize;
     [SerializeField] GameObject headExplosive;
+    [SerializeField] ParticleSystem headWarningParticle;
 
     GameObject player;
     PlayerLife playerLife;
@@ -65,6 +66,10 @@ public class ExpolisveEmeny : MonoBehaviour
                 //if clock = 0 explode
                 if (explosionClock > 0)
                 {
+                    if (headWarningParticle != null && !headWarningParticle.isPlaying)
+                    {
+                        headWarningParticle.Play(false);
+                    }
                     explosionClock -= explosionRate.y * Time.deltaTime;
                 }
                 else
@@ -79,6 +84,10 @@ public class ExpolisveEmeny : MonoBehaviour
                 //count down clock till hold position only
                 if (explosionClock > clockHoldPosition)
                 {
+                    if (headWarningParticle != null && !headWarningParticle.isPlaying)
+                    {
+                        headWarningParticle.Play(false);
+                    }
                     explosionClock -= explosionRate.x * Time.deltaTime;
                 }
                 else
@@ -98,6 +107,10 @@ public class ExpolisveEmeny : MonoBehaviour
 
     void Explode(float distance)
     {
+        if (headWarningParticle != null && headWarningParticle.isPlaying)
+        {
+            headWarningParticle.Stop(false);
+        }
         explosionState = ExpolisveState.exploded;
         ParticleSystem particleSystem = gameObject.GetComponent<ParticleSystem>();
 
@@ -127,7 +140,7 @@ public class ExpolisveEmeny : MonoBehaviour
             }
         }
 
-        particleSystem.Play();
+        particleSystem.Play(false);
     }
 
     void Reset()
@@ -135,6 +148,10 @@ public class ExpolisveEmeny : MonoBehaviour
         if (!headExplosive.activeSelf)
         {
             headExplosive.SetActive(true);
+        }
+        if (headWarningParticle != null && headWarningParticle.isPlaying)
+        {
+            headWarningParticle.Stop(false);
         }
         explosionClock = clockStartPosition;
         explosionState = ExpolisveState.neurtal;

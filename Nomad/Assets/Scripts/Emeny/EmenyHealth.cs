@@ -9,12 +9,17 @@ public class EmenyHealth : MonoBehaviour
     [SerializeField] private bool disableDayCycle;
     private float curHealth;
     [SerializeField] GameObject remainsPrefab;
-    [SerializeField] GameObject particaleEffectPrefab; 
+    [SerializeField] GameObject particaleEffectPrefab;
+    [SerializeField] private GameObject damageParticlePrefab;
     public SkellyMovement movementScript;
     public BaseEmenyMovement hornedCharger;
     private Vector3 spawn;
-    Renderer renderer;
+    [SerializeField] Renderer renderer;
     Collider collider;
+
+    public bool testKill;
+    public bool testReset;
+    
     private void Start()
     {
         if (!disableDayCycle)
@@ -35,7 +40,17 @@ public class EmenyHealth : MonoBehaviour
 
     private void Update()
     {
-        
+        if (testKill)
+        {
+            Killed();
+            testKill = false;
+        }
+
+        if (testReset)
+        {
+            Reset();
+            testReset = false;
+        }
     }
     private void Killed()
     {
@@ -82,6 +97,10 @@ public class EmenyHealth : MonoBehaviour
     {
         if (health > 0)
         {
+            if (damageParticlePrefab != null)
+            {
+                Instantiate(damageParticlePrefab, transform.position, Quaternion.identity);
+                }
             health -= damage;
             Debug.Log(gameObject.name + " lost " + damage + " damage health now " + health);
             if (health <= 0)
@@ -123,11 +142,13 @@ public class EmenyHealth : MonoBehaviour
 
     void CheckRendererBoxCollider()
     {
-        if (renderer != null && collider != null)
+        if (renderer == null)
         {
-            return;
+            renderer = gameObject.GetComponent<Renderer>();
         }
-        renderer = gameObject.GetComponent<Renderer>();
-        collider = gameObject.GetComponent<Collider>();
+        if (collider == null)
+        {
+            collider = gameObject.GetComponent<Collider>();
+        }
     }
 }

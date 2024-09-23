@@ -27,6 +27,7 @@ public class HornedCharger : BaseEmenyMovement
     private bool hitPlayer;
     [SerializeField] string ground;
     [SerializeField] MeshRenderer colorChangeMesh;
+    public bool testKill;
 
 
     [Header("Temp Color Changes")]
@@ -69,6 +70,11 @@ public class HornedCharger : BaseEmenyMovement
             //Debug.Log("charge Player");
             ActackCharge();
             break;
+        }
+
+        if (testKill)
+        {
+            testKill = false;
         }
     }
 
@@ -269,10 +275,13 @@ public class HornedCharger : BaseEmenyMovement
 
             if (collision.gameObject.tag == "Player" && !hitPlayer)
             {
-                player.gameObject.GetComponent<Rigidbody>().AddForce(transform.forward * knockback, ForceMode.Impulse);
+                if (RaycasyCheck(1))
+                {
+                    player.gameObject.GetComponent<Rigidbody>().AddForce(transform.forward * knockback, ForceMode.Impulse);
 
-                VelocityZero();
-                playerLife.AlterHealth(-damage);
+                    VelocityZero();
+                    playerLife.AlterHealth(-damage);
+                }
                 collided = false;
 
                 Debug.Log("exiting charge at 0");

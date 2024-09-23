@@ -16,5 +16,5 @@ MonoBehaviour:
   icon: {fileID: 514707589, guid: c6ee2ca114be33e44ba6dab93836e3d1, type: 3}
   damage: 1
   type: 1
-  range: 3
+  range: 4
   actackSpeed: 0.8

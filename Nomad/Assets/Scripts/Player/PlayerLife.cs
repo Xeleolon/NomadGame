@@ -155,6 +155,7 @@ public class ToolInfo
     [System.Serializable]
     public class UIVariables
     {
+        public GameObject damagePartical;
         public GameObject menuUi;
         public GameObject deathUI;
         public GameObject restUI;
@@ -184,6 +185,7 @@ public class ToolInfo
     [Header("UI")]
     [SerializeField] UIVariables UI;
     private GameObject menuUi {get {return UI.menuUi;} set {UI.menuUi = value;}}
+    private GameObject damagePartical {get {return UI.damagePartical;} set {UI.damagePartical = value;}}
     
     private GameObject deathUI {get {return UI.deathUI;} set {UI.deathUI = value;}}
     private GameObject restUI {get {return UI.restUI;} set {UI.restUI = value;}}
@@ -340,6 +342,10 @@ public class ToolInfo
         if (temp <= 0)
         {
             PlayUiAnimation(damageHealth);
+            if (damagePartical != null)
+            {
+                Instantiate(damagePartical, transform.position, Quaternion.identity);
+            }
         }
 
         if (curHealth <= 0)
@@ -357,6 +363,7 @@ public class ToolInfo
     public void Respawn()
     {
         curHealth = health;
+        UpdateHealthUI();
         transform.position = spawnPoint;
         LevelManager.instance.ResetTo(LevelManager.ResetStates.respawn);
         PlayerMovement.instance.KillJoint();
@@ -574,7 +581,7 @@ public class ToolInfo
             int layerMask = 1 << 15;
             layerMask = ~layerMask;
     
-            if (Physics.Raycast(ray, out hit, spear.range, layerMask))
+            if (Physics.SphereCast(transform.position, 0.4f, Vector3.forward, out hit, spear.range, layerMask))
             {
                 EmenyHealth emeny = hit.collider.gameObject.GetComponent<EmenyHealth>();
                 Debug.Log("Hit object " + emeny + " type " + hit.collider.gameObject.name);

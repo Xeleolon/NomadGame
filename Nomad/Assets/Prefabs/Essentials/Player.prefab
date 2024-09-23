@@ -3887,7 +3887,7 @@ Transform:
   - {fileID: 2700543972091085099}
   - {fileID: 2700543971962854697}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!136 &2700543971393520738
 CapsuleCollider:
@@ -3982,6 +3982,8 @@ MonoBehaviour:
   torchPrefab: {fileID: 3260074229154982981, guid: 5a199d4a5236f3448b5955f5ce891c51,
     type: 3}
   UI:
+    damagePartical: {fileID: 3123471801500262157, guid: eb6ae0b40c46a6543ae94e607d78f00f,
+      type: 3}
     menuUi: {fileID: 167804712}
     deathUI: {fileID: 52064433262021083}
     restUI: {fileID: 4166145820759398460}
@@ -4023,7 +4025,7 @@ MonoBehaviour:
   bodyRotateSpeed: 3
   maxSlopeAngle: 45
   groundDrag: 9
-  airDrag: 1
+  airDrag: 0.6
   downWardForce: {x: 3, y: 6}
   jumpHieght: 1
   airSideWardDevider: 2
@@ -6398,7 +6400,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 2700543971393520748}
         m_TargetAssemblyTypeName: PlayerLife, Assembly-CSharp
-        m_MethodName: CheckPointRespawn
+        m_MethodName: Respawn
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -10100,7 +10102,7 @@ MonoBehaviour:
       - m_Target: {fileID: 2700543971393520748}
         m_TargetAssemblyTypeName: PlayerLife, Assembly-CSharp
         m_MethodName: WindowMode
-        m_Mode: 6
+        m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
