@@ -42,6 +42,7 @@ public class MenuManager : MonoBehaviour
 
     void Start()
     {
+        playerCameraSensitivity = GameManager.instance.cameraSensitivity;
         mouseSlider.value = playerCameraSensitivity;
     }
 
@@ -110,5 +111,6 @@ public class MenuManager : MonoBehaviour
     public void SetMouseSensitivity()
     {
         playerCameraSensitivity = mouseSlider.value;
+        GameManager.instance.cameraSensitivity = playerCameraSensitivity;
     }
 }

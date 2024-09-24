@@ -19,5 +19,12 @@ public class GameManager : MonoBehaviour
 
         DontDestroyOnLoad(this.gameObject);
     }
+
+
+    [Tooltip("a mutiples the camera Input")] [Range(0.5f,5)]
+    public float cameraSensitivity = 1.5f;
+
+
+
     #endregion
 }

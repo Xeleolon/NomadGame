@@ -190,6 +190,7 @@ public class PlayerMovement : MonoBehaviour
         newBodyTarget = cameraCenter.forward;
         ResetJump();
 
+        cameraSensitivity = GameManager.instance.cameraSensitivity;
         mouseSlider.value = cameraSensitivity;
     }
     void Update()
@@ -1035,6 +1036,7 @@ public class PlayerMovement : MonoBehaviour
     public void SetMouseSensitivity()
     {
         cameraSensitivity = mouseSlider.value;
+        GameManager.instance.cameraSensitivity = cameraSensitivity;
     }
 
     
