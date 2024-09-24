@@ -28,7 +28,7 @@ public class PickUpTorch : InteractBase
 
     public override void Interact()
     {
-        if (!Unpickable && door == null && playerLife.AddTorch(lightState))
+        if ( door == null && playerLife.AddTorch(lightState) && !Unpickable)
         {
             //Debug.Log("pick up torch");
             Destroy(gameObject);

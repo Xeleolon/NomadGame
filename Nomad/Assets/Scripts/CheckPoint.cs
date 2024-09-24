@@ -7,7 +7,10 @@ public class CheckPoint : MonoBehaviour
     Vector3 spawnOffset;
     private void OnTriggerEnter(Collider other) 
     {
-        PlayerLife.instance.SetCheckPoint(transform.position + spawnOffset);
+        if (other.gameObject.tag == "Player")
+        {
+            PlayerLife.instance.SetCheckPoint(transform.position + spawnOffset);
+        }
     }
 
     public virtual void OnDrawGizmosSelected ()

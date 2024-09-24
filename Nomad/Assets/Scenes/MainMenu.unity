@@ -2465,9 +2465,9 @@ RectTransform:
   m_Father: {fileID: 1508858409}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0}
-  m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 8.6, y: 110.4}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 8.6, y: -99.6}
   m_SizeDelta: {x: 177.3758, y: 191.35526}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &97152169
@@ -12902,10 +12902,10 @@ RectTransform:
   m_Father: {fileID: 1508858409}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 1}
+  m_AnchorMin: {x: 0, y: 0.5}
+  m_AnchorMax: {x: 0, y: 0.5}
   m_AnchoredPosition: {x: 168.1, y: 0}
-  m_SizeDelta: {x: 495.7, y: 0}
+  m_SizeDelta: {x: 495.7, y: 420}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &757836818
 MonoBehaviour:
@@ -28198,6 +28198,11 @@ PrefabInstance:
       propertyPath: directionLight
       value: 
       objectReference: {fileID: 203844588}
+    - target: {fileID: 1092074525231827244, guid: fec997c1dee0d4c449e2bc30e6e34f67,
+        type: 3}
+      propertyPath: disableCursorLockMode
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5940299283223448679, guid: fec997c1dee0d4c449e2bc30e6e34f67,
         type: 3}
       propertyPath: m_RootOrder

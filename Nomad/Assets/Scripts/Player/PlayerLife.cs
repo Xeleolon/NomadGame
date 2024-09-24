@@ -367,6 +367,10 @@ public class ToolInfo
         transform.position = spawnPoint;
         LevelManager.instance.ResetTo(LevelManager.ResetStates.respawn);
         PlayerMovement.instance.KillJoint();
+        if (torchState == TorchStates.empty)
+        {
+            AddTorch(TorchStates.unlit);
+        }
         DeathScreen(false);
     }
 
@@ -375,6 +379,11 @@ public class ToolInfo
         LevelManager.instance.ResetTo(LevelManager.ResetStates.checkpoint);
         transform.position = checkPointSpawn;
         PlayerMovement.instance.KillJoint();
+
+        if (torchState == TorchStates.empty)
+        {
+            AddTorch(TorchStates.unlit);
+        }
     }
 
     public void RestRestore(Vector3 newPosition)

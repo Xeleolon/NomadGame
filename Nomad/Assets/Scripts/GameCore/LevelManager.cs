@@ -32,12 +32,21 @@ public class LevelManager : MonoBehaviour
     public delegate void onResetDelegate();
     public onResetDelegate onResetCheckPoint;
     public onResetDelegate onResetRespawn;
+    public bool disableCursorLockMode;
 
     // Start is called before the first frame update
     void Start()
     {
-        Cursor.lockState = CursorLockMode.Confined;
-        Cursor.visible = false;
+        if (!disableCursorLockMode)
+        {
+            Cursor.lockState = CursorLockMode.Confined;
+            Cursor.visible = false;
+        }
+        else
+        {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+        }
 
         onResetCheckPoint += DebugLogReset;
         onResetRespawn += DebugLogReset;
