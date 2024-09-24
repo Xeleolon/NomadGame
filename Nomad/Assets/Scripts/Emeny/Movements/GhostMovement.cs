@@ -19,6 +19,7 @@ public class GhostMovement : BaseEmenyMovement
     [SerializeField] Vector2 regionSize = new Vector2(2,2);
     [SerializeField] float minTravelDistance = 2;
     [SerializeField] float maxTravelClock = 2;
+    [SerializeField] GameObject bodyMesh;
     private enum MovementType {disable, neutral, chase, run}
     MovementType movementType = MovementType.neutral;
     private bool avoidPlayer;
@@ -27,16 +28,30 @@ public class GhostMovement : BaseEmenyMovement
     private Vector3 startPosition;
     private Vector3 targetPosition;
     private Transform player;
+    private Collider collider;
+    private ParticleSystem particleSystem;
+    private bool playingParticle;
 
 
     void Start()
     {
         startPosition = transform.position;
         targetPosition = transform.position;
+        particleSystem = GetComponent<ParticleSystem>();
+
+        LevelManager.instance.onResetRespawn += Reset;
     }
 
     void Update()
     {
+
+        if (playingParticle && particleSystem.isStopped)
+        {
+            Died();
+            playingParticle = false;
+        }
+
+
         switch (movementType)
         {
             case MovementType.neutral:
@@ -140,6 +155,11 @@ public class GhostMovement : BaseEmenyMovement
 
     private void OnTriggerEnter(Collider other) 
     {
+        if (movementType == MovementType.disable)
+        {
+            return;
+        }
+
         if (other.gameObject.tag == "Player" && !dectectingPlayer)
         {
             dectectingPlayer = true;
@@ -151,6 +171,12 @@ public class GhostMovement : BaseEmenyMovement
     }
     private void OnTriggerExit(Collider other) 
     {
+        if (movementType == MovementType.disable)
+        {
+            return;
+        }
+        
+
         if (other.gameObject.tag == "Player" && dectectingPlayer)
         {
             dectectingPlayer = false;
@@ -162,11 +188,17 @@ public class GhostMovement : BaseEmenyMovement
     }
     private void OnTriggerStay(Collider other)
     {
+        if (movementType == MovementType.disable)
+        {
+            return;
+        }
+        
         if (other.gameObject.tag == "Player")
         {
             if (PlayerLife.instance.curTool == PlayerLife.ToolType.torch && PlayerLife.instance.torchState == PlayerLife.TorchStates.lit 
             && Vector3.Distance(other.gameObject.transform.position, transform.position) <= fireAvoidanceRange.x)
             {
+                CheckOnFireState(other.gameObject.transform.position);
                 movementType = MovementType.run;
                 targetPosition = other.gameObject.transform.position;
                 targetPosition.y = transform.position.y;
@@ -188,11 +220,64 @@ public class GhostMovement : BaseEmenyMovement
         }
         if (other.gameObject.tag == "Fire" && Vector3.Distance(other.gameObject.transform.position, transform.position) <= fireAvoidanceRange.x)
         {
+            CheckOnFireState(other.gameObject.transform.position);
             movementType = MovementType.run;
             targetPosition = other.gameObject.transform.position;
             targetPosition.y = transform.position.y;
         }
+
+
+
+        void CheckOnFireState(Vector3 target)
+        {
+            if (target.y < transform.position.y - 1 || target.y > transform.position.y + 1)
+            {
+                return;
+            }
+    
+            target.y = transform.position.y;
+            if (Vector3.Distance(transform.position, target) <= 0.5f)
+            {
+                //lit on fire dire and die
+                particleSystem.Play(false);
+                playingParticle = true;
+            }
+        }
     }
+
+    public void Died()
+    {
+        if (bodyMesh != null && bodyMesh.activeSelf)
+        {
+            bodyMesh.SetActive(false);
+        }
+        
+        if (collider == null)
+        {
+            collider = gameObject.GetComponent<Collider>();
+        }
+        collider.enabled = false;
+
+        transform.position = startPosition;
+        movementType = MovementType.disable;
+    }
+
+    private void Reset()
+    {
+        if (bodyMesh != null && !bodyMesh.activeSelf)
+        {
+            bodyMesh.SetActive(true);
+        }
+        
+        if (collider == null)
+        {
+            collider = gameObject.GetComponent<Collider>();
+        }
+        collider.enabled = true;
+        transform.position = startPosition;
+        movementType = MovementType.neutral;
+    }
+
 
     public void OnDrawGizmosSelected()
     {

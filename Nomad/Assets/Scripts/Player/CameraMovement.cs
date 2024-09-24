@@ -24,6 +24,8 @@ public class CameraMovement : MonoBehaviour
     private enum CameraDirection {forward, backwards, changingForward, changingBackwards, neutral}
     CameraDirection cameraDirection = CameraDirection.neutral;
     private float rateToPlace;
+
+    public bool disable;
     void Start()
     {
         startPlace = transform.localPosition.z;
@@ -34,24 +36,27 @@ public class CameraMovement : MonoBehaviour
 
     void Update()
     {
-        if (!collision && cameraCurSeat != cameraRange.x) //set place to distance rest
+        if (!disable)
         {
-            //Debug.Log("active");
-            if (cameraDirection == CameraDirection.backwards || cameraDirection == CameraDirection.changingForward || cameraDirection == CameraDirection.neutral)
+            if (!collision && cameraCurSeat != cameraRange.x) //set place to distance rest
             {
-                cameraDirection = CameraDirection.backwards;
-                rateToPlace = 0;
-                startPlace = transform.localPosition.z;
-                cameraCurSeat = LeftCollisionRayCast();
-                //Debug.Log("reset to origin " + cameraCurSeat);
+                //Debug.Log("active");
+                if (cameraDirection == CameraDirection.backwards || cameraDirection == CameraDirection.changingForward || cameraDirection == CameraDirection.neutral)
+                {
+                    cameraDirection = CameraDirection.backwards;
+                    rateToPlace = 0;
+                    startPlace = transform.localPosition.z;
+                    cameraCurSeat = LeftCollisionRayCast();
+                    //Debug.Log("reset to origin " + cameraCurSeat);
+                }
+                else if (cameraDirection == CameraDirection.forward)
+                {
+                    cameraDirection = CameraDirection.changingBackwards;
+                    alterClock = 0;
+                }
             }
-            else if (cameraDirection == CameraDirection.forward)
-            {
-                cameraDirection = CameraDirection.changingBackwards;
-                alterClock = 0;
-            }
+            MoveCameraClear();
         }
-        MoveCameraClear();
 
     }
 

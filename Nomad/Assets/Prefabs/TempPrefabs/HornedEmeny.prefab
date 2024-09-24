@@ -167,8 +167,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c48ab7f4d7e2b44c98aec29b5b74118, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rotationSpeed: 5
-  speedCharge: 10
+  rotationSpeed: 3
+  speedCharge: 8
   speedNeutral: 6
   damage: 1
   knockback: 32
@@ -179,7 +179,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   curMode: 0
-  actackPause: {x: 0.5, y: 1}
+  actackPause: {x: 0.7, y: 2}
   ground: Respawn
   colorChangeMesh: {fileID: 7786825068578028386}
   testKill: 0
