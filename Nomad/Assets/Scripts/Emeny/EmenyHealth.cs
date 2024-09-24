@@ -99,8 +99,8 @@ public class EmenyHealth : MonoBehaviour
         {
             if (damageParticlePrefab != null)
             {
-                Instantiate(damageParticlePrefab, transform.position, Quaternion.identity);
-                }
+                Instantiate(damageParticlePrefab, transform.position, transform.rotation);
+            }
             health -= damage;
             Debug.Log(gameObject.name + " lost " + damage + " damage health now " + health);
             if (health <= 0)

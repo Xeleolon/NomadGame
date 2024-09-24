@@ -344,7 +344,7 @@ public class ToolInfo
             PlayUiAnimation(damageHealth);
             if (damagePartical != null)
             {
-                Instantiate(damagePartical, transform.position, Quaternion.identity);
+                Instantiate(damagePartical, transform.position, transform.rotation);
             }
         }
 
