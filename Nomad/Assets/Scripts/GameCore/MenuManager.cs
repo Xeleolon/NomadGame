@@ -2,11 +2,30 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.InputSystem;
 using TMPro;
 using UnityEngine.SceneManagement;
 
 public class MenuManager : MonoBehaviour
 {
+    private PlayerInputActions playerControls;
+    void Awake()
+    {
+        playerControls = new PlayerInputActions(); 
+    }
+    private InputAction inActiveButton;
+
+    void OnEnable()
+    {
+        inActiveButton = playerControls.UI.InActiveKey;
+        inActiveButton.Enable();
+        inActiveButton.performed += InActivePress;
+    }
+
+    void OnDisable()
+    {
+        inActiveButton.Disable();
+    }
     public Slider mouseSlider;
     float playerCameraSensitivity;
 
@@ -20,6 +39,7 @@ public class MenuManager : MonoBehaviour
     public float inActiveDelayReset = 1;
     private float inActiveDelayClock;
     private bool disableVideo;
+
     void Start()
     {
         mouseSlider.value = playerCameraSensitivity;
@@ -49,6 +69,11 @@ public class MenuManager : MonoBehaviour
                 inActiveDelayClock += 1 * Time.deltaTime;
             }
         }
+    }
+
+    void InActivePress(InputAction.CallbackContext context)
+    {
+        PlayVideo(false);
     }
 
     public void PlayVideo(bool play)
