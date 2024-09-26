@@ -31,6 +31,7 @@ public class GhostMovement : BaseEmenyMovement
     private Collider collider;
     private ParticleSystem particleSystem;
     private bool playingParticle;
+    public bool checkRegionInPlay;
 
 
     void Start()
@@ -167,6 +168,11 @@ public class GhostMovement : BaseEmenyMovement
             {
                 player = other.gameObject.transform;
             }
+
+            if (PlayerLife.instance.ghost != this)
+            {
+                PlayerLife.instance.ghost = this;
+            }
         }
     }
     private void OnTriggerExit(Collider other) 
@@ -180,6 +186,11 @@ public class GhostMovement : BaseEmenyMovement
         if (other.gameObject.tag == "Player" && dectectingPlayer)
         {
             dectectingPlayer = false;
+            if (PlayerLife.instance.ghost == this)
+            {
+                PlayerLife.instance.ghost = null;
+            }
+
             if (movementType == MovementType.chase)
             {
                 movementType = MovementType.neutral;
@@ -245,12 +256,30 @@ public class GhostMovement : BaseEmenyMovement
         }
     }
 
+    public void SetOnFire(Vector3 target)
+    {
+        if (target.y < transform.position.y - 1 || target.y > transform.position.y + 1)
+        {
+            return;
+        }
+    
+        target.y = transform.position.y;
+        if (Vector3.Distance(transform.position, target) <= 2f)
+        {
+            Debug.Log("Play lit ghost on fire");
+            //lit on fire dire and die
+            particleSystem.Play(false);
+            playingParticle = true;
+        }
+    }
+
     public void Died()
     {
         if (bodyMesh != null && bodyMesh.activeSelf)
         {
             bodyMesh.SetActive(false);
         }
+        PlayerLife.instance.AddItem(PlayerLife.CollectableItemType.fobiddenCoin, 1);
         
         if (collider == null)
         {
@@ -282,7 +311,12 @@ public class GhostMovement : BaseEmenyMovement
     public void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.yellow;
-        Gizmos.DrawWireCube(transform.position + regionOffset, new Vector3(regionSize.x, 2, regionSize.y));
+        Vector3 origin = transform.position;
+        if (checkRegionInPlay)
+        {
+            origin = startPosition;
+        }
+        Gizmos.DrawWireCube(origin + regionOffset, new Vector3(regionSize.x, 2, regionSize.y));
 
     }
 }

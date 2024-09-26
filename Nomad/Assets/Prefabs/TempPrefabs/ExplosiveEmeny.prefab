@@ -62,13 +62,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 597a430e7a90d6c47941ac6f50ca6d51, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  explosionRange: 3
+  explosionRange: 2.7
   dectectRange: 6.6
   damage: 1
   fireDamage: 2
-  explosionRate: {x: 2, y: 5}
+  explosionRate: {x: 7, y: 10}
   clockStartPosition: 10
-  clockHoldPosition: 5
+  clockHoldPosition: 7
   minDistance: 0.5
   headSize: {x: 0.5, y: 1}
   headExplosive: {fileID: 6618373949020503020}

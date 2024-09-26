@@ -54,6 +54,7 @@ public class EmenyHealth : MonoBehaviour
     }
     private void Killed()
     {
+        PlayerLife.instance.AddItem(PlayerLife.CollectableItemType.fobiddenCoin, 1);
         if (remainsPrefab != null && SpawnCylce.instance.makeSpace(true))
         {
             GameObject temp = Instantiate(remainsPrefab, transform.position, Quaternion.identity);

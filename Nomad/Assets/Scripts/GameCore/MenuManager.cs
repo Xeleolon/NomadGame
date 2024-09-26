@@ -39,6 +39,7 @@ public class MenuManager : MonoBehaviour
     public float inActiveDelayReset = 1;
     private float inActiveDelayClock;
     private bool disableVideo;
+    private bool disableButton;
 
     void Start()
     {
@@ -50,6 +51,11 @@ public class MenuManager : MonoBehaviour
     {
         if (!videoPlayerCanvas.activeSelf)
         {
+            if (inActiveDelayClock > inActiveDelayReset)
+            {
+                disableButton = true;
+            }
+
             if (inActiveClock > inActiveMax)
             {
                 PlayVideo(true);
@@ -63,12 +69,13 @@ public class MenuManager : MonoBehaviour
         {
             if (inActiveDelayClock > inActiveDelayReset)
             {
-                disableVideo = true;
+                disableVideo = false;
             }
-            else
-            {
-                inActiveDelayClock += 1 * Time.deltaTime;
-            }
+        }
+
+        if (inActiveDelayClock < inActiveDelayReset)
+        {
+            inActiveDelayClock += 1 * Time.deltaTime;
         }
     }
 
@@ -82,15 +89,29 @@ public class MenuManager : MonoBehaviour
         inActiveClock = 0;
         if (play)
         {
+            if (!disableButton)
+            {
+                return;
+            }
+
             if (!videoPlayerCanvas.activeSelf)
             {
                 videoPlayerCanvas.SetActive(true);
+                disableVideo = false;
+                inActiveDelayClock = 0;
             }
         }
         else
         {
+            if (disableVideo)
+            {
+                return;
+            }
+
             if (videoPlayerCanvas.activeSelf)
             {
+                disableButton = false;
+                inActiveDelayClock = 0;
                 videoPlayerCanvas.SetActive(false);
             }
         }
@@ -98,6 +119,11 @@ public class MenuManager : MonoBehaviour
 
     public void OpenScene(string sceneName)
     {
+        if (!disableButton)
+            {
+                return;
+            }
+
         if (sceneName != null)
         {
             SceneManager.LoadScene(sceneName);
@@ -105,6 +131,10 @@ public class MenuManager : MonoBehaviour
     }
     public void WindowMode(bool windowed)
     {
+        if (!disableButton)
+        {
+            return;
+        }
         Screen.fullScreen = !windowed;
     }
 

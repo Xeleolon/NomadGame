@@ -428,7 +428,7 @@ public class ToolInfo
             break;
 
             case ToolType.torch: //Torch
-                changeTorch(TorchStates.lit);
+                //changeTorch(TorchStates.lit);
                 if (torchLight != null && !torchLight.activeSelf)
                 {
                     //Debug.Log("Made to stage 4");
@@ -437,11 +437,10 @@ public class ToolInfo
                 }
                 else
                 {
-
                     //actack with torch
-                    if (toolanimation != null && toolanimation.IsPlaying(torchInfo.animtionNames[0]))
+                    if (toolsAnimator != null && !toolsAnimator.GetCurrentAnimatorStateInfo(0).IsName(torchInfo.animtionNames[1]))
                     {
-                        PlayAnimation(torchInfo.animtionNames[2]);
+                        TorchActack();
                     }
                 }
             break;
@@ -452,8 +451,10 @@ public class ToolInfo
     }
     void PlayAnimation(string name)
     {
+        Debug.Log("playing tool animation " + name);
         if (name != null && toolsAnimator != null)
         {
+            Debug.Log(name + " passed check and now playing");
             toolsAnimator.Play(name);
         }
     }
@@ -582,6 +583,20 @@ public class ToolInfo
             //Debug.Log("spear Actacked");
             canHarm = false;
             PlayAnimation(spearInfo.animtionNames[1]);
+            /*
+            if (InteractionTrigger.instance.CheckEmeny())
+            {
+                GameObject emenyObject = InteractionTrigger.instance.emenyObject;
+                Vector3 emenyDistnace = emenyObject.transform.position;
+                emenyDistnace.y = transform.position.y;
+                if (Vector3.Distance(emenyDistnace, transform.position) < spear.range)
+                {
+                    EmenyHealth emeny = emenyObject.GetComponent<EmenyHealth>();
+                    emeny.Damage(spear.damage);
+                    Debug.Log("Hit " + emenyObject.name);
+                }
+            }*/
+            
             Ray ray;
             ray = new Ray(transform.position, playerBody.forward);
     
@@ -589,8 +604,8 @@ public class ToolInfo
     
             int layerMask = 1 << 15;
             layerMask = ~layerMask;
-    
-            if (Physics.SphereCast(transform.position, 0.4f, Vector3.forward, out hit, spear.range, layerMask))
+
+            if (Physics.SphereCast(transform.position, 0.4f, playerBody.forward, out hit, spear.range, layerMask))
             {
                 EmenyHealth emeny = hit.collider.gameObject.GetComponent<EmenyHealth>();
                 Debug.Log("Hit object " + emeny + " type " + hit.collider.gameObject.name);
@@ -599,16 +614,16 @@ public class ToolInfo
                     emeny.Damage(spear.damage);
                     Debug.Log("Hit " + hit.collider.gameObject.name);
                 }
-            }
-            Invoke(nameof(Reset), spear.actackSpeed);
-        }
-    }
 
-    void Reset()
-    {
-        if (!canHarm)
-        {
-            canHarm = true;
+                //Debug.DrawRay(transform.position, hit.point, Color.red, 3, false);
+            }
+
+            Vector3 forward = playerBody.forward;
+            forward.x = forward.x * spear.range;
+            forward.z = forward.z * spear.range;
+            Debug.DrawRay(transform.position, forward, Color.green, 3, false);
+            
+            Invoke(nameof(Reset), spear.actackSpeed);
         }
     }
 
@@ -663,6 +678,31 @@ public class ToolInfo
         Debug.Log("No bow Info Added to player");
 
         ToolChange(ToolType.empty);
+    }
+    public GhostMovement ghost;
+    void TorchActack()
+    {
+        if (canHarm )
+        {
+            //Debug.Log("spear Actacked");
+            canHarm = false;
+            PlayAnimation(torchInfo.animtionNames[2]);
+            
+            if (ghost != null)
+            {
+                ghost.SetOnFire(transform.position);
+                
+            }
+
+            Invoke(nameof(Reset), spear.actackSpeed);
+        }
+    }
+    void Reset()
+    {
+        if (!canHarm)
+        {
+            canHarm = true;
+        }
     }
 
     public float ArrowHit()

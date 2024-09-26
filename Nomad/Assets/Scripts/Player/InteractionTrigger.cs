@@ -43,6 +43,8 @@ public class InteractionTrigger : MonoBehaviour
     [SerializeField] TMP_Text functionName;
     [SerializeField] GameObject interactPopup;
     [SerializeField] bool activeDebug;
+    private bool interactingWithEmeny;
+    [HideInInspector] public GameObject emenyObject;
     
     
     void Start()
@@ -63,12 +65,39 @@ public class InteractionTrigger : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        InteractCheck(other.gameObject);        
+        InteractCheck(other.gameObject);
+
+        if (other.gameObject.tag == "Emeny")
+        {
+            emenyObject = other.gameObject;
+            EmenyHealth emeny = emenyObject.GetComponent<EmenyHealth>();
+            if (emeny = null)
+            {
+                interactingWithEmeny = false;
+            }
+            else
+            {
+                interactingWithEmeny = true;
+            }
+        }        
     }
 
     void OnTriggerStay(Collider other)
     {
         InteractCheck(other.gameObject);
+
+        if (other.gameObject.tag == "Emeny")
+        {
+            emenyObject = other.gameObject;
+            if (emenyObject = null)
+            {
+                interactingWithEmeny = false;
+            }
+            else
+            {
+                interactingWithEmeny = true;
+            }
+        } 
     }
 
     public void AnimationPassThrough(int state)
@@ -105,6 +134,21 @@ public class InteractionTrigger : MonoBehaviour
             
 
         RequirementCheck();
+    }
+
+    public bool CheckEmeny()
+    {
+        if (emenyObject == null)
+        {
+            interactingWithEmeny = false;
+            return interactingWithEmeny;
+        }
+        EmenyHealth emeny = emenyObject.GetComponent<EmenyHealth>();
+        if (emeny = null)
+        {
+            interactingWithEmeny = false;
+        }
+        return interactingWithEmeny;
     }
 
     public void RequirementCheck()
@@ -144,6 +188,13 @@ public class InteractionTrigger : MonoBehaviour
     void OnTriggerExit(Collider other)
     {
         InteractExiting(other.gameObject);
+
+        if (interactingWithEmeny && other.gameObject.tag == "Emeny" && other.gameObject == emenyObject)
+        {
+            emenyObject = null;
+            interactingWithEmeny = false;
+            
+        } 
 
     }
 
