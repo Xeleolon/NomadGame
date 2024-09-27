@@ -43,6 +43,7 @@ public class MenuManager : MonoBehaviour
 
     void Start()
     {
+        Time.timeScale = 1;
         playerCameraSensitivity = GameManager.instance.cameraSensitivity;
         mouseSlider.value = playerCameraSensitivity;
     }

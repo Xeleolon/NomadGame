@@ -396,6 +396,7 @@ public class ToolInfo
         if (restUI != null && !restUI.activeSelf)
         {
             restUI.SetActive(true);
+            PlayerMovement.instance.FreazePlayer();
             PlayUiAnimation(restAnimation);
             
         }
@@ -906,6 +907,7 @@ public class ToolInfo
     {
         if (restUI != null && restUI.activeSelf)
         {
+            PlayerMovement.instance.FreazePlayer();
             restUI.SetActive(false);
         }
     }

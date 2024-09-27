@@ -122,7 +122,9 @@ public class GhostMovement : BaseEmenyMovement
     {
         Move(new Vector2(speedChase, 0), player.position, true);
 
-        if (Vector3.Distance(transform.position, player.position) <= damageDistance)
+        Vector3 target = player.position;
+        target.y = transform.position.y;
+        if (Vector3.Distance(transform.position, target) <= damageDistance)
         {
             Debug.Log(gameObject.name + " is damage player at " + transform.position + " with player at " + player.position + " distance is " + damageDistance);
             if (damageClock >= damageSpeed)
