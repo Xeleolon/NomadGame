@@ -1051,17 +1051,20 @@ public class ToolInfo
         {
             if (numChildren > intHealth)
             {
+                int sizeChange = numChildren - intHealth;
                 Debug.Log("removing ui element");
                 //int target = numChildren - intHealth
-                for (int i = numChildren - intHealth; i > 0; i--)
+                for (int i = 0; i < sizeChange; i++)
                 {
                     //remove extra element
-                    Destroy(healthParent.GetChild(0).gameObject);
+                    Debug.Log(numChildren + " " + intHealth + " " + sizeChange + healthParent.GetChild((i + 1)).gameObject);
+                    Destroy(healthParent.GetChild(sizeChange - (i + 1)).gameObject);
                 }
             }
             else
             {
-                for (int i = intHealth- numChildren; i > 0; i--)
+                int sizeChange = intHealth - numChildren;
+                for (int i = 0; i < sizeChange; i++)
                 {
                     //remove extra element
                     Instantiate(healthyUiPrefab, healthParent);
