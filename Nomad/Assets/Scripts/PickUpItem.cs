@@ -8,6 +8,8 @@ public class PickUpItem : MonoBehaviour
 
     [SerializeField] int value;
     [SerializeField] PlayerLife.CollectableItemType collectable = PlayerLife.CollectableItemType.coin;
+    [SerializeField] GameObject awakenObject;
+    [SerializeField] bool setObjectToAwake = true;
 
     private void OnTriggerEnter(Collider other) 
     {
@@ -15,6 +17,20 @@ public class PickUpItem : MonoBehaviour
         {
             PlayerLife.instance.AddItem(collectable, value);
             Debug.Log("Player picking up " + value + " of " + pickUpName);
+
+            if (awakenObject != null)
+            {
+                if (setObjectToAwake && !awakenObject.activeSelf)
+                {
+                    awakenObject.SetActive(true);
+                }
+                else if (!setObjectToAwake && awakenObject.activeSelf)
+                {
+                    awakenObject.SetActive(false);
+                }
+
+            }
+
             Destroy(gameObject);
         }
     }
