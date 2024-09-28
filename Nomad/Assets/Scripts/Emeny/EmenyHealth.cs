@@ -83,6 +83,7 @@ public class EmenyHealth : MonoBehaviour
         {
             hornedCharger.DisableMovement(false);
         }
+        curHealth = health;
         transform.position = spawn;
         CheckRendererBoxCollider();
         renderer.enabled = true;
@@ -90,21 +91,21 @@ public class EmenyHealth : MonoBehaviour
     }
     public void ForceDeath()
     {
-        health = 0;
+        curHealth = 0;
         Killed();
     }
 
     public virtual void Damage(float damage)
     {
-        if (health > 0)
+        if (curHealth > 0)
         {
             if (damageParticlePrefab != null)
             {
                 Instantiate(damageParticlePrefab, transform.position, transform.rotation);
             }
-            health -= damage;
+            curHealth -= damage;
             Debug.Log(gameObject.name + " lost " + damage + " damage health now " + health);
-            if (health <= 0)
+            if (curHealth <= 0)
             {
                 Killed();
             }
