@@ -256,6 +256,13 @@ public class PlayerMovement : MonoBehaviour
         switch (curMovmenent)
         {
             case MovementType.climbing:
+
+                if (inputVariables.y != 0)
+                {
+                    inputVariables.x = 0;
+                }
+
+                
                 newBodyTarget = climbingWall.forward;
                 newBodyTarget.y = playerBody.forward.y;
                 newBodyRotation = Vector3.RotateTowards(playerBody.forward, newBodyTarget, bodyRotateSpeed * Time.deltaTime, 0);
